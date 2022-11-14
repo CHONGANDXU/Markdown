@@ -900,6 +900,7 @@ ThreadNode *pre = NULL;
 ```
 
 - 先序线索化
+> 先序线索化有个坑，在处理根结点之后，处理左孩子之前，需要判断改结点的lchild的ltag标志是否为0，如果为0，则lchild不是前驱线索
 ```c++
 #include <iostream>
 using namespace std;
@@ -936,3 +937,4 @@ void visit(ThreadNode *q){
 //全局变量 pre ，指向当前访问结点的前驱
 ThreadNode *pre = NULL;
 ```
+
