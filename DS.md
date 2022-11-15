@@ -900,7 +900,7 @@ ThreadNode *pre = NULL;
 ```
 
 - 先序线索化
-> 先序线索化有个坑，在处理根结点之后，处理左孩子之前，需要判断改结点的lchild的ltag标志是否为0，如果为0，则lchild不是前驱线索
+> 先序线索化 **有个坑**，在处理根结点之后，处理左孩子之前，需要判断改当前结点的ltag标志是否为0，如果为0，则lchild不是前驱线索
 ```c++
 #include <iostream>
 using namespace std;
@@ -940,4 +940,12 @@ ThreadNode *pre = NULL;
 
 # 第六章 图
 ## 图的概念
+```c++
+#include<iostream>
+using namespace std;
+typedef struct {
+    
+}
+```
 
+今天是 11 月 15 号，我的数据结构才学了一半，非常的难过，怎么办呢，睡个觉先，哈哈哈哈😂
