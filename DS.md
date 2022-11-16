@@ -1118,9 +1118,9 @@ int BST_Insert(BSTree &T,int k){
     }
     else if(k==T->key)                    //树中存在相同关键字的结点，插入失败，返回 0
         return 0;
-    else if( k < T->key)
+    else if( k < T->key)                   //插入到 T 的左子树 
         return BST_Insert(T->lchild,k);
-    else
+    else                                        //插入到 T 的右子树
         return BST_Insert(T->rchild,k);
 ```
 
