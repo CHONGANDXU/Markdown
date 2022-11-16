@@ -1098,14 +1098,7 @@ BSTNode *BST_Search(BSTree T,int key){
 ```
 
 # 第六章——图
-## 图的概念
-```c++
-#include<iostream>
-using namespace std;
 
-
-
-```
 
 KMP优化算法没看  视频P37
 线索二叉树找前驱后驱还没看完 视频P48
