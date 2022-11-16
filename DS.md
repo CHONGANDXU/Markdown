@@ -1124,9 +1124,14 @@ int BST_Insert(BSTree &T,int k){
         return BST_Insert(T->rchild,k);
 }
 
+//按照 str[] 中的关键字序列建立二叉排序树
 void Create_BST(BSTree &T,int str[],int n){
-    T=NULL;
+    T=NULL;                    //初始化 T 为空树
     int i=0;
+    while(i<n){                  //依次将每个关键字插入到二叉排序树中
+        BST_Insert(T,str[i]);
+        i++;
+    }
 }
 ```
 
