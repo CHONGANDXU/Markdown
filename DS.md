@@ -1110,8 +1110,18 @@ BSTNode *BSTSearch(BSTree T,int key){
 
 //在二叉排序树插入关键字为 k 的新结点（递归实现）
 int BST_Insert(BSTree &T,int k){
-    
-}
+    if(T==NULL){                            //原树为空，新插入的结点为根结点
+        T=(BSTree)malloc(sizeof(BSTNode));
+        T->key = k;
+        T->lchild=T->rchild=NULL;
+        return 1;                               //返回 1 ，插入成功
+    }
+    else if(k==T->key)                    //树中存在相同关键字的结点，插入失败，返回 0
+        return 0;
+    else if( k < T->key)
+        return BST_Insert(T->lchild,k);
+    else
+        return BST_Insert(T->rchild,k);
 ```
 
 # 第六章——图
