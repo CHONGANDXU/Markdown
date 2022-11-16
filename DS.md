@@ -1077,7 +1077,7 @@ typedef struct CSNode{
 }CSNode,*CSTree;
 ```
 
-## 二叉排序树
+## 二叉排序树的建立、查找、插入等相关操作
 ```c++
 //二叉排序树结点
 typedef struct BSTNode{
@@ -1122,6 +1122,12 @@ int BST_Insert(BSTree &T,int k){
         return BST_Insert(T->lchild,k);
     else                                        //插入到 T 的右子树
         return BST_Insert(T->rchild,k);
+}
+
+void Create_BST(BSTree &T,int str[],int n){
+    T=NULL;
+    int i=0;
+}
 ```
 
 # 第六章——图
