@@ -1096,6 +1096,16 @@ BSTNode *BST_Search(BSTree T,int key){
     return T;
 }
 
+//在二叉排序树中查找值为 key 的结点（递归实现）
+BSTNode *BSTSearch(BSTree T,int key){
+    if(T==NULL)
+        return NULL;
+    if(key==T->key)
+        return T;
+    else if(key < T->key)
+        return BSTSearch(T->lchild,key);
+    
+}
 
 ```
 
