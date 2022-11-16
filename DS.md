@@ -29,6 +29,11 @@
   - [二叉树的顺序存储](#二叉树的顺序存储)
   - [二叉树的链式存储](#二叉树的链式存储)
   - [二叉树的线索化](#二叉树的线索化)
+  - [线索二叉树找前驱（后继）](#线索二叉树找前驱后继)
+  - [树的存储方式](#树的存储方式)
+  - [二叉排序树](#二叉排序树)
+- [第六章——图](#第六章图)
+  - [图的概念](#图的概念)
 
 # 第二章——线性表
 ## 2.3 线性表的链式表示
@@ -939,14 +944,168 @@ void visit(ThreadNode *q){
 ThreadNode *pre = NULL;
 ```
 
-# 第六章 图
+- 后序线索化
+```c++
+#include <iostream>
+using namespace std;
+
+//全局变量pre，指向当前访问结点的前驱
+ThreadNode *pre=NULL;
+
+//后序线索化二叉树T
+void CreatePostThread(ThreadTree T){
+    pre=NULL;                   //pre初始化为NULL
+    if(T!=NULL){                //非空二叉树才能线索化
+        PostThread(T);          //后续线索化二叉树
+        if(pre->lchild==NULL){
+            pre->rtag=1;        //处理遍历的最后一个结点
+        }
+    }
+}
+
+//后序遍历二叉树，一边遍历一边线索化
+void PostThread(ThreadTree T){
+    if(T!=NULL){
+        PostThread(T->lchild);  //后序遍历左子树
+        PostThread(T->rchild);  //后序遍历右子树
+        visit(T);               //访问根结点
+    }
+}
+
+void visit(ThreadNode *q){
+    if(q->lchild==NULL){        //左子树为空，建立前驱线索
+        q->lchild = pre;
+        q->ltag=1;
+    }
+    if(pre!=NULL && p->rchild==NULL){
+        pre->rchild = q;        //建立前驱结点的后继线索
+        pre -> rtag = 1;
+    } 
+    pre = q;
+}
+```
+
+## 线索二叉树找前驱（后继）
+
+- 中序线索二叉树找中序后继
+```c++
+//找到以P为根的子树中，第一个被中序遍历的结点
+ThreadNode *FirstNode(ThreadNode *p){
+    while(p->ltag==0)       //循环寻找最左下结点（不一定是叶节点）
+        p=p->lchild;
+    return p;
+}
+
+//在中序线索二叉树中找到结点p的后继结点
+ThreadNode *NextNode(ThreadNode *p){
+    id(p->rtag==0)          //右子树的最左👈下结点
+        return FirstNode(p->rchild);
+    else                    //rtag==1，直接返回后继线索
+        return p->rchild;
+}
+
+//对中序线索二叉树进行中序遍历（利用线索实现的非递归算法）
+void InOrder(ThreadNode *T){
+    for(ThreadNode *p=FirstNode(T);p!=NULL;p=NextNode(p))
+        visit(p);
+}
+```
+
+- 中序线索二叉树找中序前驱
+```c++
+//找到以p为根的子树中，最后一个被中序遍历的结点
+ThreadNode *LastNode(ThreadNode *p){
+    while(p->rtag==0)       //循环寻找最右👉下结点（不一定是叶节点）
+        p=p->rchild;
+    return p;
+}
+
+//在中序线索二叉树中找到结点p的前驱结点
+ThreadNode *PreNode(ThreadNode *p){
+    id(p->ltag==0)          //左子树的最右下结点
+        return FirstNode(p->lchild);
+    else                    //rtag==1，直接返回前驱线索
+        return p->lchild;
+}
+
+//对中序线索二叉树进行逆向中序遍历（利用线索实现的非递归算法）
+void RevInOrder(ThreadNode *T){
+    for(ThreadNode *p=LastNode(T);p!=NULL;p=PreNode(p))
+        visit(p);
+}
+```
+
+## 树的存储方式
+- 双亲表示法（顺序存储）
+```c++
+#define MAX_TREE_SIZE 100           //树中最多结点树
+
+typedef struct{                     //树的结点定义
+    ElemType data;                  //数据元素
+    int parent;                     //双亲位置域
+}PTNode;
+
+typedef struct{                     //树的结构类型
+    PTNode nodes[MAX_TREE_SIZE];    //双亲表示
+    int n;                          //结点数
+}PTree;
+```
+
+- 孩子表示法（顺序+链式存储）
+```c++
+struct CTNode{
+    int child;                  //孩子结点在数组中的位置
+    struct CTNode *next;        //下一个孩子
+};
+
+typedef struct{
+    ElemType data;
+    struct CTNode *firstChild;  //第一个孩子
+}CTBox;
+
+typedef struct{
+    CTBox nodes[MAX_TREE_SIZE];
+    int n,r;
+}CTree;
+```
+
+- 孩子兄弟表示法（链式存储）
+```c++
+typedef struct CSNode{
+    ElemType data;                          //数据域
+    struct CSNode *firstChild,*nextSibling; //第一个孩子和右兄弟指针
+}CSNode,*CSTree;
+```
+
+## 二叉排序树
+```c++
+//二叉排序树结点
+typedef struct BSTNode{
+    int key;
+    struct BSTNode *lchild,*rchild;
+}BSTNode,*BSTree;
+
+//在二叉排序树中查找值为 key 的结点
+BSTNode *BST_Search(BSTree T,int key){
+    while(T!=NULL && key != T->key){    //若树空或等于根结点值，则结束循环
+        if(key < (T->key))
+            T=T->lchild;                //小于，则在左子树上查找
+        else
+            T=T->rchild;                //大于，则在右子树上查找
+    }
+    return T;
+}
+```
+
+# 第六章——图
 ## 图的概念
 ```c++
 #include<iostream>
 using namespace std;
-typedef struct {
-    
-}
+
+
+
 ```
 
-今天是 11 月 15 号，我的数据结构才学了一半，非常的难过，怎么办呢，睡个觉先，哈哈哈哈😂
+KMP优化算法没看  视频P37
+线索二叉树找前驱后驱还没看完 视频P48
