@@ -1099,14 +1099,19 @@ BSTNode *BST_Search(BSTree T,int key){
 //在二叉排序树中查找值为 key 的结点（递归实现）
 BSTNode *BSTSearch(BSTree T,int key){
     if(T==NULL)
-        return NULL;
+        return NULL;    //查找失败
     if(key==T->key)
-        return T;
+        return T;          //查找成功
     else if(key < T->key)
-        return BSTSearch(T->lchild,key);
-    
+        return BSTSearch(T->lchild,key);    //在左子树中查找
+    else
+        return BSTSearch(T->rchild,key);    //在右子树中查找
 }
 
+//在二叉排序树插入关键字为 k 的新结点（递归实现）
+int BST_Insert(BSTree &T,int k){
+    
+}
 ```
 
 # 第六章——图
