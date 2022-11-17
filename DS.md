@@ -1134,6 +1134,16 @@ void Create_BST(BSTree &T,int str[],int n){
     }
 }
 ```
+## 平衡二叉树
+```c++
+#include<iostream>
+using namespace std;
+typedef struct AVLNode{
+    int key;
+    int balance;
+    struct 
+}
+```
 
 # 第六章——图
 
