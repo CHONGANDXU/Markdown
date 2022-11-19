@@ -31,9 +31,11 @@
   - [二叉树的线索化](#二叉树的线索化)
   - [线索二叉树找前驱（后继）](#线索二叉树找前驱后继)
   - [树的存储方式](#树的存储方式)
-  - [二叉排序树](#二叉排序树)
+  - [二叉排序树的建立、查找、插入等相关操作](#二叉排序树的建立查找插入等相关操作)
+  - [平衡二叉树](#平衡二叉树)
 - [第六章——图](#第六章图)
-  - [图的概念](#图的概念)
+  - [邻接矩阵法（顺序存储）](#邻接矩阵法顺序存储)
+  - [邻接表法（顺序+链式存储）](#邻接表法顺序链式存储)
 
 # 第二章——线性表
 ## 2.3 线性表的链式表示
@@ -1139,14 +1141,65 @@ void Create_BST(BSTree &T,int str[],int n){
 #include<iostream>
 using namespace std;
 typedef struct AVLNode{
-    int key;
-    int balance;
-    struct 
-}
+    int key;        //结点关键词
+    int balance;    //平衡因子
+    struct AVLNode *lchild,*rchild;
+}AVLNode,*AVLTree
 ```
 
 # 第六章——图
 
+## 邻接矩阵法（顺序存储）
+
+> 对于 **不带权** 的无向图、有向图
+```c++
+#define MaxVertexNum 100                    //顶点数目的最大值
+typedef struct{
+    char Vex[MaxVertexNum];                 //顶点表
+    int Edge[MaxVertexNum][MaxVertexNum];   //邻接矩阵，边表
+    int vexnum,arcnum;                      //图的当前顶点数和边数/弧数
+}MGraph;
+```
+- 性质
+
+$设图G的邻接矩阵为A（矩阵元素为 0/1），则  A^n 的元素 A^n[i][j] \\ 等于 由顶点 i 到顶点 j 的长度为 n 的路径的数目$
+
+> 对于带权图（网）
+```c++
+#define MaxVertexNum 100                        //顶点数目的最大值
+#define INFINITY 最大的int值                    //宏定义 常量 “无穷”
+typedef char VertexType;                        //顶点的数据类型
+typedef int EdgeType;                           //带权图中边上权值的数据类型
+typedef struct{
+    VertexType Vex[MaxVertexNum];               //顶点表
+    EdgeType Edge[MaxVertexNum][MaxVertexNum];  //邻接矩阵，边的权值表
+    int vexnum,arcnum;                          //图的当前顶点数和边数/弧数
+}MGraph;
+```
+
+## 邻接表法（顺序+链式存储）
+```c++
+#define MaxVertexNum 100
+
+//用邻接表存储的图
+typedef struct{
+    AdjList vertices;
+    int vexnum,arcnum;
+}ALGraph;
+
+//顶点
+typedef struct VNode{
+    VertexType data;        //顶点信息
+    ArcNode *first;         //第一条边/弧
+}VNode,AdjList[MaxVertexNum];
+
+//“边/弧”
+typedef struct ArcNode{
+    int adjvex;             //边/弧指向哪个结点
+    struct ArcNode *next;   //指向下一条弧的指针
+    //InfoType info;        //边权值
+}ArcNode;
+```
 
 KMP优化算法没看  视频P37
 线索二叉树找前驱后驱还没看完 视频P48
