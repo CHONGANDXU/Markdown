@@ -36,6 +36,8 @@
 - [第六章——图](#第六章图)
   - [邻接矩阵法（顺序存储）](#邻接矩阵法顺序存储)
   - [邻接表法（顺序+链式存储）](#邻接表法顺序链式存储)
+  - [BFS 广度优先遍历算法](#bfs-广度优先遍历算法)
+  - [DFS 深度优先遍历算法](#dfs-深度优先遍历算法)
 
 # 第二章——线性表
 ## 2.3 线性表的链式表示
@@ -1200,6 +1202,47 @@ typedef struct ArcNode{
     //InfoType info;        //边权值
 }ArcNode;
 ```
+
+## BFS 广度优先遍历算法
+```c++
+#include <iostream>
+using namespace std;
+
+#define MaxVertexNum 100            //结点的最大个数
+bool visited[MaxVertexNum];         //访问标记数组
+
+void BFSTraverse(Graph G){          //对图G进行广度优先遍历
+    for(int i=0;i<G.vexnum;i++){
+        visited[i]=false;           //访问标记数组初始化
+    }
+    InitQueue(Q);                   //初始化辅助队列Q
+    for(int i=0;i<G.vexnum;i++){    //从0号顶点开始遍历
+        if(!visit[i]){              //对每个连通分量调用一次BFS算法
+            BFS(G,i);               //若第i个顶点未被访问过，则执行BFS
+        }
+    }
+}
+
+//广度优先遍历算法
+void BFS(Graph G,int v){            //从顶点v出发，广度优先遍历图G
+    visit(v);                       //访问初始顶点v
+    visited[v]=true;                //对顶点 v 做已访问标记
+    Enqueue(Q,v);                   //顶点v入队列Q
+    while(!isEmpty(Q)){             
+        Dequeue(v);                 //顶点v出队列Q
+        for(int w=FirstNeighbor(G,v);w>=0;w=NextNeighbor(G,v,w)){  //检测v的所有邻接点
+            if(!visited[w]){        //w为v的未访问的邻接顶点
+                visit(w);           //访问w
+                visit[w]=true;      //对w做 已访问标记
+                Enqueue(Q,w);       //顶点w入队列
+            }
+        }
+    }
+}
+
+```
+
+## DFS 深度优先遍历算法
 
 KMP优化算法没看  视频P37
 线索二叉树找前驱后驱还没看完 视频P48
