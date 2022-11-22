@@ -1217,7 +1217,7 @@ void BFSTraverse(Graph G){          //对图G进行广度优先遍历
     }
     InitQueue(Q);                   //初始化辅助队列Q
     for(int i=0;i<G.vexnum;i++){    //从0号顶点开始遍历
-        if(!visit[i]){              //对每个连通分量调用一次BFS算法
+        if(!visited[i]){              //对每个连通分量调用一次BFS算法
             BFS(G,i);               //若第i个顶点未被访问过，则执行BFS
         }
     }
@@ -1233,7 +1233,7 @@ void BFS(Graph G,int v){            //从顶点v出发，广度优先遍历图G
         for(int w=FirstNeighbor(G,v);w>=0;w=NextNeighbor(G,v,w)){  //检测v的所有邻接点
             if(!visited[w]){        //w为v的未访问的邻接顶点
                 visit(w);           //访问w
-                visit[w]=true;      //对w做 已访问标记
+                visited[w]=true;      //对w做 已访问标记
                 Enqueue(Q,w);       //顶点w入队列
             }
         }
@@ -1242,7 +1242,54 @@ void BFS(Graph G,int v){            //从顶点v出发，广度优先遍历图G
 
 ```
 
+时间复杂度：
+1. 邻接矩阵存储的图：
+   访问 $|V|$ 个顶点需要 $O(|V|)$ 的时间
+   查找每个顶点的邻接点都需要 $O(|V|)$ 的时间，总共有 $|V|$ 个顶点
+   总的时间复杂度为 $O(|V|^2)$
+2. 邻接表存储的图：
+   访问 $|V|$ 个顶点需要 $O(|V|)$ 的时间
+   查找所有顶点的邻接点总共需要 $O(|E|)$ 的时间
+   总的时间复杂度为 $O(|V|+|E|)$
+
 ## DFS 深度优先遍历算法
+
+```c++
+#define MaxVertexNum 100            //结点的最大个数
+bool visited[MaxVertexNum];         //访问标记数组
+
+void DFSTraverse(Graph G){          //对图G进行深度优先遍历
+    for(int i=0;i<G.vexnum;i++){
+        visited[i]=false;           //访问标记数组初始化
+    }
+    for(int i=0;i<G.vexnum;i++){    //从0号顶点开始遍历
+        if(!visited[i]){              //对每个连通分量调用一次BFS算法
+            DFS(G,i);               //若第i个顶点未被访问过，则执行BFS
+        }
+    }
+}
+
+//深度优先遍历算法
+void DFS(Graph G,int v){            //从顶点v出发，深度优先遍历图G
+    visit(v);                       //访问初始顶点v
+    visited[v]=true;                //对顶点 v 做已访问标记
+    for(int w=FirstNeighbor(G,v);w>=0;w=NextNeighbor(G,v,w)){  //检测v的所有邻接点
+        if(!visited[w]){        //w为v的未访问的邻接顶点
+            DFS(G,w);
+        }
+    }
+}
+```
+
+时间复杂度：
+1. 邻接矩阵存储的图：
+   访问 $|V|$ 个顶点需要 $O(|V|)$ 的时间
+   查找每个顶点的邻接点都需要 $O(|V|)$ 的时间，总共有 $|V|$ 个顶点
+   总的时间复杂度为 $O(|V|^2)$
+2. 邻接表存储的图：
+   访问 $|V|$ 个顶点需要 $O(|V|)$ 的时间
+   查找所有顶点的邻接点总共需要 $O(|E|)$ 的时间
+   总的时间复杂度为 $O(|V|+|E|)$
 
 KMP优化算法没看  视频P37
 线索二叉树找前驱后驱还没看完 视频P48
