@@ -68,6 +68,7 @@
   - [8.2 交换排序](#82-交换排序)
   - [8.3 选择排序](#83-选择排序)
   - [8.4 归并排序](#84-归并排序)
+  - [8.5 基数排序](#85-基数排序)
 
 # 第一章——绪论
 
@@ -1512,10 +1513,12 @@ ElemType List[100];
 分块查找的平均查找长度为 $ASL_{分块查找}=ASL_{索引查找}+ASL_{块内查找}$
 ① 用 <font color='blue'>顺序</font> 查找索引表
 $$
-n=b*s   \\[5px]
-ASL_{分块查找}=ASL_{索引顺序}+ASL_{块内顺序}    \\[5px] 
-ASL_{索引顺序}=\frac{1+2+ \dots +b}{b}=\frac{b+1}{2}    \\[5px]
-ASL_{块内顺序}=\frac{1+2+ \dots +s}{s}=\frac{b+1}{2}
+\begin{aligned}
+n &=b*s   \\[5px]
+ASL_{分块查找} &=ASL_{索引顺序}+ASL_{块内顺序}    \\[5px] 
+ASL_{索引顺序} &=\frac{1+2+ \dots +b}{b}=\frac{b+1}{2}    \\[5px]
+ASL_{块内顺序} &=\frac{1+2+ \dots +s}{s}=\frac{s+1}{2}
+\end{aligned}
 $$
 
 $$
@@ -1805,8 +1808,41 @@ void HeapSort(int A[],int len){
 
 ## 8.4 归并排序
 ```c++
+#include <iostream>
+using namespace std;
 
+int *B=(int *)malloc(n*sizeof(int));    //辅助数组B
+
+//A[low...mid] A[mid+1...high]各自有序，将两部分归并
+void Merge(int A[],int low,int mid,int high){
+    int i,j,k;
+    for(k=low;k<=high;k++)
+        B[k]=A[k];                      //将A中所有元素复制到B中
+    for(i=low,j=mid+1,k=i;i<=mid&&j<=high;k++){
+        if(B[i]<=B[j])
+            A[k]=B[i++];                //将较小值复制到A中
+        else
+            A[k]=B[j++];
+    }
+    while(i<=mid) A[k++]=B[i++];
+    while(j<=high) A[k++]=B[j++];
+}
+
+void MergeSort(int A[],int low,int high){
+    if(low<high){
+        int mid=(low+high)/2;       //从中间划分
+        MergeSort(A,low,mid);       //对左半部分归并排序
+        MergeSort(A,mid+1,high);    //对右半部分归并排序
+        Merge(A,low,mid,high);      //归并
+    }
+}
 ```
+
+## 8.5 基数排序
+擅长解决的问题：
+1. 数据元素的关键字可以方便地拆分为d组，且d较小
+2. 每组关键字的取值范围不大，即r较小
+3. 数据元素个数n较大
 
 KMP优化算法没看  视频P37
 线索二叉树找前驱后驱还没看完 视频P48
