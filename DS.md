@@ -33,7 +33,8 @@
     - [5.2.1 二叉树的定义及其主要特征](#521-二叉树的定义及其主要特征)
     - [5.2.2 二叉树的存储结构、遍历](#522-二叉树的存储结构遍历)
   - [5.3 线索二叉树](#53-线索二叉树)
-    - [线索二叉树找前驱（后继）](#线索二叉树找前驱后继)
+    - [5.3.1 线索化二叉树](#531-线索化二叉树)
+    - [5.3.2 线索二叉树找前驱（后继）](#532-线索二叉树找前驱后继)
   - [5.4 树、森林](#54-树森林)
     - [5.4.1 树的存储结构](#541-树的存储结构)
   - [5.5 树与二叉树的应用](#55-树与二叉树的应用)
@@ -794,9 +795,19 @@ next [ j ] = S 的最长相等前后缀长度 + 1
 
 ## 5.2 二叉树的基本概念
 ### 5.2.1 二叉树的定义及其主要特征
+1. $$\begin{aligned}① \quad n &=n_0+n_1+n_2    \\② \quad n &= n_1+2n_2+1    \\②-① \quad n_0&=n_2+1   \end{aligned}$$
+2. $非空二叉树上第 i 层上至多有 2^{i−1} 个结点（i ≥ 1）\\[5px]$
+3. $m叉树第 i 层至多有 m^{i - 1}个结点\\[5px]$
+4. $高度为 h 的 二叉树 至多有 2^h - 1 个结点（满二叉树）\\[5px]$
+5. $高度为 h 的 m叉树 至多有 \frac{m^h - 1}{m -1}个结点（h≥1）\\[5px]$
+6. $$高度为 h 的 m 叉树 至少有h个结点 \\ 高度为h 、度为m 的树至少有h+m-1个结点$$
+7. $具有N个（N>0）结点的完全二叉树的高度为 \lceil log_{2}(N+1) \rceil 或 \lfloor log_{2}N \rfloor+1。\\[5px]$
+
 ### 5.2.2 二叉树的存储结构、遍历
+
 1. 顺序存储
 ```c++
+#include<iostream>
 #define MaxSize 100
 struct TreeNode{
     ElemType value; //结点中的数据元素
@@ -819,7 +830,11 @@ void initTree{      //初始化
     - 递归算法和非递归算法的转换
     - 层次遍历
     - 由遍历序列构造二叉树（必须由中序遍历序列）
+
+> 三种遍历（先序中序后序）
 ```c++
+#include <iostream>
+
 struct ElemType{
     int value;
 };
@@ -863,7 +878,14 @@ void PostOrder(BiTree T){
         visit(T);           //访问根结点       
     }
 }
+```
 
+> 层次遍历
+```c++
+#include<iostream>
+using namespace std;
+
+//二叉树的结点（链式存储）
 typedef struct BiTNode{
     char data;                  //数据域
     struct BiTNode *lchild,*rchild; //左右孩子指针
@@ -871,12 +893,12 @@ typedef struct BiTNode{
 
 //链式队列结点
 typedef struct LinkNode{
-    BiTNode *data;
+    BiTNode *data;              //存指针而不是结点
     struct LinkNode *next;
 }LinkNode;
 
 typedef struct{
-    LinkNode *front,*rear; //队头队尾
+    LinkNode *front,*rear;      //队头队尾
 }LinkQueue;
 
 // 层序遍历
@@ -886,7 +908,7 @@ void LevelOrder(BiTree T){
     BiTree p;
     EnQueue(Q,T);               //将根结点入队
     while(!IsEmpty(Q)){         //队列不空则循环
-        DeQueue(Q,p);           //队头结点出队
+        DeQueue(Q,p);           //队头结点出队，T赋值p
         visit(p);               //访问出队结点
         if(p->lchild!=NULL)
             EnQueue(Q,p->lchild);//左孩子入队
@@ -898,6 +920,7 @@ void LevelOrder(BiTree T){
 
 ## 5.3 线索二叉树
 
+### 5.3.1 线索化二叉树
 - 用土办法找到中序前驱
 ```c++
 #include <iostream>
@@ -1043,7 +1066,7 @@ void visit(ThreadNode *q){
 }
 ```
 
-### 线索二叉树找前驱（后继）
+### 5.3.2 线索二叉树找前驱（后继）
 
 - 中序线索二叉树找中序后继
 ```c++
