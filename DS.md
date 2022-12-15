@@ -1398,8 +1398,8 @@ AOV网：用DAG图表示一个工程，其顶点表示活动，用有向边 $<V_
 
 typedef struct ArcNode{     //边表结点
     int adjvex;             //该弧所指向的顶点的位置
-    struct ArcNode *nextarc;//指向下一条弧的指针
-    //InfoType info;        //网的边权值
+    struct ArcNode *nextArc;//指向下一条弧的指针
+    //InfoType info;       //网的边权值
 }ArcNode;
 
 typedef struct VNode{       //顶点表结点
