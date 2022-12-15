@@ -1441,9 +1441,9 @@ bool TopologicalSort(Graph G){
 2. 删去此顶点，并删除以此顶点为弧头的弧
 3. 重复步骤直到输出图中全部顶点，或者找不到出度为0的顶点为止【后者表示该图不是DAG（有向无环图）】
 
-5. 逆邻接表
+1. 逆邻接表
 
-6. DFS算法
+2. DFS算法
 ```c++
 #define MaxVertexNum 100            //结点的最大个数
 bool visited[MaxVertexNum];         //访问标记数组
