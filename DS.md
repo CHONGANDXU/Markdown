@@ -1422,7 +1422,7 @@ bool TopologicalSort(Graph G){
     while(!isEmpty(S)){
         Pop(S,i);           //栈顶元素出栈
         print[count++]=i;   //print数组记录拓扑序列，输出顶点i
-        for(p=G.vertices[i].firstarc; p ; p = p->nextarc ){ //将所有i指向的顶点的入度减1，并且将入度为0的顶点压入栈S
+        for(p=G.vertices[i].firstArc; p ; p = p->nextArc ){ //将所有i指向的顶点的入度减1，并且将入度为0的顶点压入栈S
             v = p -> adjvex;    
             if(!(--indegree[v]))
                 Push(S,v);  //入度为0，则入栈
@@ -1437,9 +1437,13 @@ bool TopologicalSort(Graph G){
 ```
 
 逆拓扑排序算法：
-1. 逆邻接表
+1. 从AOV网中选择一个出度为0的顶点输出
+2. 删去此顶点，并删除以此顶点为弧头的弧
+3. 重复步骤直到输出图中全部顶点，或者找不到出度为0的顶点为止【后者表示该图不是DAG（有向无环图）】
 
-2. DFS算法
+5. 逆邻接表
+
+6. DFS算法
 ```c++
 #define MaxVertexNum 100            //结点的最大个数
 bool visited[MaxVertexNum];         //访问标记数组
