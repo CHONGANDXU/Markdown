@@ -1318,12 +1318,16 @@ void DFS(Graph G,int v){            //从顶点v出发，深度优先遍历图G
 ## 6.4应用
 ### 6.4.1 最小生成树
 1. Prim算法
+   从某一个顶点开始构建生成树；
+   每次将代价最小的新顶点纳入生成树，直到所有顶点都纳入为止；
 2. Kruskal算法
+   每次选择一条权值最小的边，使这条边的两头连通（原本已经连通的就不选）；
+   知道所有结点都连通；
 
 ### 6.4.2 最短路径
 
 > 单源最短路径
-1. BFS 求无权图的单源最短路径
+1. BFS 求单源最短路径（无权图）
 ```c++
 void BFS_MIN_Distance(Graph G,int u){
     //d[i] 表示从 u 到 i 结点的最短路径
@@ -1348,12 +1352,20 @@ void BFS_MIN_Distance(Graph G,int u){
 }
 ```
 
-2. Dijkstra算法 （迪杰斯特拉——带权图）
+2. Dijkstra算法 （迪杰斯特拉——带权图、无权图）
+
+final[] ：初始化为false，循环遍历所有结点，找到还没确定最短路径，且 dist 最小的顶点 $V_i$ ,使得 final[i]=true
+dist[] ：记录了从源点 $V_0$ 到其他各顶点当前的最短路径长度
+path[] ：path[i]表示从源点到顶点i之间的最短路径的前驱结点，初始化为 -1
+
 
 > 各个顶点之间的最短距离
 
 Floyd算法 
-![](/pictures/Floyd.png)
+
+初始化矩阵
+![](/pictures/Floyd-V0.png)
+![](/pictures/Floyd-V1.png)
 
 $$
 \begin{aligned}
@@ -1505,8 +1517,7 @@ int Search_Seq(SSTable ST,ElemType key){
 ### 7.2.2 折半查找
 又称二分查找，仅适用于 <font color='red'>有序</font> 的 <font color='red'>顺序表</font>
 
-$具有 n 个(n>0)结点的完全二叉树的高度
-为 \log_2{(n+1)} 或 \log_2{n}+1。$
+$具有n个 (n>0) 结点的完全二叉树的高度为 \log_2{(n+1)} 或 \log_2{n}+1$
 
 $时间复杂度 \log_{2}{n}$
 
@@ -1535,8 +1546,8 @@ int Binary_Search(SSTable L,ElemType key){
 ```c++
 //索引表
 typedef struct{
-    ElemType maxValue;
-    int low,high;
+    ElemType maxValue;  //每个分块的最大关键字
+    int low,high;       //存储空间的索引下标范围
 }Index;
 
 //顺序表实际存储的元素
@@ -1636,6 +1647,21 @@ typedef struct AVLNode{
 ```
 
 ## 7.4 B树和B+树
+
+```c++
+//5叉排序树的结点定义
+struct Node{
+    ElemType keys[4];       //最多4个关键字
+    struct Node *child[5];  //最多5个孩子
+    int num;                //结点中有几个关键字
+}
+```
+
+> m阶B树的核心特性
+> 1. 根结点的子树数 ∈ [ 2 , m ],关键字个数∈[1 , m-1]
+>       其他子树的子树数 ∈ $[ \lceil m/2 \rceil ,m]$,关键字个数∈$[ \lceil m/2 \rceil-1 ,m-1]$
+> 2. 对任一结点，其所有子树的高度相同
+> 3. 关键字的值：子树0 < 关键字1 < 子树1 < 关键字2 ...
 
 <font size=5px>如何保证查找效率</font>
 
