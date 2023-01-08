@@ -13,7 +13,7 @@
             "state": {
               "type": "pdf",
               "state": {
-                "file": "PDF/基于人工智能预测糖尿病肾病预后模型的建立_王传鹏.pdf"
+                "file": "PDF/人工智能在糖尿病诊断中的应用研究_薛翔.pdf"
               }
             }
           }
@@ -83,7 +83,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "PDF/基于人工智能预测糖尿病肾病预后模型的建立_王传鹏.pdf",
+                "file": "PDF/人工智能在糖尿病诊断中的应用研究_薛翔.pdf",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -100,7 +100,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "PDF/基于人工智能预测糖尿病肾病预后模型的建立_王传鹏.pdf",
+                "file": "PDF/人工智能在糖尿病诊断中的应用研究_薛翔.pdf",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -123,7 +123,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "PDF/基于人工智能预测糖尿病肾病预后模型的建立_王传鹏.pdf"
+                "file": "PDF/人工智能在糖尿病诊断中的应用研究_薛翔.pdf"
               }
             }
           },
@@ -152,8 +152,10 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "955225e5eb10d677",
+  "active": "0a6e7e7530ae5558",
   "lastOpenFiles": [
+    "PDF/基于医疗大数据及人工智能的...动脉粥样硬化的预测模型研究_杨柳.pdf",
+    "PDF/基于人工智能预测糖尿病肾病预后模型的建立_王传鹏.pdf",
     "DS.md",
     "Vue+SSM.md"
   ]
