@@ -1,0 +1,160 @@
+{
+  "main": {
+    "id": "6e73625ef55a9b83",
+    "type": "split",
+    "children": [
+      {
+        "id": "710efe43d0d7f53b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0a6e7e7530ae5558",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "PDF/基于人工智能预测糖尿病肾病预后模型的建立_王传鹏.pdf"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "9d09ed34be505a36",
+    "type": "split",
+    "children": [
+      {
+        "id": "f50791a5850e27a7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "955225e5eb10d677",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "bd6b275ee59f0419",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "2d3988e7d3594795",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "f56417d3ab98bff3",
+    "type": "split",
+    "children": [
+      {
+        "id": "6c68a974984db036",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4e6bd78cbfea63da",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "PDF/基于人工智能预测糖尿病肾病预后模型的建立_王传鹏.pdf",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "2b0bd4c269fd1b99",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "PDF/基于人工智能预测糖尿病肾病预后模型的建立_王传鹏.pdf",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "e00e3a79b0aa9d81",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "05bf324ba2d1953b",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "PDF/基于人工智能预测糖尿病肾病预后模型的建立_王传鹏.pdf"
+              }
+            }
+          },
+          {
+            "id": "9b97d0c7adc285da",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "955225e5eb10d677",
+  "lastOpenFiles": [
+    "DS.md",
+    "Vue+SSM.md"
+  ]
+}
