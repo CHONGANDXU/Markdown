@@ -16,8 +16,21 @@
                 "file": "PDF/人工智能在糖尿病诊断中的应用研究_薛翔.pdf"
               }
             }
+          },
+          {
+            "id": "7ab9b15243d136d0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Config.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -83,7 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "PDF/人工智能在糖尿病诊断中的应用研究_薛翔.pdf",
+                "file": "Config.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -100,7 +113,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "PDF/人工智能在糖尿病诊断中的应用研究_薛翔.pdf",
+                "file": "Config.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -123,7 +136,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "PDF/人工智能在糖尿病诊断中的应用研究_薛翔.pdf"
+                "file": "Config.md"
               }
             }
           },
@@ -152,10 +165,12 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "0a6e7e7530ae5558",
+  "active": "7ab9b15243d136d0",
   "lastOpenFiles": [
-    "PDF/基于医疗大数据及人工智能的...动脉粥样硬化的预测模型研究_杨柳.pdf",
     "PDF/基于人工智能预测糖尿病肾病预后模型的建立_王传鹏.pdf",
+    "Config.md",
+    "PDF/人工智能在糖尿病诊断中的应用研究_薛翔.pdf",
+    "PDF/基于医疗大数据及人工智能的...动脉粥样硬化的预测模型研究_杨柳.pdf",
     "DS.md",
     "Vue+SSM.md"
   ]
