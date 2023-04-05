@@ -1,13 +1,13 @@
 # 第一章 绪论
 ## 1.1 数据库系统概论
 ### 1.1.1 数据库的四个概念
-1. 数据（ *data* ）
+1. 数据（ *Data* ）
 
    描述事物的符号记录称为 ***数据***。
 
    数据的含义称为数据的语义，数据及其语义是分不开的。
 
-2. 数据库（ *database，DB* ）
+2. 数据库（ *DataBase，DB* ）
    
    数据库是长期存储在计算机内、有组织的、可共享的大量数据的集合。
 
@@ -27,7 +27,7 @@
 
 4. 数据库系统（ *DataBase System，DBS* ）
 
-   数据库管理系统是由数据库、数据库管理系统（及其应用开发工具）、应用程序和数据库管理员（ *DBA* ）组成的存储、管理、处理和维护数据的系统。
+   数据库系统是由数据库、数据库管理系统（及其应用开发工具）、应用程序和数据库管理员（ *DataBase Administrator, DBA* ）组成的存储、管理、处理和维护数据的系统。
 
 ### 1.1.2 数据管理技术的产生和发展
 - 人工管理
@@ -157,7 +157,7 @@
 >
 >非等值连接：
 >
->![连接](/pictures/link.jpg)
+>![连接](./pictures/link.jpg)
 除：÷
 
 # 第三章 关系数据库标准语言SQL
@@ -290,13 +290,13 @@ delete from 表名 where 条件;
 ## 3.5 视图
 ### 3.5.1 什么是视图？
 	站在不同的角度去看到数据。（同一张表的数据，通过不同的角度去看待）。
-	
+
 ### 3.5.2 怎么创建视图？怎么删除视图？
 	create view myview as select empno,ename from emp;
 	drop view myview;
-
-	注意：只有DQL语句才能以视图对象的方式创建出来。
 	
+	注意：只有DQL语句才能以视图对象的方式创建出来。
+
 ### 3.5.3 对视图进行增删改查，会影响到原表数据。
 >（通过视图影响原表数据的，不是直接操作的原表）
 >
@@ -424,7 +424,7 @@ show grants for 'rose'@'localhost';
 
 	insert into t_user(username,email) values('jack','jack@123.com');
 	ERROR 1364 (HY000): Field 'id' doesn't have a default value
-```	
+```
 
 根据以上的测试得出：id是主键，因为添加了主键约束，主键字段中的数据不能为NULL，也不能重复。
 主键的特点：不能为NULL，也不能重复。
@@ -434,10 +434,12 @@ show grants for 'rose'@'localhost';
 - 主键字段 : id字段添加primary key之后，id叫做主键字段
 - 主键值 : id字段中的每一个值都是主键值。
 	
+
 主键有什么作用
 - 表的设计三范式中有要求，第一范式就要求任何一张表都应该有主键。
 - 主键的作用：主键值是这行记录在这张表当中的唯一标识。（就像一个人的身份证号码一样。）
 	
+
 主键的分类
 1. 根据主键字段的字段数量来划分：
 	- 单一主键（推荐的，常用的。）
@@ -447,6 +449,7 @@ show grants for 'rose'@'localhost';
 	- 业务主键：主键值和系统的业务挂钩，例如：拿着银行卡的卡号做主键，拿着身份证号码作为主键。（不推荐用）
 	最好不要拿着和业务挂钩的字段作为主键。因为以后的业务一旦发生改变的时候，主键值可能也需要随着发生变化，但有的时候没有办法变化，因为变化可能会导致主键值重复。
 	
+
 ***一张表的主键约束只能有1个。（必须记住）***
 
 使用表级约束方式定义主键：
@@ -511,14 +514,14 @@ MySQL提供主键值自增：（非常重要。）
 			4					zs4				102				北京大兴区经济技术开发区亦庄二中高三2班
 			5					zs5				102				北京大兴区经济技术开发区亦庄二中高三2班
 			缺点：冗余。【不推荐】
-
+		
 			第二种方案：两张表（班级表和学生表）
 			t_class 班级表
 			cno(pk)		cname
 			--------------------------------------------------------
 			101		北京大兴区经济技术开发区亦庄二中高三1班
 			102		北京大兴区经济技术开发区亦庄二中高三2班
-
+		
 			t_student 学生表
 			sno(pk)		sname				classno(该字段添加外键约束fk)
 			------------------------------------------------------------
@@ -541,13 +544,13 @@ MySQL提供主键值自增：（非常重要。）
 		```SQL
 		drop table if exists t_student;
 		drop table if exists t_class;
-
+		
 		create table t_class(
 			cno int,
 			cname varchar(255),
 			primary key(cno)
 		);
-
+		
 		create table t_student(
 			sno int,
 			sname varchar(255),
@@ -555,10 +558,10 @@ MySQL提供主键值自增：（非常重要。）
 			primary key(sno),
 			foreign key(classno) references t_class(cno)
 		);
-
+		
 		insert into t_class values(101,'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 		insert into t_class values(102,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-
+		
 		insert into t_student values(1,'zs1',101);
 		insert into t_student values(2,'zs2',101);
 		insert into t_student values(3,'zs3',102);
@@ -567,7 +570,7 @@ MySQL提供主键值自增：（非常重要。）
 		insert into t_student values(6,'zs6',102);
 		select * from t_class;
 		select * from t_student;
-
+		
 		insert into t_student values(7,'lisi',103);
 		ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`bjpowernode`.INT `t_student_ibfk_1` FOREIGN KEY (`classno`) REFERENCES `t_class` (`cno`))
 		```
@@ -677,14 +680,14 @@ select @sum;
  >设 *K* 为 *R<U,F>* 中的属性或属性组合，若 *K → U* ,则 *K* 为 *R* 的 **候选码**
 
  >如果 *U* 函数依赖于 *K* ，即 *K → U* ，则称 *K* 为 **超码**
- 
+
  > ***候选码是一类特殊的超码，候选码的任意真子集一定不是超码***
 
  >若候选码多于
  一个，则选定其中的一个为 **主码**
 
  >包含在任何一个候选码中的属性称为主属性；不包含在任何候选码中的属性称为非主属性或非码属性。
- 
+
  >最简单的情况，单个属性是码；最极端的情况，整个属性组是码，称为全码
  3. **范式：**
  >关系数据库中的关系是要满足一定要求的，满足不同程度要求的为不同范式。
@@ -722,7 +725,7 @@ select @sum;
 >5. 数据库实施阶段
 >6. 数据库运行和维护阶段
 
-![基本过程](/pictures/process.png)
+![基本过程](./pictures/process.png)
 
 ## 7.2 需求分析
 
@@ -878,7 +881,7 @@ int main(){
 >	EXEC SQL DECLARE <游标名> CURSOR
 >		FOR <SELECT语句>;
 >	```
->说明性语句，DBMS并不执行SELECT语句，而是申请一个数据空间，用于存放未来执行SELECT的结构数据集
+>	说明性语句，DBMS并不执行SELECT语句，而是申请一个数据空间，用于存放未来执行SELECT的结构数据集
 >
 >2. 打开游标
 >	```SQL
@@ -892,7 +895,7 @@ int main(){
 >		INTO <主变量>[<指示变量>]
 >			[,<主变量>[<指示变量>]]...;
 >	```
->指定方向推动游标指针，同时将缓冲区中的当前记录取出来送至主变量供主语言进一步处理
+>	指定方向推动游标指针，同时将缓冲区中的当前记录取出来送至主变量供主语言进一步处理
 >
 >4. 关闭游标
 >	```SQL
@@ -907,7 +910,7 @@ int main(){
 >		- 用带游标的SELECT语句查出所有满足条件的记录。从中进一步找出要修改或删除的记录
 >		- 用CURRENT形式的UPDATE语句和DELETE语句修改或删除
 >		- UPDATE语句和DELETE语句中要用子句 
-        ```WHERE CURRENT OF <游标名>```
+  	  ```WHERE CURRENT OF <游标名>```
 		表示修改或删除的是最近一次取出的记录，即游标指针指向的记录
 ### 8.1.2 不用游标的SQL语句
 1. 查询结果为单条记录的SELECT语句
@@ -1011,7 +1014,7 @@ select show_level(card_id),balance from reader_info;
 		- 自底向上
 
 
-![查询处理步骤](/pictures/query_processs.png)
+![查询处理步骤](./pictures/query_processs.png)
 
 ### 9.1.2 实现查询操作的算法实例
 1. 选择操作的实现
