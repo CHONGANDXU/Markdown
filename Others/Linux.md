@@ -1,10 +1,6 @@
 # Linux 常用知识
 
-
-
 ## Shell
-
-
 
 表示“为使用者提供的操作界面”
 
@@ -78,6 +74,15 @@ In computing, a **shell** is a computer program which exposes an [operating syst
 
 加载顺序：$.zshenv \rightarrow .zprofile \rightarrow .zshrc \rightarrow .zlogin \rightarrow .zlogout$
 
+## chsh
+
+改变终端命令程序，与以上部分知识相结合
+
+```sh
+chsh /bin/zsh
+chsh /bin/bash
+```
+
 ## curl wget fetch
 `curl` 常用的命令行工具，用来请求 `Web` 服务器，意思是客户端（client）的 URL 工具的
 不带任何参数时，发出 `GET` 请求
@@ -114,7 +119,7 @@ curl [options] [URL...]
 | upload     | All options for uploads                                    |           |             |
 | verbose    | Options related to any kind of command line output of curl |           |             |
 
-  
+
 
 ## echo
 
@@ -138,9 +143,9 @@ echo [-neE] [ARGUMENTS]
 - \v 显示垂直标签
 - 这个-E 项禁用转义字符的解释。这是默认值
 
-
-
 显示变量 变量名前加$
+
+
 
 ## 文件查看或处理
 
@@ -206,7 +211,7 @@ chgrp [-R] 属组名 文件名
 
 变更权限的指令 chmod 的语法：
 
-```
+```sh
  chmod [-R] xyz 文件或目录
 ```
 
@@ -239,7 +244,73 @@ chown [–R] 属主名 文件名
 chown [-R] 属主名：属组名 文件名
 ```
 
-## chsh
+## 网络与进程管理
+
+### ifconfig
+
+查看网络接口属性
+
+```sh
+(base) ➜  ~ ifconfig  
+
+en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	options=6463<RXCSUM,TXCSUM,TSO4,TSO6,CHANNEL_IO,PARTIAL_CSUM,ZEROINVERT_CSUM>
+	ether 6c:b1:33:a4:28:16 
+	inet6 fe80::c1:bc0d:e4ac:b8ec%en0 prefixlen 64 secured scopeid 0xf 
+	inet 10.254.32.128 netmask 0xfffffc00 broadcast 10.254.35.255
+	nd6 options=201<PERFORMNUD,DAD>
+	media: autoselect
+	status: active
+```
+
+### hostname
+
+查看主机名
+
+```sh
+(base) ➜  ~ hostname
+CHONGANDXU.local
+```
+
+### ps
+
+查看所有的进程，可搭配`grep`过滤查找所需的进程
+
+```sh
+(base) ➜  ~ ps -ef
+
+(base) ➜  ~ ps -ef | grep redis
+  501 24785     1   0 11:24上午 ??         1:03.14 redis-server 0.0.0.0:6379 
+  501 28692 27957   0  2:19下午 ttys000    0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn --exclude-dir=.idea --exclude-dir=.tox redis
+```
+
+### kill
+
+结束指定名称（或pid）的进程
+
+```sh
+kill -s name
+kill -s pid
+```
+
+### top
+
+实时显示CPU进程状态
+
+```sh
+(base) ➜  ~ top
+
+Processes: 617 total, 3 running, 614 sleeping, 2893 threads                                         14:24:17
+Load Avg: 2.62, 2.27, 2.07  CPU usage: 4.72% user, 5.41% sys, 89.86% idle
+SharedLibs: 719M resident, 129M data, 110M linkedit.
+MemRegions: 316212 total, 5519M resident, 417M private, 2407M shared.
+PhysMem: 15G used (1796M wired, 1923M compressor), 188M unused.
+VM: 253T vsize, 4285M framework vsize, 0(0) swapins, 0(0) swapouts.
+Networks: packets: 18443934/14G in, 4808086/1738M out. Disks: 4217804/149G read, 4728364/55G written.
+
+PID    COMMAND      %CPU TIME     #TH    #WQ  #PORT MEM    PURG   CMPRS  PGRP  PPID  STATE    BOOSTS
+0      kernel_task  17.9 03:53:00 513/8  0    0     9664K  0B     0B     0     0     running   0[0]
+```
 
 
 
