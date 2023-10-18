@@ -5,13 +5,13 @@
 ### 1.1 顺序容器
 
 #### 1.1.1 array 静态的连续数组
-#### 成员函数
+成员函数
 
-| 隐式定义的成员函数 |                                                              |
-| ------------------ | ------------------------------------------------------------ |
+| 隐式定义的成员函数 |                                                                                     |
+| ------------------ | ----------------------------------------------------------------------------------- |
 | (构造函数)         | 遵循聚合初始化的规则初始化 array （注意默认初始化可以导致非类的 T 的不确定值）<br/> |
-| (析构函数)         | 销毁 array 的每个元素<br />                                  |
-| operator=          | 以来自另一 array 的每个元素重写 array 的对应元素<br />       |
+| (析构函数)         | 销毁 array 的每个元素<br />                                                         |
+| operator=          | 以来自另一 array 的每个元素重写 array 的对应元素<br />                              |
 
 
 
@@ -115,14 +115,14 @@ int main()
 
 
 
-#### 非成员函数
+非成员函数
 
-|                                                              |                                |
-| ------------------------------------------------------------ | ------------------------------ |
+|                                                                                     |                                |
+| ----------------------------------------------------------------------------------- | ------------------------------ |
 | operator==<br/>operator!=<br/>operator<<br/>operator<=<br/>operator><br/>operator>= | 按照字典顺序比较 array 中的值  |
-| std::get(std::array)                                         | 访问 array 的一个元素          |
-| std::swap(std::array)                                        | 特化 std::swap 算法            |
-| to_array                                                     | 从内建数组创建 std::array 对象 |
+| std::get(std::array)                                                                | 访问 array 的一个元素          |
+| std::swap(std::array)                                                               | 特化 std::swap 算法            |
+| to_array                                                                            | 从内建数组创建 std::array 对象 |
 
 
 
@@ -179,16 +179,16 @@ int main(){
 
 
 
-#### 成员函数
+成员函数
 
-| [(构造函数)](https://zh.cppreference.com/w/cpp/container/vector/vector) | 构造 `vector`    |
-| ------------------------------------------------------------ | ---------------- |
-| [(析构函数)](https://zh.cppreference.com/w/cpp/container/vector/~vector) | 析构 `vector`    |
-| [operator=](https://zh.cppreference.com/w/cpp/container/vector/operator%3D) | 赋值给容器       |
-| [assign](https://zh.cppreference.com/w/cpp/container/vector/assign) | 将值赋给容器     |
+| [(构造函数)](https://zh.cppreference.com/w/cpp/container/vector/vector)           | 构造 `vector`    |
+| --------------------------------------------------------------------------------- | ---------------- |
+| [(析构函数)](https://zh.cppreference.com/w/cpp/container/vector/~vector)          | 析构 `vector`    |
+| [operator=](https://zh.cppreference.com/w/cpp/container/vector/operator%3D)       | 赋值给容器       |
+| [assign](https://zh.cppreference.com/w/cpp/container/vector/assign)               | 将值赋给容器     |
 | [get_allocator](https://zh.cppreference.com/w/cpp/container/vector/get_allocator) | 返回相关的分配器 |
 
-####  `operator=` 示例
+`operator=` 示例
 
 下列代码用 `operator=` 赋值一个 [std::vector](http://zh.cppreference.com/w/cpp/container/vector) 给另一个：
 
@@ -258,7 +258,7 @@ After assignment of initializer_list
  nums3 = { 1 2 3 }
 ```
 
-####  `assign()` 示例
+`assign()` 示例
 
 下列代码用 `assign` 添加数个字符到 `std::vector<char>`：
 
@@ -313,13 +313,13 @@ b b b b b b
 C + + 1 1
 ```
 
-| `vector`元素访问 |                                                              |
-| ---------------- | ------------------------------------------------------------ |
+| `vector`元素访问 |                                                                                                                                                                               |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | at               | 返回位于指定位置 `pos` 的元素的引用，有边界检查。<br />若 `pos` 不在容器范围内，则抛出 [std::out_of_range](https://zh.cppreference.com/w/cpp/error/out_of_range) 类型的异常。 |
-| operator[]       | 访问指定的元素                                               |
-| data             | 返回指向作为元素存储工作的底层数组的指针。返回的指针使得范围 `[data(),data()+size())` 始终是合法范围，即使容器为空（此时 `data()` 不可解引用）。 |
-| front            | 返回首元素的引用，对于容器c，表达式`c.front()`等价于`*c.begin()` |
-| back             | 返回最后元素的引用，对于非空容器c，表达式`c.back()`等价于`*std::prev(c.end())` |
+| operator[]       | 访问指定的元素                                                                                                                                                                |
+| data             | 返回指向作为元素存储工作的底层数组的指针。返回的指针使得范围 `[data(),data()+size())` 始终是合法范围，即使容器为空（此时 `data()` 不可解引用）。                              |
+| front            | 返回首元素的引用，对于容器c，表达式`c.front()`等价于`*c.begin()`                                                                                                              |
+| back             | 返回最后元素的引用，对于非空容器c，表达式`c.back()`等价于`*std::prev(c.end())`                                                                                                |
 
 使用`at`进行元素访问代码样例
 
@@ -356,7 +356,7 @@ int main()
 }
 ```
 
-#### `data()`示例
+`data()`示例
 
 ```c++
 #include <cstddef>
@@ -401,21 +401,21 @@ data = 1 2 3 4
 
 ![](./pictures/vector迭代器.png)
 
-| `vector`迭代器      |                                                              |
-| ------------------- | ------------------------------------------------------------ |
-| begin<br />cbegin   | 返回指向 `vector` 首元素的迭代器<br />若 `vector`为空，则返回的迭代器将等于 `end()` |
-| end<br />cend       | 返回指向 `vector` 末元素后一元素的迭代器。<br />此元素表现为占位符；试图访问它导致未定义行为。 |
-| rbegin<br />crbegin | 返回指向逆向 `vector` 首元素的逆向迭代器。它对应非逆向 `vector` 的末元素。<br />若 `vector` 为空，则返回的迭代器等于`rend()` 。 |
+| `vector`迭代器      |                                                                                                                                                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| begin<br />cbegin   | 返回指向 `vector` 首元素的迭代器<br />若 `vector`为空，则返回的迭代器将等于 `end()`                                                            |
+| end<br />cend       | 返回指向 `vector` 末元素后一元素的迭代器。<br />此元素表现为占位符；试图访问它导致未定义行为。                                                 |
+| rbegin<br />crbegin | 返回指向逆向 `vector` 首元素的逆向迭代器。它对应非逆向 `vector` 的末元素。<br />若 `vector` 为空，则返回的迭代器等于`rend()` 。                |
 | rend<br />crend     | 返回指向逆向 `vector` 末元素后一元素的逆向迭代器。它对应非逆向 `vector` 首元素的前一元素。<br />此元素表现为占位符，试图访问它导致未定义行为。 |
 
-| 容量                                                         |                                                              |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [empty](https://zh.cppreference.com/w/cpp/container/vector/empty) | 检查容器是否为空，即是否`begin()==end()`                     |
-| [size](https://zh.cppreference.com/w/cpp/container/vector/size) | 返回容纳的元素数                                             |
-| [max_size](https://zh.cppreference.com/w/cpp/container/vector/max_size) | 返回可容纳的最大元素数，此值通常反映容器大小上的理论极限，至多为 `std::numeric_limits<difference_type>::max()` |
-| [reserve](https://zh.cppreference.com/w/cpp/container/vector/reserve) | 预留存储空间                                                 |
-| [capacity](https://zh.cppreference.com/w/cpp/container/vector/capacity) | 返回当前存储空间能够容纳的元素数                             |
-| [shrink_to_fit](https://zh.cppreference.com/w/cpp/container/vector/shrink_to_fit) | 通过释放未使用的内存减少内存的使用                           |
+| 容量                                                                              |                                                                                                                |
+| --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [empty](https://zh.cppreference.com/w/cpp/container/vector/empty)                 | 检查容器是否为空，即是否`begin()==end()`                                                                       |
+| [size](https://zh.cppreference.com/w/cpp/container/vector/size)                   | 返回容纳的元素数                                                                                               |
+| [max_size](https://zh.cppreference.com/w/cpp/container/vector/max_size)           | 返回可容纳的最大元素数，此值通常反映容器大小上的理论极限，至多为 `std::numeric_limits<difference_type>::max()` |
+| [reserve](https://zh.cppreference.com/w/cpp/container/vector/reserve)             | 预留存储空间                                                                                                   |
+| [capacity](https://zh.cppreference.com/w/cpp/container/vector/capacity)           | 返回当前存储空间能够容纳的元素数                                                                               |
+| [shrink_to_fit](https://zh.cppreference.com/w/cpp/container/vector/shrink_to_fit) | 通过释放未使用的内存减少内存的使用                                                                             |
 
 `std::vector<T,Allocator>::capacity`
 
@@ -430,7 +430,7 @@ data = 1 2 3 4
 
 复杂度：常数。
 
-#### `capacity()`示例
+`capacity()`示例
 
 ```c++
 #include <iostream>
@@ -476,8 +476,8 @@ final capacity=256
 
 `std::vector<T,Allocator>::reserve`
 
-| void reserve( size_type new_cap ); |      | (C++20 前) |
-| ---------------------------------- | ---- | ---------- |
+| void reserve( size_type new_cap ); |     | (C++20 前) |
+| ---------------------------------- | --- | ---------- |
 
 增加 `vector` 的容量（即 `vector` 在不重新分配存储的情况下能最多能持有的元素的数量）到大于或等于 new_cap 的值。如果 new_cap 大于当前的 [capacity()](https://zh.cppreference.com/w/cpp/container/vector/capacity)，那么就会分配新存储，否则该方法不做任何事。
 
@@ -587,27 +587,27 @@ size() == capacity() == 16
 
 
 
-| 修改器                                                       |                                                              |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [clear](https://zh.cppreference.com/w/cpp/container/vector/clear) | 清除内容，从容器擦除所有元素。此调用后 [size()](https://zh.cppreference.com/w/cpp/container/vector/size) 返回零。 |
-| [insert](https://zh.cppreference.com/w/cpp/container/vector/insert) | 插入元素                                                     |
-| [emplace](https://zh.cppreference.com/w/cpp/container/vector/emplace)(C++11) | 原位构造元素                                                 |
-| [erase](https://zh.cppreference.com/w/cpp/container/vector/erase) | 擦除元素                                                     |
-| [push_back](https://zh.cppreference.com/w/cpp/container/vector/push_back) | 将元素添加到容器末尾                                         |
-| [emplace_back](https://zh.cppreference.com/w/cpp/container/vector/emplace_back)(C++11) | 在容器末尾就地构造元素                                       |
-| [pop_back](https://zh.cppreference.com/w/cpp/container/vector/pop_back) | 移除末元素                                                   |
-| [resize](https://zh.cppreference.com/w/cpp/container/vector/resize) | 改变容器中可存储元素的个数                                   |
-| [swap](https://zh.cppreference.com/w/cpp/container/vector/swap) | 交换内容                                                     |
+| 修改器                                                                                 |                                                                                                                   |
+| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| [clear](https://zh.cppreference.com/w/cpp/container/vector/clear)                      | 清除内容，从容器擦除所有元素。此调用后 [size()](https://zh.cppreference.com/w/cpp/container/vector/size) 返回零。 |
+| [insert](https://zh.cppreference.com/w/cpp/container/vector/insert)                    | 插入元素                                                                                                          |
+| [emplace](https://zh.cppreference.com/w/cpp/container/vector/emplace)(C++11)           | 原位构造元素                                                                                                      |
+| [erase](https://zh.cppreference.com/w/cpp/container/vector/erase)                      | 擦除元素                                                                                                          |
+| [push_back](https://zh.cppreference.com/w/cpp/container/vector/push_back)              | 将元素添加到容器末尾                                                                                              |
+| [emplace_back](https://zh.cppreference.com/w/cpp/container/vector/emplace_back)(C++11) | 在容器末尾就地构造元素                                                                                            |
+| [pop_back](https://zh.cppreference.com/w/cpp/container/vector/pop_back)                | 移除末元素                                                                                                        |
+| [resize](https://zh.cppreference.com/w/cpp/container/vector/resize)                    | 改变容器中可存储元素的个数                                                                                        |
+| [swap](https://zh.cppreference.com/w/cpp/container/vector/swap)                        | 交换内容                                                                                                          |
 
-| insert                                                       |                                                              | 返回值                                                       |       |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | :---: |
-| iterator insert( const_iterator pos, const T& value );       | 1-2) 在 `pos` 前插入 `value`                                 | 1-2) 指向被插入 `value` 的迭代器。                           | （1） |
-| iterator insert( const_iterator pos, T&& value );            |                                                              |                                                              |  (2)  |
-| iterator insert( const_iterator pos, size_type count, const T& value ); | 3)在 `pos` 前插入 `value` 的 `count` 个副本                  | 3)指向首个被插入元素的迭代器，或者在 `count == 0` 时返回 `pos`。 | （3） |
-| template< class InputIt > iterator insert( const_iterator pos, InputIt first, InputIt last ); | 4)在 `pos` 前插入来自范围 `[first, last)` 的元素。<br />如果 `first` 和 `last` 是指向 `*this` 中的迭代器，那么行为未定义。 | 4)指向首个被插入元素的迭代器，或者在 `first == last` 时返回 `pos`。 |  (4)  |
-| iterator insert( const_iterator pos, [std::initializer_list](http://zh.cppreference.com/w/cpp/utility/initializer_list)<T> ilist ); | 5)在 `pos` 前插入来自 `initializer_list ilist` 的元素。      | 5)指向首个被插入元素的迭代器，或者在 `ilist` 为空时返回 `pos`。 |  (5)  |
+| insert                                                                                                                              |                                                                                                                            | 返回值                                                              |       |
+| ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | :---: |
+| iterator insert( const_iterator pos, const T& value );                                                                              | 1-2) 在 `pos` 前插入 `value`                                                                                               | 1-2) 指向被插入 `value` 的迭代器。                                  | （1） |
+| iterator insert( const_iterator pos, T&& value );                                                                                   |                                                                                                                            |                                                                     |  (2)  |
+| iterator insert( const_iterator pos, size_type count, const T& value );                                                             | 3)在 `pos` 前插入 `value` 的 `count` 个副本                                                                                | 3)指向首个被插入元素的迭代器，或者在 `count == 0` 时返回 `pos`。    | （3） |
+| template< class InputIt > iterator insert( const_iterator pos, InputIt first, InputIt last );                                       | 4)在 `pos` 前插入来自范围 `[first, last)` 的元素。<br />如果 `first` 和 `last` 是指向 `*this` 中的迭代器，那么行为未定义。 | 4)指向首个被插入元素的迭代器，或者在 `first == last` 时返回 `pos`。 |  (4)  |
+| iterator insert( const_iterator pos, [std::initializer_list](http://zh.cppreference.com/w/cpp/utility/initializer_list)<T> ilist ); | 5)在 `pos` 前插入来自 `initializer_list ilist` 的元素。                                                                    | 5)指向首个被插入元素的迭代器，或者在 `ilist` 为空时返回 `pos`。     |  (5)  |
 
-#### `clear()`示例
+`clear()`示例
 
 ```c++
 #include <algorithm>
@@ -645,7 +645,7 @@ clear 后：
 
 
 
-#### `insert()`示例
+`insert()`示例
 
 ```c++
 #include <iostream>
@@ -712,11 +712,4 @@ int main ()
 ### 1.3 无序关联容器
 
 ### 1.4 容器适配器
-
-|   阶段   |        任务        | 时间（天） |
-| :------: | :----------------: | :--------: |
-| 第一阶段 | 理论研究和模型开发 |     30     |
-| 第二阶段 |   数据收集和分析   |     30     |
-| 第三阶段 |   模型验证和优化   |     20     |
-| 第四阶段 | 结果整理和撰写论文 |     10     |
 
