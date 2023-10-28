@@ -174,7 +174,7 @@ brew install redis
 
 > **Redis是一个key-value的数据库，key一般是String类型，不过value的类型多种多样**
 
-![image-20220524205926164](https://image-bed-vz.oss-cn-hangzhou.aliyuncs.com/Redis/image-20220524205926164.png)
+![基本数据类型](./pictures/Redis基本数据类型.png)
 
 
 
@@ -415,7 +415,7 @@ brew install redis
 
 ## 2.图形化客户端
 
-Navicat 16 版本已经支持 Redis
+Navicat 16.2 版本以上已支持 Redis 图形化界面及操作
 
 > 下载地址：https://navicat.com.cn/download/navicat-premium
 
