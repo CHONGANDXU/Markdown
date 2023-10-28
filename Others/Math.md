@@ -1,5 +1,9 @@
-**常用带佩亚诺余项的麦克劳林公式**（泰勒）
+**泰勒一般展开公式**
+$$
+f(x)=f(x_0)+f'(x_o)(x-x_0)+\frac{f''(x_0)}{2!}(x-x_0)^2+\cdots+\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n+o[(x-x_0)^n]
+$$
 
+**常用带佩亚诺余项的麦克劳林公式**（泰勒）
 $$
 \begin{align}
 e^x&= 1+x+\frac{x^2}{2 !}+\cdots+\frac{x^n}{n !}+o\left(x^n\right) \\
@@ -39,3 +43,22 @@ $$
 \\
 ps: u^{(0)}=u \qquad v^{(0)}=v
 $$
+
+
+![](http://i0.hdslb.com/bfs/new_dyn/2dea2d8b6214f5f0c2b0dfc3030aa07619147132.png)
+
+![](http://i0.hdslb.com/bfs/new_dyn/9384cefbacca1651bdbbbe0dad14fec619147132.png)
+
+![](http://i0.hdslb.com/bfs/new_dyn/6b8ca7d74ca96f68cc5a4e032991e70b19147132.png)
+
+![](http://i0.hdslb.com/bfs/new_dyn/5b5de5b34f8e958dec1b77376aad909219147132.png)
+
+![](http://i0.hdslb.com/bfs/new_dyn/acc2245606003efb045abde41dc663eb19147132.png)
+
+![](http://i0.hdslb.com/bfs/new_dyn/62ff69eda4c4aed2bbd47a4538e90a9219147132.png)
+
+![](http://i0.hdslb.com/bfs/new_dyn/32477d68755f3d143e43843390611a3919147132.png)
+
+![](http://i0.hdslb.com/bfs/new_dyn/d06969cda2a7b02532ebe5d33271533b19147132.png)
+
+![](http://i0.hdslb.com/bfs/new_dyn/2f899a2c221f766eb23d3155858ada6819147132.png)
