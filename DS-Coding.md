@@ -191,7 +191,8 @@ typedef struct LNode { // 定义单链表结点类型
   struct LNode *next;  // 指针域
 } LNode, *LinkList;
 
-LinkList createList_Head(LinkList &L) { // 使用头插法建立单链表
+// 使用头插法建立单链表(带头结点)
+LinkList createList_Head(LinkList &L) { 
   LNode *s;
   int x;
   L = (LinkList)malloc(sizeof(LNode)); // 创建头结点
@@ -207,13 +208,12 @@ LinkList createList_Head(LinkList &L) { // 使用头插法建立单链表
   return L;
 }
 
-LNode *GetElem(LinkList L, int i) { // 使用 下标 返回 该单链表结点
-  int j = 1;
-  LNode *p = L->next;
-  if (i == 0)
-    return L;
-  if (i < 1)
+// 按位查找，使用 下标 返回 该单链表结点(带头结点)
+LNode *GetElem(LinkList L, int i) {
+  if (i < 0)
     return NULL;
+  int j = 0;     // j表示指向的第几个结点
+  LNode *p = L;  // p 指向 L 的头结点(不带数据)
   while (p && j < i) {
     p = p->next;
     j++;
@@ -221,7 +221,8 @@ LNode *GetElem(LinkList L, int i) { // 使用 下标 返回 该单链表结点
   return p;
 }
 
-LNode *LocateElem(LinkList L, int e) { // 使用 值data 返回 该点链表结点
+// 按值查找，使用 值data 返回 该点链表结点
+LNode *LocateElem(LinkList L, int e) {
   LNode *p = L->next;
   while (p != NULL && p->data != e) {
     p = p->next;
@@ -229,11 +230,60 @@ LNode *LocateElem(LinkList L, int e) { // 使用 值data 返回 该点链表结�
   return p;
 }
 
+// 按位置顺序插入(带头结点),已知要插入的位置与新插入的结点
 LinkList InsertElem(LinkList &L, LNode *s, int n) {
   LNode *p = GetElem(L, n - 1);
   s->next = p->next;
   p->next = s;
   return L;
+}
+
+// 按位序删除结点(带头结点),已知要删除的位置
+bool DeleteElem(LinkList &L, ElemType &e, int n) {
+  LNode *p = GetElem(L, n - 1);
+  LNode *q = p->next;
+  e = q->data;
+  p->next = q->next;
+  free(q);
+  return L;
+}
+
+// 后插操作，在 p 结点之后插入元素 e
+bool InsertNextNode(LNode *p, ElemType e) {
+  if (p == NULL)
+    return false;
+  LNode *s = (LNode *)malloc(sizeof(LNode));
+  if (s == NULL)
+    return false; // 新结点 s 内存分配失败
+  s->data = e;
+  s->next = p->next;
+  p->next = s;
+  return true;
+}
+
+// 前插操作：在 p 结点之前插入元素 e
+bool InsertPriorNode(LNode *p, ElemType e) {
+  if (p == NULL)
+    return false;
+  LNode *s = (LNode *)malloc(sizeof(LNode));
+  if (s == NULL)
+    return false; // 新结点 s 内存分配失败
+  s->next = p->next;
+  p->next = s;
+  s->data = p->data;
+  p->data = e;
+  return true;
+}
+
+// 删除结点
+bool DeleteNode(LNode *p) {
+  if (p == NULL)
+    return false;
+  LNode *q = p->next;
+  p->data = q->data;
+  p->next = q->next;
+  free(q);
+  return true;
 }
 
 int main() {
