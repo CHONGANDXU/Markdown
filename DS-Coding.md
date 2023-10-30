@@ -79,8 +79,105 @@
 
 
 ## 2.2 线性表的顺序表示【重要】
+- 静态分配
+  - data[MaxSize]
+  
+  - 基本操作：插入、删除、查找
+```c++
+// 静态数组插入
+bool ListInsert(SqList &L, int i, int e) {
+  if (i < 1 || i > L.length + 1)
+    return false;
+  if (L.length >= MaxSize)
+    return false;
+  for (int j = L.length; j >= i; j--) {
+    L.data[j] = L.data[j - 1];
+  }                  // 将第i个元素及之后的元素后移
+  L.data[i - 1] = e; // 在位置i处放入e
+  L.length++;
+  return true;
+}
 
+//静态数据删除
+bool ListDelete(SqList &L, int i, int &deletedData) {
+  if (i < 1 || i > L.length) // 判断i的范围是否有效
+    return false;
+  deletedData = L.data[i - 1]; // 将被删除的元素赋值给e
+  for (int j = i; j < L.length; j++)
+    L.data[j - 1] = L.data[j]; // 将第i个位置后的元素前移
+  L.length--;
+  return true;
+}
 
+// 按位查找
+int GetElem(SqList L, int i) { return L.data[i - 1]; }
+
+// 按值查找
+int LocateElem(SqList L, int e) {
+  for (int i = 0; i < L.length; i++) {
+    if (L.data[i] == e)
+      return i + 1;
+  }
+  return 0;
+}
+```
+
+插入操作平均情况：
+
+> 假设新元素插入到任何一个位置的概率相同，即$i=1,2,3,\cdots,length,length+1$的概率都是$p=\frac{1}{n+1}$
+>
+> - i=1，移动n个数，循环n次；【最坏情况时间复杂度$O(n)$】
+> - i=2，移动n-1个数，循环n-1次；
+> - i=3，移动n-1个数，循环n-2次
+> - ……
+> - i=n+1时，无需移动数组，循环0次【最好情况时间复杂度$O(1)$】
+>
+> 平均循环次数=$[n+(n-1)+(n-2)+\cdots+1+0]*\frac{1}{n+1}=\frac{(1+n)n}{2}\frac{1}{n+1}=\frac{n}{2}$
+>
+> 平均时间复杂度为$O(n)$
+
+删除操作平均情况：
+
+> 假设删除任何一个位置元素的概率相同，即$i=1,2,3,\cdots,length$的概率都是$p=\frac{1}{n}$
+>
+> - i=1，移动n-1个数，循环n-1次；【最坏情况时间复杂度$O(n)$】
+> - i=2，移动n-2个数，循环n-2次；
+> - i=3，移动n-3个数，循环n-3次
+> - ……
+> - i=n，移动0个数，循环0次【最好情况时间复杂度$O(1)$】
+>
+> 平均循环次数=$[(n-1)+(n-2)+\cdots+1+0]*\frac{1}{n+1}=\frac{(n-1)n}{2}\frac{1}{n}=\frac{n-1}{2}$
+>
+> 平均时间复杂度为$O(n)$
+
+- 动态分配
+
+```c++
+#define InitSize 10 // 顺序表的初始长度
+typedef struct {
+  int *data;   // 指示动态分配数组的指针
+  int MaxSize; // 顺序表的最大容量
+  int length;  // 顺序表的当前长度
+} SeqList;     // 顺序表的类型定义(动态分配方式)
+
+void InitList(SeqList &L) {
+  // 用 malloc 函数申请一片连续的存储空间
+  L.data = (int *)malloc(InitSize * sizeof(int));
+  L.length = 0;
+  L.MaxSize = InitSize;
+}
+
+// 增加动态数组的长度
+void IncreaseSize(SeqList &L, int len) {
+  int *p = L.data;
+  L.data = (int *)malloc((L.MaxSize + len) * sizeof(int));
+  for (int i = 0; i < L.length; i++) {
+    L.data[i] = p[i]; // 将数据复制到新区域
+  }
+  L.MaxSize = L.MaxSize + len; // 顺序表最大长度增加 len
+  free(p);                     // 释放原来的内存空间
+}
+```
 
 ## 2.3 线性表的链式表示【重要】
 
@@ -89,63 +186,61 @@
 #include <iostream>
 using namespace std;
 
-typedef struct LNode{   //定义单链表结点类型
-    ElemType data;      //数据域
-    struct LNode *next; //指针域
-}LNode,*LinkList;
+typedef struct LNode { // 定义单链表结点类型
+  ElemType data;       // 数据域，ElemType为可修改的data属性值
+  struct LNode *next;  // 指针域
+} LNode, *LinkList;
 
-LinkList createList_Head(LinkList &L){  //使用头插法建立单链表
-    LNode *s;
-    int x;
-    L=(LinkList)malloc(sizeof(LNode));  //创建头结点
-    L->next=NULL;                       //初始为空链表
-    cin>>x;
-    while (x!=9999)
-    {
-        s=(LNode*)malloc(sizeof(LNode));
-        s->data=x;
-        s->next=L->next;
-        L->next=s;
-        cin>>x;
-    }
+LinkList createList_Head(LinkList &L) { // 使用头插法建立单链表
+  LNode *s;
+  int x;
+  L = (LinkList)malloc(sizeof(LNode)); // 创建头结点
+  L->next = NULL;                      // 初始为空链表
+  cin >> x;
+  while (x != 9999) {
+    s = (LNode *)malloc(sizeof(LNode));
+    s->data = x;
+    s->next = L->next;
+    L->next = s;
+    cin >> x;
+  }
+  return L;
+}
+
+LNode *GetElem(LinkList L, int i) { // 使用 下标 返回 该单链表结点
+  int j = 1;
+  LNode *p = L->next;
+  if (i == 0)
     return L;
+  if (i < 1)
+    return NULL;
+  while (p && j < i) {
+    p = p->next;
+    j++;
+  }
+  return p;
 }
 
-LNode *GetElem(LinkList L,int i){   //使用 下标 返回 该单链表结点
-    int j=1;
-    LNode *p=L->next;
-    if(i==0)
-        return L;
-    if(i<1)
-        return NULL;
-    while(p&&j<i){
-        p=p->next;
-        j++;
-    }
-    return p;
+LNode *LocateElem(LinkList L, int e) { // 使用 值data 返回 该点链表结点
+  LNode *p = L->next;
+  while (p != NULL && p->data != e) {
+    p = p->next;
+  }
+  return p;
 }
 
-LNode *LocateElem(LinkList L,int e){//使用 值data 返回 该点链表结点
-    LNode *p=L->next;
-    while(p!=NULL&&p->data!=e)
-    {
-        p=p->next;
-    }
-    return p;
+LinkList InsertElem(LinkList &L, LNode *s, int n) {
+  LNode *p = GetElem(L, n - 1);
+  s->next = p->next;
+  p->next = s;
+  return L;
 }
 
-LinkList InsertElem(LinkList &L,LNode *s,int n){
-    LNode *p=GetElem(L,n-1);
-    s->next=p->next;
-    p->next=s;
-    return L;
-}
-
-int main(){
-    LinkList L;
-    createList_Head(L);
-    cout<<L;
-    return 0;
+int main() {
+  LinkList L;
+  createList_Head(L);
+  cout << L;
+  return 0;
 }
 ```
 
