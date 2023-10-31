@@ -187,23 +187,53 @@ void IncreaseSize(SeqList &L, int len) {
 using namespace std;
 
 typedef struct LNode { // 定义单链表结点类型
-  ElemType data;       // 数据域，ElemType为可修改的data属性值
+  int data;            // 数据域，ElemType为可修改的data属性值
   struct LNode *next;  // 指针域
 } LNode, *LinkList;
 
+// 初始化一个带头结点的单链表
+bool initLinkList(LinkList &L) {
+  L = (LNode *)malloc(sizeof(LNode));
+  if (L == NULL) // 如果初始头结点内存分配失败,则返回false
+    return false;
+  L->next = NULL;
+  return true;
+}
+
 // 使用头插法建立单链表(带头结点)
-LinkList createList_Head(LinkList &L) { 
+LinkList createList_Head(LinkList &L) {
   LNode *s;
   int x;
   L = (LinkList)malloc(sizeof(LNode)); // 创建头结点
   L->next = NULL;                      // 初始为空链表
-  cin >> x;
-  while (x != 9999) {
+  while (cin >> x) {
     s = (LNode *)malloc(sizeof(LNode));
     s->data = x;
     s->next = L->next;
     L->next = s;
-    cin >> x;
+  }
+  // 输入的值不是数值型数据，跳出程序
+  if (cin.fail()) {
+    cout << "非法输入，创建单链表结束" << std::endl;
+  }
+  return L;
+}
+
+// 使用尾插法建立单链表(带头结点)
+LinkList createList_Tail(LinkList &L) {
+  L = (LinkList)malloc(sizeof(LNode));
+  LNode *s, *r = L;
+  int x;
+  while (cin >> x) {
+    s = (LNode *)malloc(sizeof(LNode));
+    s->data = x;
+    r->next = s;
+    r = s;  // r 指向新的表尾结点
+  }
+  r->next = NULL;  // 尾指针指向空
+  // 输入的值不是数值型数据，跳出程序
+  if (cin.fail()) {
+    cout << "非法输入，创建单链表结束" << std::endl;
   }
   return L;
 }
@@ -212,8 +242,8 @@ LinkList createList_Head(LinkList &L) {
 LNode *GetElem(LinkList L, int i) {
   if (i < 0)
     return NULL;
-  int j = 0;     // j表示指向的第几个结点
-  LNode *p = L;  // p 指向 L 的头结点(不带数据)
+  int j = 0;    // j表示指向的第几个结点
+  LNode *p = L; // p 指向 L 的头结点(不带数据)
   while (p && j < i) {
     p = p->next;
     j++;
@@ -239,7 +269,7 @@ LinkList InsertElem(LinkList &L, LNode *s, int n) {
 }
 
 // 按位序删除结点(带头结点),已知要删除的位置
-bool DeleteElem(LinkList &L, ElemType &e, int n) {
+bool DeleteElem(LinkList &L, int &e, int n) {
   LNode *p = GetElem(L, n - 1);
   LNode *q = p->next;
   e = q->data;
@@ -249,7 +279,7 @@ bool DeleteElem(LinkList &L, ElemType &e, int n) {
 }
 
 // 后插操作，在 p 结点之后插入元素 e
-bool InsertNextNode(LNode *p, ElemType e) {
+bool InsertNextNode(LNode *p, int e) {
   if (p == NULL)
     return false;
   LNode *s = (LNode *)malloc(sizeof(LNode));
@@ -262,7 +292,7 @@ bool InsertNextNode(LNode *p, ElemType e) {
 }
 
 // 前插操作：在 p 结点之前插入元素 e
-bool InsertPriorNode(LNode *p, ElemType e) {
+bool InsertPriorNode(LNode *p, int e) {
   if (p == NULL)
     return false;
   LNode *s = (LNode *)malloc(sizeof(LNode));
@@ -286,8 +316,20 @@ bool DeleteNode(LNode *p) {
   return true;
 }
 
+// 求表的长度
+int Length(LinkList L) {
+  int len = 0;
+  LNode *p = L->next;
+  while (p != NULL) {
+    p = p->next;
+    len++;
+  }
+  return len;
+}
+
 int main() {
   LinkList L;
+  initLinkList(L);
   createList_Head(L);
   cout << L;
   return 0;
@@ -299,65 +341,76 @@ int main() {
 #include <iostream>
 using namespace std;
 
-typedef struct DNode{           //定义双链表结点类型
-    ElemType data;              //数据域
-    struct DNode *prior,*next;  //前驱和后驱指针
-}DNode,*DLinkList;
+typedef struct DNode {        // 定义双链表结点类型
+  int data;                   // 数据域
+  struct DNode *prior, *next; // 前驱和后驱指针
+} DNode, *DLinkList;
 
-bool initDLinkList(DLinkList &L){
-    L = (DNode*)malloc(sizeof(DNode));//分配一个头结点
-    if(L==NULL)
-        return false;
-    L->piror=NULL;                    //头结点的piror永远指向NULL
-    L->next=NUll;                     //头结点之后暂时没有结点
-    return true;
+bool initDLinkList(DLinkList &L) {
+  L = (DNode *)malloc(sizeof(DNode)); // 分配一个头结点
+  if (L == NULL)
+    return false;
+  L->prior = NULL; // 头结点的prior永远指向NULL
+  L->next = NULL;  // 头结点之后暂时没有结点
+  return true;
 }
 
-bool insertNextDNode(DNode *p,DNode *s){ //在P节点后插入S结点
-    if(p==NULL || s==NULL)
-        return false;
-    s->next=p->next;
-    if(p->next != NULL)                  //如果p有后继结点
-        p->next->prior=s;
-    s->prior=p;    
-    p->next=s;
-    return true;
+bool insertNextDNode(DNode *p, DNode *s) { // 在P节点后插入S结点
+  if (p == NULL || s == NULL)
+    return false;
+  s->next = p->next;
+  if (p->next != NULL) // 如果p有后继结点
+    p->next->prior = s;
+  s->prior = p;
+  p->next = s;
+  return true;
 }
 
-bool deleteNextDNode(DNode *p){ //删除p结点的后继结点 
-    if(p==NULL) return false;
-    DNode *q=p->next;           //找到p结点的后继结点q
-    if(q==NULL) return false;   //p没有后继结点，q为空
-    p->next=q->next;            
-    if(q->next!=NULL)           //q不是最后一个结点
-        q->next->prior=p;       
-    free(q);                    //释放结点空间
-    return true;
+bool deleteNextDNode(DNode *p) { // 删除p结点的后继结点
+  if (p == NULL)
+    return false;
+  DNode *q = p->next; // 找到p结点的后继结点q
+  if (q == NULL)
+    return false; // p没有后继结点，q为空
+  p->next = q->next;
+  if (q->next != NULL) // q不是最后一个结点
+    q->next->prior = p;
+  free(q); // 释放结点空间
+  return true;
 }
 
-void DestroyDLinkList(DLinkList &L){    //循环释放各个数据结点
-    while(L->next!=NULL)
-        deleteNextDNode(L);
-    free(L);
-    L=NULL;
+void DestroyDLinkList(DLinkList &L) { // 循环释放各个数据结点
+  while (L->next != NULL)
+    deleteNextDNode(L);
+  free(L);
+  L = NULL;
 }
 
-void checkAllDNode(){
-    while(p!=NULL){         //后向遍历
-        p=p->next;
-    }
-    while(p!=NULL){         //前向遍历
-        p=p->prior;
-    }
-    while(p->prior!=NULL){  //前向遍历（跳过头结点）
-        p=p->prior;
-    }
+void checkAllDNode(DLinkList &L) {
+  DNode *p = L->next;
+  while (p != NULL) { // 后向遍历
+    p = p->next;
+    cout << p->data << " ";
+  }
+  while (p != NULL) { // 前向遍历
+    p = p->prior;
+    cout << p->data << " ";
+  }
+  while (p->prior != NULL) { // 前向遍历(跳过头结点)
+    p = p->prior;
+    cout << p->data << " ";
+  }
 }
 
-void testDLinkList(){
-    DLinkList L;
-    initDLinkList(L);
-    ......
+// check the DLinkList is empty or not
+bool isEmptyDLinkList(DLinkList &L) { return L->next == NULL; }
+
+void testDLinkList() {
+  DLinkList L;
+  initDLinkList(L);
+  insertNextDNode(L, (DNode *)malloc(sizeof(DNode)));
+  insertNextDNode(L->next, (DNode *)malloc(sizeof(DNode)));
+  DestroyDLinkList(L);
 }
 ```
 
