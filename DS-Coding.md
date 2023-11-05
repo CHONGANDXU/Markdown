@@ -699,7 +699,6 @@ int main(){
 ```c++
 #include <iostream>
 using namespace std;
-#define MaxSize 10
 
 /**
 以下Code采用队列的顺序存储，且使用循环队列存储
@@ -708,48 +707,47 @@ using namespace std;
 队列满的条件为 (Q.rear+1)%MaxSize == Q.front
  */
 
-typedef struct SqQuene{
-    int data[MaxSize];
-    int front,rear;
-}SqQueue;
+#define MaxSize 10
+typedef struct SqQueue {
+  int data[MaxSize];
+  int front, rear;
+} SqQueue;
 
-//初始化队列
-void InitQueue(SqQuene& Q){
-    Q.front = Q.rear = 0;
-}
+// 初始化队列
+void InitQueue(SqQueue &Q) { Q.front = Q.rear = 0; }
 
-//判断队列是否为空
-bool QueueEmpty(SqQuene Q){
-    if(Q.front == Q.rear)
-        return true;
-    else
-        return false;
-}
-
-//入队
-bool EnQueue(SqQuene &Q,int x){
-    if((Q.rear+1)%MaxSize == Q.front) //判断队满
-        return false;
-    Q.data[Q.rear] = x;               //新元素插入队尾
-    Q.rear = (Q.rear + 1)%MaxSize;    //队尾指针加1取模
+// 判断队列是否为空
+bool QueueEmpty(SqQueue Q) {
+  if (Q.front == Q.rear)
     return true;
+  else
+    return false;
 }
 
-//出队
-bool DeQueue(SqQuene &Q,int &x){
-    if(Q.front==Q.rear)         //队空则报错
-        return false;
-    x = Q.data[Q.front];
-    Q.front=(Q.front + 1)%MaxSize;
-    return true;
+// 入队
+bool EnQueue(SqQueue &Q, int x) {
+  if ((Q.rear + 1) % MaxSize == Q.front) // 判断队满
+    return false;
+  Q.data[Q.rear] = x;              // 新元素插入队尾
+  Q.rear = (Q.rear + 1) % MaxSize; // 队尾指针加1取模
+  return true;
 }
 
-//获得队头元素的值,用x返回
-int GetHead(SqQuene Q,int& x){
-    if(Q.front == Q.rear)
-        return;       //队空则报错
-    x = Q.data[Q.front];
-    return x;
+// 出队
+bool DeQueue(SqQueue &Q, int &x) {
+  if (Q.front == Q.rear) // 队空则报错
+    return false;
+  x = Q.data[Q.front];
+  Q.front = (Q.front + 1) % MaxSize;
+  return true;
+}
+
+// 获得队头元素的值,用x返回
+int GetHead(SqQueue Q, int &x) {
+  if (Q.front == Q.rear)
+    return false; // 队空则报错
+  x = Q.data[Q.front];
+  return x;
 }
 ```
 
