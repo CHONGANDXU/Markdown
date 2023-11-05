@@ -418,49 +418,56 @@ void testDLinkList() {
 ## 3.1 栈
 ### 3.1.1 栈的基本概念
 ### 3.1.2 栈的顺序存储（顺序栈）【重要】
+
+> n个不同元素进栈，出栈元素不同排列的个数为 $\frac{1}{n+1}C^n_{2n}$，上述公式成为卡特兰数
+
 ```c++
 #include <iostream>
 using namespace std;
 
-#define MaxSize 10      //定义栈中元素的最大个数
-typedef struct{
-    int data[MaxSize];  //静态数据存放栈中元素
-    int top;            //栈顶指针
-}SqStack;
+#define MaxSize 10 // 定义栈中元素的最大个数
+typedef struct {
+  int data[MaxSize]; // 静态数据存放栈中元素
+  int top;           // 栈顶指针
+} SqStack;
 
-void InitStack(SqStack &S){
-    S.top = -1;             //初始化栈顶指针
+// 初始化栈
+void InitStack(SqStack &S) {
+  S.top = -1; // 初始化栈顶指针
 }
 
-bool StackEmpty(SqStack S){ //判断栈空
-    if(S.top == -1)
-        return true;        //栈空
-    else
-        return false;       //不空
+// 判断栈空与否
+bool StackEmpty(SqStack S) {
+  if (S.top == -1)
+    return true; // 栈空
+  else
+    return false; // 不空
 }
 
-bool Push(SqStack &S,int x){//进栈
-    if(S.top == MaxSize-1)  //栈满
-        return false;
-    S.top = S.top + 1 ;     //指针+1
-    S.data[S.top] = x;      //新元素进栈
-    return true;
+// 进栈
+bool Push(SqStack &S, int x) {
+  if (S.top == MaxSize - 1) // 栈满
+    return false;
+  S.top = S.top + 1; // 指针+1
+  S.data[S.top] = x; // 新元素进栈
+  return true;
 }
 
-bool Pop(SqStack &S,int x){ //出栈
-    if(S.top == -1)
-        return false;       //栈空，报错
-    x = S.data[S.top];      //栈顶元素出栈
-    S.top = S.top - 1;      //指针-1
-    return true;
+// 出栈
+bool Pop(SqStack &S, int &x) {
+  if (S.top == -1)
+    return false;    // 栈空，报错
+  x = S.data[S.top]; // 栈顶元素出栈
+  S.top = S.top - 1; // 指针-1
+  return true;
 }
 
-//读栈顶指针
-bool GetTop(SqStack S,int &x){
-    if(S.top == -1)
-        return false;
-    x = S.data[S.top];      //x 记录栈顶元素
-    return true;
+// 读栈顶指针
+bool GetTop(SqStack S, int &x) {
+  if (S.top == -1)
+    return false;
+  x = S.data[S.top]; // x 记录栈顶元素
+  return true;
 }
 ```
 
@@ -469,71 +476,71 @@ bool GetTop(SqStack S,int &x){
 #include <iostream>
 using namespace std;
 
-#define MaxSize 100     //定义栈中元素的最大个数
-typedef struct{
-    int data[MaxSize];  //静态数据存放栈中元素
-    int top1;           //栈顶指针1
-    int top2;           //栈顶指针2
-}SqDouStack;
+#define MaxSize 100 // 定义栈中元素的最大个数
+typedef struct {
+  int data[MaxSize]; // 静态数据存放栈中元素
+  int top1;          // 栈顶指针1
+  int top2;          // 栈顶指针2
+} SqDouStack;
 
-void InitStack(SqDouStack &S){
-    S.top1 = -1;             //初始化栈顶指针
-    S.top2 = MaxSize;
+// 初始化栈
+void InitStack(SqDouStack &S) {
+  S.top1 = -1; // 初始化栈顶指针
+  S.top2 = MaxSize;
 }
 
-bool StackEmpty(SqDouStack S){ //判断栈空
-    if(S.top1 == -1 && S.top2 == MaxSize)
-        return true;        //栈空
-    else
-        return false;       //不空
+// 判断栈空
+bool StackEmpty(SqDouStack S) {
+  if (S.top1 == -1 && S.top2 == MaxSize)
+    return true; // 栈空
+  else
+    return false; // 不空
 }
 
-bool Push(SqDouStack &S,int x,int StackNum){//进栈
-    if(S.top1 + 1 == S.top2)  //栈满
-        return false;
-    if(StackNum == 1){
-        S.top1 = S.top1 + 1;     //1指针+1
-        S.data[S.top1] = x;      //新元素进栈1
-    }
-    else{
-        S.top2 = S.top2 - 1;     //2指针-1
-        S.data[S.top1] = x;      //新元素进栈2      
-    }
+// 进栈
+bool Push(SqDouStack &S, int x, int StackNum) {
+  if (S.top1 + 1 == S.top2) // 栈满
+    return false;
+  if (StackNum == 1) {
+    S.top1 = S.top1 + 1; // 1指针+1
+    S.data[S.top1] = x;  // 新元素进栈1
+  } else {
+    S.top2 = S.top2 - 1; // 2指针-1
+    S.data[S.top1] = x;  // 新元素进栈2
+  }
+  return true;
+}
+
+// 出栈
+bool Pop(SqDouStack &S, int x, int StackNum) {
+  if (StackNum == 1) {
+    if (S.top1 == -1)
+      return false;      // 栈空，报错
+    x = S.data[S.top1];  // 栈顶元素出栈
+    S.top1 = S.top1 - 1; // 指针-1
     return true;
+  } else {
+    if (S.top2 == MaxSize)
+      return false;      // 栈空，报错
+    x = S.data[S.top2];  // 栈顶元素出栈
+    S.top2 = S.top2 + 1; // 指针-1
+    return true;
+  }
 }
 
-bool Pop(SqDouStack &S,int x,int StackNum){ //出栈
-    if(StackNum == 1){
-        if(S.top1 == -1)
-            return false;       //栈空，报错
-        x = S.data[S.top1];      //栈顶元素出栈
-        S.top1 = S.top1 - 1;      //指针-1
-        return true;
-    }
-    else{
-        if(S.top2 == MaxSize)
-            return false;       //栈空，报错
-        x = S.data[S.top2];      //栈顶元素出栈
-        S.top2 = S.top2 + 1;      //指针-1
-        return true;
-    }
-}
-
-//读栈顶指针
-bool GetTop(SqDouStack S,int &x,int StackNum){
-    if(StackNum == 1){
-        if(S.top1 == -1)
-            return false;
-        x = S.data[S.top1];      //x 记录栈顶元素
-        return true;
-    }
-    else{
-        if(S.top2 == MaxSize)
-            return false;
-        x = S.data[S.top2];      //x 记录栈顶元素
-        return true;
-    }
-
+// 读栈顶指针
+bool GetTop(SqDouStack S, int &x, int StackNum) {
+  if (StackNum == 1) {
+    if (S.top1 == -1)
+      return false;
+    x = S.data[S.top1]; // x 记录栈顶元素
+    return true;
+  } else {
+    if (S.top2 == MaxSize)
+      return false;
+    x = S.data[S.top2]; // x 记录栈顶元素
+    return true;
+  }
 }
 ```
 
@@ -542,34 +549,34 @@ bool GetTop(SqDouStack S,int &x,int StackNum){
 #include <iostream>
 using namespace std;
 
-typedef struct Linknode{
-    ElemType data;
-    struct Linknode *next;
-}*LiStack;
+typedef struct LinkNode {
+  int data;
+  struct LinkNode *next;
+} *LiStack;
 
-typedef struct LinkStack{
-    LiStack top;
-    int count;
-}LinkStack;
+typedef struct LinkStack {
+  LiStack top;
+  int count;
+} LinkStack;
 
-bool Push(LinkStack *s, int x){
-    LiStack p = (LiStack)malloc(sizeof(SNode));
-    p -> data = x;
-    p -> next = s -> top;
-    s -> top = p;
-    S -> count ++;
-    return true; 
+bool Push(LinkStack &s, int x) {
+  LiStack p = (LiStack)malloc(sizeof(LinkNode));
+  p->data = x;
+  p->next = s.top;
+  s.top = p;
+  s.count++;
+  return true;
 }
 
-bool Pop(LinkStack *s, int& x){
-    if(s -> top == NULL)
-        return false;
-    x = s->top->data;
-    SLink p = s->top;
-    s -> top = s->top->next;
-    free(p);
-    s->count--;
-    return true;
+bool Pop(LinkStack &s, int &x) {
+  if (s.top == NULL)
+    return false;
+  x = s.top->data;
+  LinkNode *p = s.top;
+  s.top = s.top->next;
+  free(p);
+  s.count--;
+  return true;
 }
 ```
 
@@ -580,50 +587,89 @@ bool Pop(LinkStack *s, int& x){
 using namespace std;
 
 #define MaxSize 10
-typedef struct{
-    char data[MaxSize];
-    int top;
-}SqStack;
+typedef struct {
+  char data[MaxSize];
+  int top;
+} SqStack;
 
 // 初始化栈
-void InitStack(SqStack &S)
+void InitStack(SqStack &S) { S.top = -1; }
 
 // 判断栈是否为空
-bool StackEmpty(SqStack S)
+bool StackEmpty(SqStack S) {
+  if (S.top == -1)
+    return true;
+  else
+    return false;
+}
 
 // 新元素入栈
-bool Push(SqStack &S,char x)
+bool Push(SqStack &S, char x) {
+  if (S.top == MaxSize - 1)
+    return false;
+  else {
+    S.top++;
+    S.data[S.top] = x;
+    return true;
+  }
+}
 
 // 栈顶元素出栈，用x返回
-bool Pop(SqStack &S,char &x)
+bool Pop(SqStack &S, char &x) {
+  if (S.top == -1)
+    return false;
+  else {
+    x = S.data[S.top];
+    S.top--;
+    return true;
+  }
+}
 
-bool bracketCheck(char str[],int length){
-    SqStack S;
-    InitStack(S);                   // 初始化一个栈
-    for(int i=0;i<length;i++){
-        if(str[i]=='(' || str[i]=='{' ||str[i]=='['){
-            Push(S,str[i])          // 扫描到左括号，入栈操作
-        }else{
-            if(StackEmpty(S)){      // 扫描到右括号，然而栈空，匹配错误
-                return false;
-            }
-
-            char topElem;
-            Pop(S,topElem);         // 栈顶元素出栈
-            if(str[i]==')' && topElem!='(')
-                return false;
-            if(str[i]==']' && topElem!='[')
-                return false;
-            if(str[i]=='}' && topElem!='{')
-                return false;
-        }
+bool bracketCheck(char str[], int length) {
+  SqStack S;
+  InitStack(S); // 初始化一个栈
+  for (int i = 0; i < length; i++) {
+    if (str[i] == '(' || str[i] == '{' || str[i] == '[') {
+      Push(S, str[i]); // 扫描到左括号，入栈操作
+    } else {
+      if (StackEmpty(S)) { // 扫描到右括号，然而栈空，匹配错误
+        return false;
+      }
+      char topElem;
+      Pop(S, topElem); // 栈顶元素出栈
+      if (str[i] == ')' && topElem != '(')
+        return false;
+      if (str[i] == ']' && topElem != '[')
+        return false;
+      if (str[i] == '}' && topElem != '{')
+        return false;
     }
-    return StackEmpty(S);           // 检索完全部括号后，栈空说明匹配成功
+  }
+  return StackEmpty(S); // 检索完全部括号后，栈空说明匹配成功
 }
 ```
 
-2. 后缀表达式
-计算机计算步骤明晰
+2. 三种算术表达式（转换及求值）
+后缀表达式 = 逆波兰表达式【**重要**】
+前缀表达式 = 波兰表达式
+
+> 后缀表达式（手算）
+> 【中缀转后缀】
+> “左优先”原则：只要左边的运算符能先计算，就优先算左边的
+> 
+> 后缀表达式（机算）
+>> ①从左往右扫描下一个元素，直到处理完所有元素
+>> ②若扫描到操作数则压入栈，并回到①：否则执行③
+>> ③若扫描到运算符，则弹出两个栈顶元素(<font color='red'>注意：先出栈的是“右操作数”</font>)，执行相应运算，运算结果压回栈顶，回到①
+
+> 前缀表达式（手算）
+> 【中缀转前缀】
+> “右优先”原则：只要右边的运算符能先计算，就优先算右边的
+> 
+> 前缀表达式（机算）
+>> ①从右往左扫描下一个元素，直到处理完所有元素
+>> ②若扫描到操作数则压入栈，并回到①：否则执行③
+>> ③若扫描到运算符，则弹出两个栈顶元素(<font color='red'>注意：先出栈的是“左操作数”</font>)，执行相应运算，运算结果压回栈顶，回到①
 
 3. 递归
 ```c++
