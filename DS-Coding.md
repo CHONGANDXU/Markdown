@@ -724,7 +724,7 @@ bool QueueEmpty(SqQueue Q) {
     return false;
 }
 
-// 入队
+// 入队（队尾入队）
 bool EnQueue(SqQueue &Q, int x) {
   if ((Q.rear + 1) % MaxSize == Q.front) // 判断队满
     return false;
@@ -733,7 +733,7 @@ bool EnQueue(SqQueue &Q, int x) {
   return true;
 }
 
-// 出队
+// 出队（队头出队）
 bool DeQueue(SqQueue &Q, int &x) {
   if (Q.front == Q.rear) // 队空则报错
     return false;
