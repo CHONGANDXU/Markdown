@@ -696,16 +696,15 @@ int main(){
 ### 3.2.1 队列的基本结构
 ### 3.2.2 队列的顺序存储【重要】
 
+以下Code采用队列的顺序存储，且使用循环队列存储
+为了区分队空和队满，采取入队时**少用一个队列单元**
+队列空的条件为 Q.front == Q.rear
+队列满的条件为 (Q.rear+1) % MaxSize == Q.front
+队列中元素的个数 （rear + MaxSize - front）% MaxSize
+
 ```c++
 #include <iostream>
 using namespace std;
-
-/**
-以下Code采用队列的顺序存储，且使用循环队列存储
-为了区分队空和队满，采取入队时少用一个队列单元
-此时队列空的条件为 Q.front == Q.rear
-队列满的条件为 (Q.rear+1)%MaxSize == Q.front
- */
 
 #define MaxSize 10
 typedef struct SqQueue {
@@ -756,96 +755,95 @@ int GetHead(SqQueue Q, int &x) {
 #include <iostream>
 using namespace std;
 
-typedef struct LinkNode{    //队列结点
-    int data;
-    struct LinkNode *next;
-}LinkNode;
+typedef struct LinkNode { // 队列结点
+  int data;
+  struct LinkNode *next;
+} LinkNode;
 
-typedef struct{             //链式队列
-    LinkNode *front,*rear;  //队头和队尾指针
-}LinkQueue;
+typedef struct {          // 链式队列
+  LinkNode *front, *rear; // 队头和队尾指针
+} LinkQueue;
 
 // 初始化队列(带头结点)
-void InitQueue(LinkQueue &Q){
-    // 初始化,front rear 都指向头结点
-    Q.front = Q.rear = (LinkNode *)malloc(sizeof(LinkNode));
-    Q.front->next = NULL;
+void InitQueue(LinkQueue &Q) {
+  // 初始化,front rear 都指向头结点
+  Q.front = Q.rear = (LinkNode *)malloc(sizeof(LinkNode));
+  Q.front->next = NULL;
 }
 
 // 初始化队列（不带头结点）
-void InitQueue(LinkQueue &Q){
-    // 初始化,front rear 都指向NULL
-    Q.front = Q.rear = NULL;
+void InitQueue_NoHead(LinkQueue &Q) {
+  // 初始化,front rear 都指向NULL
+  Q.front = Q.rear = NULL;
 }
 
 // 判断队列是否为空(带头结点)
-bool IsEmpty(LinkQueue Q){
-    if(Q.front == Q.rear)
-        return true;
-    else
-        return false;
+bool IsEmpty(LinkQueue Q) {
+  if (Q.front == Q.rear)
+    return true;
+  else
+    return false;
 }
 
 // 判断队列是否为空（不带头结点）
-bool IsEmpty(LinkQueue Q){
-    if(Q.front == NULL)
-        return true;
-    else
-        return false;
+bool IsEmpty_NoHead(LinkQueue Q) {
+  if (Q.front == NULL)
+    return true;
+  else
+    return false;
 }
 
 // 新元素入队（带头结点）
-void EnQueue(LinkQueue &Q,int x){
-    LinkNode *s=(LinkNode *)malloc(sizeof(LinkNode));
-    s->data = x;
-    s->next = NULL;
-    Q.rear->next = s;   //新结点插入到rear之后
-    Q.rear = s;         //修改队尾指针
+void EnQueue(LinkQueue &Q, int x) {
+  LinkNode *s = (LinkNode *)malloc(sizeof(LinkNode));
+  s->data = x;
+  s->next = NULL;
+  Q.rear->next = s; // 新结点插入到rear之后
+  Q.rear = s;       // 修改队尾指针
 }
 
 // 新元素入队（不带头结点）
-void EnQueue(LinkQueue &Q,int x){
-    LinkNode *s = (LinkNode*)malloc(sizeof(LinkNode));
-    s->data = x;
-    s->next = NULL;
-    if(Q.front==NULL){      //在空队列中插入第一个元素
-        Q.front = s;
-        Q.rear = s;
-    }else{
-        Q.rear->next = s;   //新结点插入到rear结点之后
-        Q.rear = s;         //修改rear队尾指针
-    }
+void EnQueue_NoHead(LinkQueue &Q, int x) {
+  LinkNode *s = (LinkNode *)malloc(sizeof(LinkNode));
+  s->data = x;
+  s->next = NULL;
+  if (Q.front == NULL) { // 在空队列中插入第一个元素
+    Q.front = s;
+    Q.rear = s;
+  } else {
+    Q.rear->next = s; // 新结点插入到rear结点之后
+    Q.rear = s;       // 修改rear队尾指针
+  }
 }
 
 // 队头元素出队（带头结点）
-bool DeQueue(LinkQueue& Q,int& x){
-    if(Q.front == Q.rear)       // 队空
-        return false;
-    LinkNode *p = Q.front->next;// p指向此次出队的队头结点
-    x = p->data;                // 用 x 返回队头的数据
-    Q.front->next = p->next;    // 修改头结点的next指针
+bool DeQueue(LinkQueue &Q, int &x) {
+  if (Q.front == Q.rear) // 队空
+    return false;
+  LinkNode *p = Q.front->next; // p指向此次出队的队头结点
+  x = p->data;                 // 用 x 返回队头的数据
+  Q.front->next = p->next;     // 修改头结点的next指针
 
-    if(Q.rear == p)             // 如果是最后一个结点出队
-        Q.rear = Q.front;       // 修改 rear 指针 
-    free(p);                    // 释放结点空间
-    return true;
+  if (Q.rear == p)    // 如果是最后一个结点出队
+    Q.rear = Q.front; // 修改 rear 指针
+  free(p);            // 释放结点空间
+  return true;
 }
 
 // 队头元素出队（不带头结点）
-bool DeQueue(LinkQueue& Q,int& x){
-    if(Q.front == NULL)
-        return false;       // 队空
-    LinkNode *p = Q.front;  // p指向此次出队的队头结点
-    x = p->data;            // 用变量 x 返回队头的数据
-    Q.front = p->next;      // 修改 front 指针
-    if(Q.rear == p){        // 倘若是队中最后一个结点出队
-        Q.front = NULL;     // front 指向 NULL
-        Q.rear = NULL;      // rear 指向 NULL
-    }
-    free(p);                // 释放结点空间
-    return true;
+bool DeQueue_NoHead(LinkQueue &Q, int &x) {
+  if (Q.front == NULL)
+    return false;        // 队空
+  LinkNode *p = Q.front; // p指向此次出队的队头结点
+  x = p->data;           // 用变量 x 返回队头的数据
+  Q.front = p->next;     // 修改 front 指针
+  if (Q.rear == p) {     // 倘若是队中最后一个结点出队
+    Q.front = NULL;      // front 指向 NULL
+    Q.rear = NULL;       // rear 指向 NULL
+  }
+  free(p); // 释放结点空间
+  return true;
 }
-
 ```
 
 ### 3.2.4 双端队列（不受限和受限）
@@ -2155,6 +2153,3 @@ void MergeSort(int A[],int low,int high){
 1. 数据元素的关键字可以方便地拆分为d组，且d较小
 2. 每组关键字的取值范围不大，即r较小
 3. 数据元素个数n较大
-
-
-
