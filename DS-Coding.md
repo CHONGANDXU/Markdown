@@ -27,14 +27,14 @@
     - [4.2.1 朴素模式匹配（定位操作）](#421-朴素模式匹配定位操作)
     - [4.2.2 KMP](#422-kmp)
     - [4.2.3 KMP算法优化——nextval数组](#423-kmp算法优化nextval数组)
-- [第五章——树和二叉树](#第五章树和二叉树)
+- [第五章——树与二叉树](#第五章树与二叉树)
   - [5.1 树的基本概念](#51-树的基本概念)
   - [5.2 二叉树的基本概念](#52-二叉树的基本概念)
     - [5.2.1 二叉树的定义及其主要特征](#521-二叉树的定义及其主要特征)
     - [5.2.2 二叉树的存储结构、遍历【重要】](#522-二叉树的存储结构遍历重要)
   - [5.3 线索二叉树](#53-线索二叉树)
     - [5.3.1 线索化二叉树](#531-线索化二叉树)
-    - [5.3.2 线索二叉树找前驱（后继）](#532-线索二叉树找前驱后继)
+    - [5.3.2 线索二叉树找前驱（后继）\[没整理完整\]](#532-线索二叉树找前驱后继没整理完整)
   - [5.4 树、森林](#54-树森林)
     - [5.4.1 树的存储结构](#541-树的存储结构)
   - [5.5 树与二叉树的应用](#55-树与二叉树的应用)
@@ -1045,9 +1045,17 @@ next [ j ] = S 的最长相等前后缀长度 + 1
 
 ### 4.2.3 KMP算法优化——nextval数组
 
-# 第五章——树和二叉树
+# 第五章——树与二叉树
 
 ## 5.1 树的基本概念
+常考性质:
+1. 结点数=总度数+1
+2. 度为$m$的树($m$叉树)第$i$层至多有 $m^{i-1}$个结点（$i>=1$）
+3. 高度为$h$的$m$叉树至多有$\frac{m^h-1}{m-1}$个结点
+4. - 高度$h$的$m$叉树至少有$h$个结点。
+   - 高度为$h$、度为$m$的树至少有$h+m-1$个结点。
+5. 具有$n$个结点的$m$叉树的最小高度为$\lceil\log_m(n(m-1)+1)\rceil$
+
 
 ## 5.2 二叉树的基本概念
 ### 5.2.1 二叉树的定义及其主要特征
@@ -1061,22 +1069,22 @@ next [ j ] = S 的最长相等前后缀长度 + 1
 
 ### 5.2.2 二叉树的存储结构、遍历【重要】
 
-1. 顺序存储
+1. 顺序存储(适用于完全二叉树)
 ```c++
-#include<iostream>
+#include <iostream>
 #define MaxSize 100
-struct TreeNode{
-    ElemType value; //结点中的数据元素
-    bool isEmpty;   //结点是否为空
+struct TreeNode {
+  int value;    // 结点中的数据元素
+  bool isEmpty; // 结点是否为空
 };
 
 TreeNode t[MaxSize];
 
-void initTree{      //初始化
-    for(int i=0;i<MaxSize;i++){
-        t[i].isEmpty=true;
-    }
-}
+void initTree() { // 初始化
+  for (int i = 0; i < MaxSize; i++) {
+    t[i].isEmpty = true;
+  }
+};
 ```
 
 2. 链式存储（遍历）
@@ -1087,167 +1095,204 @@ void initTree{      //初始化
     - 层次遍历
     - 由遍历序列构造二叉树（必须由中序遍历序列）
 
+$n$个结点的二叉链表共有$n+1$个空链域
+
 > 三种遍历（先序中序后序）
 ```c++
 #include <iostream>
 
-struct ElemType{
-    int value;
+struct ElemType {
+  int value;
 };
 
-typedef struct BiTNode{
-    ElemType data;                  //数据域
-    struct BiTNode *lchild,*rchild; //左右孩子指针
-    struct BiTNode *parent;         //父结点指针
-}BiTNode,*BiTree;
+typedef struct BiTNode {
+  ElemType data;                   // 数据域
+  struct BiTNode *lchild, *rchild; // 左右孩子指针
+  struct BiTNode *parent; // 父结点指针(方便查找当前结点的父结点)
+} BiTNode, *BiTree;
 
-BiTree root = NULL;
-
-root = (BiTree)malloc(sizeof(BiTNode));
-root -> data ={1};
-root -> lchild = NULL;
-root -> rchild = NULL;
+void visit(BiTree T) { std::cout << T->data.value << std::endl; }
 
 // 先序遍历
-void PreOrder(BiTree T){
-    if(T != NULL){
-        visit(T);           //访问根结点
-        PreOrder(T->lchild);//递归遍历左子树
-        PreOrder(T->rchild);//递归遍历右子树
-    }
+void PreOrder(BiTree T) {
+  if (T != NULL) {
+    visit(T);            // 访问根结点
+    PreOrder(T->lchild); // 递归遍历左子树
+    PreOrder(T->rchild); // 递归遍历右子树
+  }
 }
 
-//中序遍历
-void InOrder(BiTree T){
-    if(T != NULL){
-        InOrder(T->lchild);//递归遍历左子树
-        visit(T);           //访问根结点
-        InOrder(T->rchild);//递归遍历右子树
-    }
+// 中序遍历
+void InOrder(BiTree T) {
+  if (T != NULL) {
+    InOrder(T->lchild); // 递归遍历左子树
+    visit(T);           // 访问根结点
+    InOrder(T->rchild); // 递归遍历右子树
+  }
 }
 
-//后序遍历
-void PostOrder(BiTree T){
-    if(T != NULL){
-        PostOrder(T->lchild);//递归遍历左子树
-        PostOrder(T->rchild);//递归遍历右子树
-        visit(T);           //访问根结点       
-    }
+// 后序遍历
+void PostOrder(BiTree T) {
+  if (T != NULL) {
+    PostOrder(T->lchild); // 递归遍历左子树
+    PostOrder(T->rchild); // 递归遍历右子树
+    visit(T);             // 访问根结点
+  }
 }
+
+int main() {
+  // 定义一棵空树
+  BiTree root = NULL;
+
+  // 插入根结点 root
+  root = (BiTree)malloc(sizeof(BiTNode));
+  root->data = {1};
+  root->lchild = NULL;
+  root->rchild = NULL;
+
+  // 插入新结点 p
+  BiTNode *p = (BiTNode *)malloc(sizeof(BiTNode));
+  p->data = {2};
+  p->lchild = NULL;
+  p->rchild = NULL;
+
+  // 作为根节点的左孩子插入结点 p
+  root->lchild = p;
+}
+
 ```
 
-> 层次遍历
+> 层序遍历
 ```c++
-#include<iostream>
-using namespace std;
+#include <iostream>
 
-//二叉树的结点（链式存储）
-typedef struct BiTNode{
-    char data;                  //数据域
-    struct BiTNode *lchild,*rchild; //左右孩子指针
-}BiTNode,*BiTree;
+// 二叉树的结点（链式存储）
+typedef struct BiTNode {
+  char data;                       // 数据域
+  struct BiTNode *lchild, *rchild; // 左右孩子指针
+} BiTNode, *BiTree;
 
-//链式队列结点
-typedef struct LinkNode{
-    BiTNode *data;              //存指针而不是结点
-    struct LinkNode *next;
-}LinkNode;
+// 链式队列结点
+typedef struct LinkNode {
+  BiTNode *data; // 存指针而不是结点
+  struct LinkNode *next;
+} LinkNode;
 
-typedef struct{
-    LinkNode *front,*rear;      //队头队尾
-}LinkQueue;
+typedef struct {
+  LinkNode *front, *rear; // 队头队尾
+} LinkQueue;
 
 // 层序遍历
-void LevelOrder(BiTree T){
-    LinkQueue Q;
-    InitQueue(Q);               //初始化辅助队列
-    BiTree p;
-    EnQueue(Q,T);               //将根结点入队
-    while(!IsEmpty(Q)){         //队列不空则循环
-        DeQueue(Q,p);           //队头结点出队，T赋值p
-        visit(p);               //访问出队结点
-        if(p->lchild!=NULL)
-            EnQueue(Q,p->lchild);//左孩子入队
-        if(p->rchild!=NULL)
-            EnQueue(Q,p->rchild);//右孩子入队
-    }
+void LevelOrder(BiTree T) {
+  LinkQueue Q;
+  InitQueue(Q); // 初始化辅助队列
+  BiTree p;
+  EnQueue(Q, T);        // 将根结点入队
+  while (!isEmpty(Q)) { // 队列不空则循环
+    DeQueue(Q, p);      // 队头结点出队，T赋值p
+    visit(p);           // 访问出队结点
+    if (p->lchild != NULL)
+      EnQueue(Q, p->lchild); // 左孩子入队
+    if (p->rchild != NULL)
+      EnQueue(Q, p->rchild); // 右孩子入队
+  }
 }
 ```
 
 > 用土办法找到中序前驱
+
+思路：
+
+从根节点出发，重新进行一次中序遍历，指针 q 记录当前访问的结点，指针 pre 记录上一个被访问的结点 
+① 当 $q==p$ 时，pre 为前驱
+② 当 $pre=p$ 时，q 为后继
+
 ```c++
 #include <iostream>
-using namespace std;
 
-//中序遍历
-void InOrder(BiTree T){
-    if(T!=NULL){
-        InOrder(T->lchild); //递归遍历左子树
-        visit(T);           //访问根结点
-        InOrder(T->rchild); //递归遍历右子树
-    }
+// 二叉树的结点（链式存储）
+typedef struct BiTNode {
+  char data;                       // 数据域
+  struct BiTNode *lchild, *rchild; // 左右孩子指针
+} BiTNode, *BiTree;
+
+// 辅助的全局变量，用于查找结点p的前驱
+BiTNode *p;            // p指向目标结点
+BiTNode *pre = NULL;   // 指向当前访问结点的前驱
+BiTNode *final = NULL; // 用于记录最终结果
+
+void visit(BiTNode *q) {
+  if (q == p)    // 当前访问结点刚好是结点p
+    final = pre; // 找到p的前驱
+  else
+    pre = q; // pre指向当前访问的结点
 }
 
-void visit(BiTNode *q){
-    if(q==p)            //当前访问结点刚好是结点p
-        final = pre;    //找到p的前驱
-    else
-        pre = q;        //pre指向当前访问的结点
+// 中序遍历
+void InOrder(BiTree T) {
+  if (T != NULL) {
+    InOrder(T->lchild); // 递归遍历左子树
+    visit(T);           // 访问根结点
+    InOrder(T->rchild); // 递归遍历右子树
+  }
 }
-
-//辅助的全局变量，用于查找结点p的前驱
-BiTNode *p;         //p指向目标结点
-BiTNode *pre=NULL;  //指向当前访问结点的前驱
-BiTNode *final=NULL;//用于记录最终结果
 ```
 
 ## 5.3 线索二叉树
 
 ### 5.3.1 线索化二叉树
+
+tag == 0 , 表示指针指向的是孩子
+tag == 1 , 表示指针指向的是线索
+
 - 中序线索化
 ```c++
 #include <iostream>
-using namespace std;
 
-//线索二叉树结点
-typedef struct ThreadNode{
-    ElemType data;
-    struct ThreadNode *lchild,*rchild;
-    int ltag,rtag;           //左、右线索标志，初始化为0，假设都有左右孩子
-}ThreadNode,*ThreadTree;
+typedef struct ElemType {
+  int data;
+} ElemType;
 
-//全局变量 pre ，指向当前访问结点的前驱
+// 线索二叉树结点
+typedef struct ThreadNode {
+  ElemType data;
+  struct ThreadNode *lchild, *rchild;
+  int ltag, rtag; // 左、右线索标志，初始化为0，假设都有左右孩子
+} ThreadNode, *ThreadTree;
+
+// 全局变量 pre ，指向当前访问结点的前驱
 ThreadNode *pre = NULL;
 
-//中序线索化二叉树T，主函数
-void CreateInThread(ThreadTree T){
-    pre=NULL;
-    if(T!=NULL){
-        InThread(T);
-        if(pre->rchild==NULL)
-            pre->rtag=1;
-    }
+void visit(ThreadNode *q) {
+  if (q->lchild == NULL) { // 左子树为空，建立前驱线索
+    q->lchild = pre;
+    q->ltag = 1;
+  }
+  if (pre != NULL && pre->rchild == NULL) {
+    pre->rchild = q; // 建立前驱结点的后继线索
+    pre->rtag = 1;
+  }
+  pre = q;
 }
 
-//中序遍历二叉树，一边遍历一边线索化
-void InThread(ThreadTree T){ 
-    if(T!=NULL){
-        InThread(T->lchild);    
-        visit(T);
-        InThread(T->rchild);
-    }
+// 中序遍历二叉树，一边遍历一边线索化
+void InThread(ThreadTree T) {
+  if (T != NULL) {
+    InThread(T->lchild);
+    visit(T);
+    InThread(T->rchild);
+  }
 }
 
-void visit(ThreadNode *q){
-    if(q->lchild == NULL){  //左子树为空，建立前驱线索
-        q->lchild = pre;
-        q->ltag = 1;
-    }
-    if(pre != NULL && pre->rchild == NULL){
-        pre->rchild = q;    //建立前驱结点的后继线索
-        pre->rtag = 1;
-    }
-    pre = q;
+// 中序线索化二叉树T，主函数
+void CreateInThread(ThreadTree T) {
+  pre = NULL;
+  if (T != NULL) {
+    InThread(T);
+    // 最后检查 pre 的 rchild 是否为 NULL,如果是,则令 rtag=1
+    if (pre->rchild == NULL)
+      pre->rtag = 1;
+  }
 }
 ```
 
@@ -1256,131 +1301,161 @@ void visit(ThreadNode *q){
 >> 【综上是为了避免陷入遍历的 **死循环**】
 ```c++
 #include <iostream>
-using namespace std;
 
-typedef struct ThreadNode{
-    ElemType data;
-    struct ThreadNode *lchild,*rchild;
-    int ltag,rtag;      //左、右线索标志，初始化为0，假设都有左右孩子
-}ThreadNode,*ThreadTree;
+typedef struct ThreadNode {
+  int data;
+  struct ThreadNode *lchild, *rchild;
+  int ltag, rtag; // 左、右线索标志，初始化为0，假设都有左右孩子
+} ThreadNode, *ThreadTree;
 
-//先序遍历二叉树，一边遍历一边线索化
-void PreThread(ThreadTree T){
-    if(T!=NULL){
-        visit(T);               //先处理根结点
-        if(T->ltag == 0){
-            PreThread(T->lchild);//如果lchild不是前驱线索
-        }
-        PreThread(T->rchild);
-    }
-}
-
-void visit(ThreadNode *q){
-    if(q->lchild == NULL){      //左子树为空，建立前驱线索
-        q->lchild = pre;
-        q->ltag = 1;
-    }
-    if(pre != NULL && pre->rchild == NULL){
-        pre->rchild = q;        //建立前驱结点的后继线索
-        pre->rtag = 1;
-    }
-    pre = q;
-}
-
-//全局变量 pre ，指向当前访问结点的前驱
+// 全局变量 pre ，指向当前访问结点的前驱
 ThreadNode *pre = NULL;
+
+void visit(ThreadNode *q) {
+  if (q->lchild == NULL) { // 左子树为空，建立前驱线索
+    q->lchild = pre;
+    q->ltag = 1;
+  }
+  if (pre != NULL && pre->rchild == NULL) {
+    pre->rchild = q; // 建立前驱结点的后继线索
+    pre->rtag = 1;
+  }
+  pre = q;
+}
+
+// 先序遍历二叉树，一边遍历一边线索化
+void PreThread(ThreadTree T) {
+  if (T != NULL) {
+    visit(T); // 先处理根结点
+    if (T->ltag == 0) {
+      PreThread(T->lchild); // 如果lchild不是前驱线索,继续遍历左子树
+    }
+    PreThread(T->rchild);
+  }
+}
+
+// 先序线索化二叉树T
+void CreatePreThread(ThreadTree T) {
+  pre = NULL;      // pre初始为NULL
+  if (T != NULL) { // 非空二叉树才能线索化
+    PreThread(T);
+    if (pre->rchild == NULL)
+      pre->rtag = 1; // 处理遍历的最后一个结点
+  }
+}
 ```
 
 - 后序线索化
 ```c++
 #include <iostream>
-using namespace std;
 
-//全局变量pre，指向当前访问结点的前驱
-ThreadNode *pre=NULL;
+typedef struct ThreadNode {
+  int data;
+  struct ThreadNode *lchild, *rchild;
+  int ltag, rtag; // 左、右线索标志，初始化为0，假设都有左右孩子
+} ThreadNode, *ThreadTree;
 
-//后序线索化二叉树T
-void CreatePostThread(ThreadTree T){
-    pre=NULL;                   //pre初始化为NULL
-    if(T!=NULL){                //非空二叉树才能线索化
-        PostThread(T);          //后续线索化二叉树
-        if(pre->lchild==NULL){
-            pre->rtag=1;        //处理遍历的最后一个结点
-        }
-    }
+// 全局变量pre，指向当前访问结点的前驱
+ThreadNode *pre = NULL;
+
+void visit(ThreadNode *q) {
+  if (q->lchild == NULL) { // 左子树为空，建立前驱线索
+    q->lchild = pre;
+    q->ltag = 1;
+  }
+  if (pre != NULL && pre->rchild == NULL) {
+    pre->rchild = q; // 建立前驱结点的后继线索
+    pre->rtag = 1;
+  }
+  pre = q;
 }
 
-//后序遍历二叉树，一边遍历一边线索化
-void PostThread(ThreadTree T){
-    if(T!=NULL){
-        PostThread(T->lchild);  //后序遍历左子树
-        PostThread(T->rchild);  //后序遍历右子树
-        visit(T);               //访问根结点
-    }
+// 后序遍历二叉树，一边遍历一边线索化
+void PostThread(ThreadTree T) {
+  if (T != NULL) {
+    PostThread(T->lchild); // 后序遍历左子树
+    PostThread(T->rchild); // 后序遍历右子树
+    visit(T);              // 访问根结点
+  }
 }
 
-void visit(ThreadNode *q){
-    if(q->lchild==NULL){        //左子树为空，建立前驱线索
-        q->lchild = pre;
-        q->ltag=1;
+// 后序线索化二叉树T
+void CreatePostThread(ThreadTree T) {
+  pre = NULL;      // pre初始化为NULL
+  if (T != NULL) { // 非空二叉树才能线索化
+    PostThread(T); // 后续线索化二叉树
+    if (pre->lchild == NULL) {
+      pre->rtag = 1; // 处理遍历的最后一个结点
     }
-    if(pre!=NULL && p->rchild==NULL){
-        pre->rchild = q;        //建立前驱结点的后继线索
-        pre -> rtag = 1;
-    } 
-    pre = q;
+  }
 }
 ```
 
-### 5.3.2 线索二叉树找前驱（后继）
+### 5.3.2 <font color='red'>线索二叉树找前驱（后继）[没整理完整]</font>
+
+> 中序线索二叉树
 
 - 中序线索二叉树找中序后继
 ```c++
-//找到以P为根的子树中，第一个被中序遍历的结点
-ThreadNode *FirstNode(ThreadNode *p){
-    while(p->ltag==0)       //循环寻找最左下结点（不一定是叶节点）
-        p=p->lchild;
-    return p;
+// 找到以P为根的子树中，第一个被中序遍历的结点
+ThreadNode *FirstNode(ThreadNode *p) {
+  while (p->ltag == 0) // 循环寻找最左下结点（不一定是叶节点）
+    p = p->lchild;
+  return p;
 }
 
-//在中序线索二叉树中找到结点p的后继结点
-ThreadNode *NextNode(ThreadNode *p){
-    id(p->rtag==0)          //右子树的最左👈下结点
-        return FirstNode(p->rchild);
-    else                    //rtag==1，直接返回后继线索
-        return p->rchild;
+// 在中序线索二叉树中找到结点p的后继结点
+ThreadNode *NextNode(ThreadNode *p) {
+  if (p->rtag == 0) // 右子树的最左👈下结点
+    return FirstNode(p->rchild);
+  else // rtag==1，直接返回后继线索
+    return p->rchild;
 }
 
-//对中序线索二叉树进行中序遍历（利用线索实现的非递归算法）
-void InOrder(ThreadNode *T){
-    for(ThreadNode *p=FirstNode(T);p!=NULL;p=NextNode(p))
-        visit(p);
+// 对中序线索二叉树进行中序遍历（利用线索实现的非递归算法）
+void InOrder(ThreadNode *T) {
+  for (ThreadNode *p = FirstNode(T); p != NULL; p = NextNode(p))
+    visit(p);
 }
 ```
 
 - 中序线索二叉树找中序前驱
 ```c++
-//找到以p为根的子树中，最后一个被中序遍历的结点
-ThreadNode *LastNode(ThreadNode *p){
-    while(p->rtag==0)       //循环寻找最右👉下结点（不一定是叶节点）
-        p=p->rchild;
-    return p;
+// 找到以p为根的子树中，最后一个被中序遍历的结点
+ThreadNode *LastNode(ThreadNode *p) {
+  while (p->rtag == 0) // 循环寻找最右👉下结点（不一定是叶节点）
+    p = p->rchild;
+  return p;
 }
 
-//在中序线索二叉树中找到结点p的前驱结点
-ThreadNode *PreNode(ThreadNode *p){
-    id(p->ltag==0)          //左子树的最右下结点
-        return FirstNode(p->lchild);
-    else                    //rtag==1，直接返回前驱线索
-        return p->lchild;
+// 在中序线索二叉树中找到结点p的前驱结点
+ThreadNode *PreNode(ThreadNode *p) {
+  if (p->ltag == 0) // 左子树的最右下结点
+    return LastNode(p->lchild);
+  else // rtag==1，直接返回前驱线索
+    return p->lchild;
 }
 
-//对中序线索二叉树进行逆向中序遍历（利用线索实现的非递归算法）
-void RevInOrder(ThreadNode *T){
-    for(ThreadNode *p=LastNode(T);p!=NULL;p=PreNode(p))
-        visit(p);
+// 对中序线索二叉树进行逆向中序遍历（利用线索实现的非递归算法）
+void RevInOrder(ThreadNode *T) {
+  for (ThreadNode *p = LastNode(T); p != NULL; p = PreNode(p))
+    visit(p);
 }
 ```
+
+---
+
+> 先序线索二叉树
+
+- 先序线索二叉树找先序前驱
+- 先序线索二叉树找先序后继
+
+---
+
+> 后序线索二叉树
+
+- 后序线索二叉树找后序前驱
+- 后序线索二叉树着后序后继
 
 ## 5.4 树、森林
 
@@ -2164,4 +2239,3 @@ void MergeSort(int A[],int low,int high){
 3. 数据元素个数n较大
 
 ## 8.5 内部排序算法的比较
-
