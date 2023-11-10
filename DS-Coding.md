@@ -50,8 +50,9 @@
   - [6.3 图的遍历](#63-图的遍历)
     - [6.3.1 BFS 广度优先遍历算法](#631-bfs-广度优先遍历算法)
     - [6.3.2 DFS 深度优先遍历算法](#632-dfs-深度优先遍历算法)
-  - [6.4应用](#64应用)
+  - [6.4 应用](#64-应用)
     - [6.4.1 最小生成树](#641-最小生成树)
+  - [适合用于边稠密图](#适合用于边稠密图)
     - [6.4.2 最短路径](#642-最短路径)
     - [6.4.3 有向无环图（DAG）描述表达式](#643-有向无环图dag描述表达式)
     - [6.4.4 拓扑排序(逆拓扑排序)](#644-拓扑排序逆拓扑排序)
@@ -1615,7 +1616,7 @@ $设图G的邻接矩阵为A（矩阵元素为 0/1），则  A^n 的元素 A^n[i]
 > 对于带权图（网）
 ```c++
 #define MaxVertexNum 100                        //顶点数目的最大值
-#define INFINITY 最大的int值                    //宏定义 常量 “无穷”
+#define INFINITY 最大的int值                     //宏定义 常量 “无穷”
 typedef char VertexType;                        //顶点的数据类型
 typedef int EdgeType;                           //带权图中边上权值的数据类型
 typedef struct{
@@ -1653,38 +1654,38 @@ typedef struct ArcNode{
 ### 6.3.1 BFS 广度优先遍历算法
 ```c++
 #include <iostream>
-using namespace std;
 
-#define MaxVertexNum 100            //结点的最大个数
-bool visited[MaxVertexNum];         //访问标记数组
+#define MaxVertexNum 100    // 结点的最大个数
+bool visited[MaxVertexNum]; // 访问标记数组
 
-void BFSTraverse(Graph G){          //对图G进行广度优先遍历
-    for(int i=0;i<G.vexnum;i++){
-        visited[i]=false;           //访问标记数组初始化
+// 广度优先遍历算法
+void BFS(Graph G, int v) { // 从顶点v出发，广度优先遍历图G
+  visit(v);                // 访问初始顶点v
+  visited[v] = true;       // 对顶点 v 做已访问标记
+  Enqueue(Q, v);           // 顶点v入队列Q
+  while (!isEmpty(Q)) {
+    Dequeue(v); // 顶点v出队列Q
+    for (int w = FirstNeighbor(G, v); w >= 0;
+         w = NextNeighbor(G, v, w)) { // 检测v的所有邻接点
+      if (!visited[w]) {              // w为v的未访问的邻接顶点
+        visit(w);                     // 访问w
+        visited[w] = true;            // 对w做 已访问标记
+        Enqueue(Q, w);                // 顶点w入队列
+      }
     }
-    InitQueue(Q);                   //初始化辅助队列Q
-    for(int i=0;i<G.vexnum;i++){    //从0号顶点开始遍历
-        if(!visited[i]){              //对每个连通分量调用一次BFS算法
-            BFS(G,i);               //若第i个顶点未被访问过，则执行BFS
-        }
-    }
+  }
 }
 
-//广度优先遍历算法
-void BFS(Graph G,int v){            //从顶点v出发，广度优先遍历图G
-    visit(v);                       //访问初始顶点v
-    visited[v]=true;                //对顶点 v 做已访问标记
-    Enqueue(Q,v);                   //顶点v入队列Q
-    while(!isEmpty(Q)){             
-        Dequeue(v);                 //顶点v出队列Q
-        for(int w=FirstNeighbor(G,v);w>=0;w=NextNeighbor(G,v,w)){  //检测v的所有邻接点
-            if(!visited[w]){        //w为v的未访问的邻接顶点
-                visit(w);           //访问w
-                visited[w]=true;      //对w做 已访问标记
-                Enqueue(Q,w);       //顶点w入队列
-            }
-        }
+void BFSTraverse(Graph G) { // 对图G进行广度优先遍历
+  for (int i = 0; i < G.vexnum; i++) {
+    visited[i] = false; // 访问标记数组初始化
+  }
+  InitQueue(Q);                        // 初始化辅助队列Q
+  for (int i = 0; i < G.vexnum; i++) { // 从0号顶点开始遍历
+    if (!visited[i]) { // 对每个连通分量调用一次BFS算法
+      BFS(G, i);       // 若第i个顶点未被访问过，则执行BFS
     }
+  }
 }
 
 ```
@@ -1701,29 +1702,30 @@ void BFS(Graph G,int v){            //从顶点v出发，广度优先遍历图G
 
 ### 6.3.2 DFS 深度优先遍历算法
 ```c++
-#define MaxVertexNum 100            //结点的最大个数
-bool visited[MaxVertexNum];         //访问标记数组
+#define MaxVertexNum 100    // 结点的最大个数
+bool visited[MaxVertexNum]; // 访问标记数组
 
-void DFSTraverse(Graph G){          //对图G进行深度优先遍历
-    for(int i=0;i<G.vexnum;i++){
-        visited[i]=false;           //访问标记数组初始化
+// 深度优先遍历算法
+void DFS(Graph G, int v) { // 从顶点v出发，深度优先遍历图G
+  visit(v);                // 访问初始顶点v
+  visited[v] = true;       // 对顶点 v 做已访问标记
+  for (int w = FirstNeighbor(G, v); w >= 0;
+       w = NextNeighbor(G, v, w)) { // 检测v的所有邻接点
+    if (!visited[w]) {              // w为v的未访问的邻接顶点
+      DFS(G, w);
     }
-    for(int i=0;i<G.vexnum;i++){    //从0号顶点开始遍历
-        if(!visited[i]){            //对每个连通分量调用一次BFS算法
-            DFS(G,i);               //若第i个顶点未被访问过，则执行BFS
-        }
-    }
+  }
 }
 
-//深度优先遍历算法
-void DFS(Graph G,int v){            //从顶点v出发，深度优先遍历图G
-    visit(v);                       //访问初始顶点v
-    visited[v]=true;                //对顶点 v 做已访问标记
-    for(int w=FirstNeighbor(G,v);w>=0;w=NextNeighbor(G,v,w)){  //检测v的所有邻接点
-        if(!visited[w]){            //w为v的未访问的邻接顶点
-            DFS(G,w);
-        }
+void DFSTraverse(Graph G) { // 对图G进行深度优先遍历
+  for (int i = 0; i < G.vexnum; i++) {
+    visited[i] = false; // 访问标记数组初始化
+  }
+  for (int i = 0; i < G.vexnum; i++) { // 从0号顶点开始遍历
+    if (!visited[i]) { // 对每个连通分量调用一次DFS算法
+      DFS(G, i);       // 若第i个顶点未被访问过，则执行DFS
     }
+  }
 }
 ```
 
@@ -1737,14 +1739,19 @@ void DFS(Graph G,int v){            //从顶点v出发，深度优先遍历图G
    查找所有顶点的邻接点总共需要 $O(|E|)$ 的时间
    总的时间复杂度为 $O(|V|+|E|)$
 
-## 6.4应用
+## 6.4 应用
 ### 6.4.1 最小生成树
 1. Prim算法
-   从某一个顶点开始构建生成树；
-   每次将代价最小的新顶点纳入生成树，直到所有顶点都纳入为止；
+   从某一个顶点开始构建生成树
+   每次将代价最小的新顶点纳入生成树，直到所有顶点都纳入为止
+   时间复杂度 $O(|V|^2)$
+   适合用于边稠密图
+---
 2. Kruskal算法
-   每次选择一条权值最小的边，使这条边的两头连通（原本已经连通的就不选）；
-   知道所有结点都连通；
+   每次选择一条权值最小的边，使这条边的两头连通（原本已经连通的就不选）
+   直到所有结点都连通
+   时间复杂度 $O(|E|\log_{2}{|E|})$
+   适合用于边稀疏图
 
 ### 6.4.2 最短路径
 
