@@ -1758,30 +1758,33 @@ void DFSTraverse(Graph G) { // 对图G进行深度优先遍历
 > 单源最短路径
 1. BFS 求单源最短路径（无权图）
 ```c++
-void BFS_MIN_Distance(Graph G,int u){
-    //d[i] 表示从 u 到 i 结点的最短路径
-    for(int i=0;i<G.vexnum;i++){
-        d[i] = ∞;                   //初始化路径长度
-        path[i] = -1;               //最短路径从哪个顶点过来
+// 求顶点 U 到其他顶点的最短路径
+void BFS_MIN_Distance(Graph G, int u) {
+  // d[i] 表示从 u 到 i 结点的最短路径
+  for (int i = 0; i < G.vexnum; i++) {
+    d[i] = ∞;     // 初始化路径长度
+    path[i] = -1; // 最短路径从哪个顶点过来
+  }
+  d[u] = 0;
+  visited[u] = true;
+  EnQueue(Q, u);
+  while (!isEmpty(Q)) { // BFS主过程
+    DeQueue(Q, u);      // 队头元素出队
+    for (w = FirstNeighbor(G, u); w >= 0; w = NextNeighbor(G, u)) {
+      if (!visited[w]) {   // w 为 u 尚未访问的邻接结点
+        d[w] = d[u] + 1;   // 路径长度+1
+        path[w] = u;       // 最短路径应当从 u 到 w
+        visited[w] = true; // 设置已访问标记
+        EnQueue(Q, w);     // 顶点 w 入队
+      }
     }
-    d[u] = 0;
-    visited[u] = true;
-    EnQueue(Q,u);
-    while(!isEmpty(Q)){             //BFS主过程
-        DeQueue(Q,u)                //队头元素出队
-        for(w=FirstNeighbor(G,u);w>=0;w=NextNeighbor(G,u)){
-            if(!visited[w]){        //w 为 u 尚未访问的邻接结点
-                d[w] = d[u] + 1;    //路径长度+1
-                path[w] = u;        //最短路径应当从 u 到 w
-                visited[w] = true;  //设置已访问标记
-                EnQueue(Q,w);       //顶点 w 入队
-            }
-        }
-    }
+  }
 }
 ```
 
 2. Dijkstra算法 （迪杰斯特拉——带权图、无权图）
+
+**不适合带负权值的图**
 
 final[] ：初始化为false，循环遍历所有结点，找到还没确定最短路径，且 dist 最小的顶点 $V_i$ ,使得 final[i]=true
 dist[] ：记录了从源点 $V_0$ 到其他各顶点当前的最短路径长度
@@ -1825,9 +1828,20 @@ $$
 $$
 
 ### 6.4.3 有向无环图（DAG）描述表达式
+**顶点中不可能出现重复的操作数**
+
+![](pictures/DAG表达式.png)
+
+1. Step 1：把各个操作数不重复地排成一排
+2. Step 2：标出各个运算符的生效顺序（先后顺序有点出入无所谓）
+3. Step 3：按顺序加入运算符，注意“分层”
+4. Step 4：从底向上逐层检章同层的运算符是否可以合体
+
 
 ### 6.4.4 拓扑排序(逆拓扑排序)
 AOV网：用DAG图表示一个工程，其顶点表示活动，用有向边 $<V_i,V_j>$ 表示活动 $V_i$ 必须先于活动 $V_j$ 的这样一种关系，则将这种有向图称为顶点表示活动的网络，记为AOV网。
+
+---
 
 拓扑排序算法：
 1. 从AOV网中选择一个入度为0的顶点输出
@@ -1835,86 +1849,114 @@ AOV网：用DAG图表示一个工程，其顶点表示活动，用有向边 $<V_
 3. 重复步骤直到输出图中全部顶点，或者找不到入度为0的顶点为止【后者表示该图不是DAG（有向无环图）】
 
 ```c++
-#define MaxVertexNum 100    //图中顶点的最大数目
+#include <iostream>
+#include <stack>
+#define MaxVertexNum 100 // 图中顶点的最大数目
 
-typedef struct ArcNode{     //边表结点
-    int adjvex;             //该弧所指向的顶点的位置
-    struct ArcNode *nextArc;//指向下一条弧的指针
-    //InfoType info;       //网的边权值
-}ArcNode;
+struct VertexType {
+  int data;
+};
 
-typedef struct VNode{       //顶点表结点
-    VertexType data;        //顶点信息
-    ArcNode *firstArc;      //指向第一条依附于该顶点的弧的指针
-}VNode,AdjList[MaxVertexNum];
+typedef struct ArcNode {   // 边表结点
+  int adjvex;              // 该弧所指向的顶点的位置
+  struct ArcNode *nextArc; // 指向下一条弧的指针
+  // InfoType info;       //网的边权值
+} ArcNode;
 
-typedef struct{
-    AdjList vertices;       //邻接表
-    int vexnum,arcnum;      //图的顶点数和弧数
-}Graph;                     //Graph 是以邻接表存储的图类型
+typedef struct VNode { // 顶点表结点
+  VertexType data;     // 顶点信息
+  ArcNode *firstArc;   // 指向第一条依附于该顶点的弧的指针
+} VNode, AdjList[MaxVertexNum];
 
-bool TopologicalSort(Graph G){
-    InitStack(S);           //初始化栈
-    for(int i=0;i<G.vexnum;i++){
-        if(indegree[i]==0)  //degree数组记录当前顶点的入度
-            Push(S,i);      //将所有入度为0的顶点入栈
+typedef struct {
+  AdjList vertices;   // 邻接表
+  int vexnum, arcnum; // 图的顶点数和弧数
+} Graph;              // Graph 是以邻接表存储的图类型
+
+std::stack<int> S; // 用栈来实现拓扑排序
+
+int indegree[MaxVertexNum]; // 记录每个顶点的入度
+
+int print[MaxVertexNum]; // 记录拓扑序列
+
+bool TopologicalSort(Graph G) {
+  for (int i = 0; i < G.vexnum; i++) {
+    if (indegree[i] == 0) // degree数组记录当前顶点的入度
+      S.push(i);          // 将所有入度为0的顶点入栈
+  }
+  int count = 0; // 计数，记录当前已经输出的顶点数
+  while (!S.empty()) {
+    int i = S.top(); // 栈顶元素出栈
+    S.pop();
+    print[count++] = i; // print数组记录拓扑序列，输出顶点i
+    for (
+        ArcNode *p = G.vertices[i].firstArc; p;
+        p = p->nextArc) { // 将所有i指向的顶点的入度减1，并且将入度为0的顶点压入栈S
+      int v = p->adjvex;
+      if (!(--indegree[v]))
+        S.push(v); // 入度为0，则入栈
     }
-    int count=0;            //计数，记录当前已经输出的顶点数
-    while(!isEmpty(S)){
-        Pop(S,i);           //栈顶元素出栈
-        print[count++]=i;   //print数组记录拓扑序列，输出顶点i
-        for(p=G.vertices[i].firstArc; p ; p = p->nextArc ){ //将所有i指向的顶点的入度减1，并且将入度为0的顶点压入栈S
-            v = p -> adjvex;    
-            if(!(--indegree[v]))
-                Push(S,v);  //入度为0，则入栈
-        }
-    }
+  }
 
-    if(count < G.vexnum)
-        return false;       //排序失败，有向图中有回路
-    else
-        return true;        //拓扑排序成功
+  if (count < G.vexnum)
+    return false; // 排序失败，有向图中有回路
+  else
+    return true; // 拓扑排序成功
 }
 ```
+
+---
 
 逆拓扑排序算法：
 1. 从AOV网中选择一个出度为0的顶点输出
 2. 删去此顶点，并删除以此顶点为弧头的弧
 3. 重复步骤直到输出图中全部顶点，或者找不到出度为0的顶点为止【后者表示该图不是DAG（有向无环图）】
 
+- 实现逆拓扑排序算法：（两个）
 1. 逆邻接表
 
 2. DFS算法
 ```c++
-#define MaxVertexNum 100            //结点的最大个数
-bool visited[MaxVertexNum];         //访问标记数组
+#define MaxVertexNum 100    // 结点的最大个数
+bool visited[MaxVertexNum]; // 访问标记数组
 
-void DFSTraverse(Graph G){          //对图G进行深度优先遍历
-    for(int i=0;i<G.vexnum;i++){
-        visited[i]=false;           //访问标记数组初始化
+void DFSTraverse(Graph G) { // 对图G进行深度优先遍历
+  for (int i = 0; i < G.vexnum; i++) {
+    visited[i] = false; // 访问标记数组初始化
+  }
+  for (int i = 0; i < G.vexnum; i++) { // 从0号顶点开始遍历
+    if (!visited[i]) { // 对每个连通分量调用一次BFS算法
+      DFS(G, i);       // 若第i个顶点未被访问过，则执行BFS
     }
-    for(int i=0;i<G.vexnum;i++){    //从0号顶点开始遍历
-        if(!visited[i]){              //对每个连通分量调用一次BFS算法
-            DFS(G,i);               //若第i个顶点未被访问过，则执行BFS
-        }
-    }
+  }
 }
 
-//深度优先遍历算法
-void DFS(Graph G,int v){            //从顶点v出发，深度优先遍历图G
-    visit(v);                       //访问初始顶点v
-    visited[v]=true;                //对顶点 v 做已访问标记
-    for(int w=FirstNeighbor(G,v);w>=0;w=NextNeighbor(G,v,w)){  //检测v的所有邻接点
-        if(!visited[w]){            //w为v的未访问的邻接顶点
-            DFS(G,w);
-        }
+// 深度优先遍历算法
+void DFS(Graph G, int v) { // 从顶点v出发，深度优先遍历图G
+  visit(v);                // 访问初始顶点v
+  visited[v] = true;       // 对顶点 v 做已访问标记
+  for (int w = FirstNeighbor(G, v); w >= 0;
+       w = NextNeighbor(G, v, w)) { // 检测v的所有邻接点
+    if (!visited[w]) {              // w为v的未访问的邻接顶点
+      DFS(G, w);
     }
-    print(v);                       //输出顶点
+  }
+  print(v); // 输出顶点
 }
 ```
 
 ### 6.4.5 关键路径
 AOE网：在带权有向图中，以顶点代表事件，以有向边表示活动，以边上的权值表示完成该活动的开销（时间），称之为用边表示活动的网络。
+
+仅有一个入度为0的顶点，称为开始顶点（源点），它表示整个工程的开始；
+
+仅有一个出度为0的顶点，称为结束顶点（汇点），它表示整个工程的结束。
+
+从源点到汇点的有向路径可能有多条，所有路径中，具有最大路径长度的路径称为关键路径，而把关键路径上的活动称为关键活动
+
+- 若关键活动耗时增加，则整个工程的工期将增长
+- 缩短关键活动的时间，可以缩短整个工程的工期
+- 当缩短到一定程度时，关键活动可能会变成非关键活动
 
 # 第七章——查找
 
