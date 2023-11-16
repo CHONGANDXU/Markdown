@@ -62,10 +62,11 @@
   - [7.2 顺序、折半、分块](#72-顺序折半分块)
     - [7.2.1 顺序查找](#721-顺序查找)
     - [7.2.2 折半查找](#722-折半查找)
-    - [7.2.3 分块查找](#723-分块查找)
+    - [7.2.3 分块查找——\[手算\]](#723-分块查找手算)
   - [7.3 树型查找](#73-树型查找)
     - [7.3.1 二叉排序树（二叉搜索树BST）](#731-二叉排序树二叉搜索树bst)
     - [7.3.2 平衡二叉树](#732-平衡二叉树)
+    - [7.3.3 红黑树](#733-红黑树)
   - [7.4 B树和B+树](#74-b树和b树)
   - [7.5 散列表（哈希表）](#75-散列表哈希表)
 - [第八章——排序](#第八章排序)
@@ -1597,6 +1598,10 @@ int Find_good(int S[], int x) {
 
 # 第六章——图
 ## 6.1 图的基本概念
+
+13. 简单路径、简单回路  
+在路径序列中，顶点不重复出现的路径称为简单路径。除第一个顶点和最后一个顶点外，其余顶点不重复出现的回路称为简单回路。
+
 ## 6.2 图的存储及基本操作
 ### 6.2.1 邻接矩阵法（顺序存储）
 
@@ -1925,8 +1930,8 @@ void DFSTraverse(Graph G) { // 对图G进行深度优先遍历
     visited[i] = false; // 访问标记数组初始化
   }
   for (int i = 0; i < G.vexnum; i++) { // 从0号顶点开始遍历
-    if (!visited[i]) { // 对每个连通分量调用一次BFS算法
-      DFS(G, i);       // 若第i个顶点未被访问过，则执行BFS
+    if (!visited[i]) { // 对每个连通分量调用一次DFS算法
+      DFS(G, i);       // 若第i个顶点未被访问过，则执行DFS
     }
   }
 }
@@ -1966,58 +1971,89 @@ AOE网：在带权有向图中，以顶点代表事件，以有向边表示活�
 ### 7.2.1 顺序查找
 
 ```c++
-typedef struct{         //查找表的数据结构（顺序表）
-    ElemType *elem;     //动态数据基址
-    int TableLen;       //表的长度
-}SSTable;
+struct ElemType {
+  int key;
+  int operator!=(ElemType e) { return key != e.key; }
+};
 
-//顺序查找_非哨兵
-int Search_Seq(SSTable ST,ElemType key){
-    int i;
-    for(i=0;i<ST.TableLen && ST.elem[i]!=key;i++){  //查找成功，则返回元素下标；查找失败，则返回-1
-        return i==ST.Table?-1:i;
-    }
+typedef struct {  // 查找表的数据结构（顺序表）
+  ElemType *elem; // 动态数据基址
+  int TableLen;   // 表的长度
+} SSTable;
+
+// 顺序查找_非哨兵
+int Search_Seq(SSTable ST, ElemType key) {
+  int i;
+  for (i = 0; i < ST.TableLen && ST.elem[i] != key; i++) {
+  }
+  // 查找成功，则返回元素下标；查找失败，则返回-1
+  return i == ST.TableLen ? -1 : i;
 }
 
-//顺序查找_哨兵，数据从下标1开始存储
-int Search_Seq(SSTable ST,ElemType key){
-    ST.elem[0]=key;                          //哨兵   
-    int i;
-    for(i=ST.TableLen;ST.elem[i]!=key;--i){  //从后往前查找
-        return i;//查找成功，则返回元素下标；查找失败，则返回0
-    }
+// 顺序查找_哨兵，数据从下标1开始存储
+int Search_Seq_sentinel(SSTable ST, ElemType key) {
+  ST.elem[0] = key; // 哨兵
+  int i;
+  for (i = ST.TableLen; ST.elem[i] != key; --i) { // 从后往前查找
+  }
+  return i; // 查找成功，则返回元素下标；查找失败，则返回0
 }
 ```
+
+查找成功 $ASL_{成功}=\frac{1+2+3+\cdots+n}{n}=\frac{n+1}{2}$
+查找失败 $ASL_{失败}=n+1$
+
+顺序查找的优化（对于顺序表）【递增或递减】
+查找失败 $ASL_{失败}=\frac{1+2+3+\cdots+n+n}{n+1}=\frac{n}{2}+\frac{n}{n+1}$
 
 ### 7.2.2 折半查找
 又称二分查找，仅适用于 <font color='red'>有序</font> 的 <font color='red'>顺序表</font>
 
 $具有n个 (n>0) 结点的完全二叉树的高度为 \log_2{(n+1)} 或 \log_2{n}+1$
 
-$时间复杂度 \log_{2}{n}$
+$时间复杂度 O(\log_{2}{n})$
 
 ```c++
-typedef struct{         //查找表的数据结构（顺序表）
-    ElemType *elem;     //动态数据基址
-    int TableLen;       //表的长度
-}SSTable;
+struct ElemType {
+  int key;
+  int operator!=(ElemType e) { return key != e.key; }
+  int operator==(ElemType e) { return key == e.key; }
+  int operator>(ElemType e) { return key > e.key; }
+};
 
-int Binary_Search(SSTable L,ElemType key){
-    int low=0,high=L.TableLen-1,mid;
-    while(low<=high){
-        mid=(low+high)/2;       //取中间位置
-        if(L.elem[mid]==key)
-            return mid;         //查找成功则返回所在位置
-        else if(L.ele[mid]>key)
-            high = mid - 1;     //从前半部分继续查找
-        else
-            low = mid + 1;      //从后半部分继续查找
+typedef struct {  // 查找表的数据结构（顺序表）
+  ElemType *elem; // 动态数据基址
+  int TableLen;   // 表的长度
+} SSTable;
+
+int Binary_Search(SSTable L, ElemType key) {
+  int low = 0, high = L.TableLen - 1;
+  while (low <= high) {
+    int mid = (low + high) / 2; // 取中间位置
+    if (L.elem[mid] == key) {
+      return mid; // 查找成功则返回所在位置
+    } else if (L.elem[mid] > key) {
+      high = mid - 1; // 从前半部分继续查找
+    } else {
+      low = mid + 1; // 从后半部分继续查找
     }
-    return -1;                  //查找失败，返回 -1
+  }
+  return -1; // 查找失败，返回 -1
 }
 ```
 
-### 7.2.3 分块查找
+折半查找判定树的构造
+平衡二叉树
+右子树结点数-左子树结点数 = 0 或 1
+判定树结点关键字：左＜中＜右，满足二叉排序树的定义
+失败结点：n+1个（等于成功结点的空链域数量）
+
+### 7.2.3 分块查找——[手算]
+
+索引块之间有序, 索引块内无序
+
+对索引表进行折半查找时，若索引表中不包含目标关键字， 则折半查找最终停在 low > high ，要在 low 所指分块中查找
+
 ```c++
 //索引表
 typedef struct{
@@ -2055,59 +2091,60 @@ $$ASL=\lceil \log_{2}{(b+1)} \rceil+\frac{s+1}{2}$$
 ### 7.3.1 二叉排序树（二叉搜索树BST）
 建立、查找、插入等相关操作
 ```c++
-//二叉排序树结点
-typedef struct BSTNode{
-    int key;
-    struct BSTNode *lchild,*rchild;
-}BSTNode,*BSTree;
+#include <iostream>
 
-//在二叉排序树中查找值为 key 的结点
-BSTNode *BST_Search(BSTree T,int key){
-    while(T!=NULL && key != T->key){    //若树空或等于根结点值，则结束循环
-        if(key < (T->key))
-            T=T->lchild;                //小于，则在左子树上查找
-        else
-            T=T->rchild;                //大于，则在右子树上查找
-    }
-    return T;
-}
+// 二叉排序树结点
+typedef struct BSTNode {
+  int key;
+  struct BSTNode *lchild, *rchild;
+} BSTNode, *BSTree;
 
-//在二叉排序树中查找值为 key 的结点（递归实现）
-BSTNode *BSTSearch(BSTree T,int key){
-    if(T==NULL)
-        return NULL;    //查找失败
-    if(key==T->key)
-        return T;          //查找成功
-    else if(key < T->key)
-        return BSTSearch(T->lchild,key);    //在左子树中查找
+// 在二叉排序树中查找值为 key 的结点
+BSTNode *BST_Search(BSTree T, int key) {
+  while (T != NULL && key != T->key) { // 若树空或等于根结点值，则结束循环
+    if (key < (T->key))
+      T = T->lchild; // 小于，则在左子树上查找
     else
-        return BSTSearch(T->rchild,key);    //在右子树中查找
+      T = T->rchild; // 大于，则在右子树上查找
+  }
+  return T;
 }
 
-//在二叉排序树插入关键字为 k 的新结点（递归实现）
-int BST_Insert(BSTree &T,int k){
-    if(T==NULL){                            //原树为空，新插入的结点为根结点
-        T=(BSTree)malloc(sizeof(BSTNode));
-        T->key = k;
-        T->lchild=T->rchild=NULL;
-        return 1;                               //返回 1 ，插入成功
-    }
-    else if(k==T->key)                    //树中存在相同关键字的结点，插入失败，返回 0
-        return 0;
-    else if( k < T->key)                   //插入到 T 的左子树 
-        return BST_Insert(T->lchild,k);
-    else                                        //插入到 T 的右子树
-        return BST_Insert(T->rchild,k);
+// 在二叉排序树中查找值为 key 的结点（递归实现）
+BSTNode *BSTSearch(BSTree T, int key) {
+  if (T == NULL)
+    return NULL; // 查找失败
+  if (key == T->key)
+    return T; // 查找成功
+  else if (key < T->key)
+    return BSTSearch(T->lchild, key); // 在左子树中查找
+  else
+    return BSTSearch(T->rchild, key); // 在右子树中查找
 }
 
-//按照 str[] 中的关键字序列建立二叉排序树
-void Create_BST(BSTree &T,int str[],int n){
-    T=NULL;                    //初始化 T 为空树
-    int i=0;
-    while(i<n){                  //依次将每个关键字插入到二叉排序树中
-        BST_Insert(T,str[i]);
-        i++;
-    }
+// 在二叉排序树插入关键字为 k 的新结点（递归实现）
+int BST_Insert(BSTree &T, int k) {
+  if (T == NULL) { // 原树为空，新插入的结点为根结点
+    T = (BSTree)malloc(sizeof(BSTNode));
+    T->key = k;
+    T->lchild = T->rchild = NULL;
+    return 1;             // 返回 1 ，插入成功
+  } else if (k == T->key) // 树中存在相同关键字的结点，插入失败，返回 0
+    return 0;
+  else if (k < T->key) // 插入到 T 的左子树
+    return BST_Insert(T->lchild, k);
+  else // 插入到 T 的右子树
+    return BST_Insert(T->rchild, k);
+}
+
+// 按照 str[] 中的关键字序列建立二叉排序树
+void Create_BST(BSTree &T, int str[], int n) {
+  T = NULL; // 初始化 T 为空树
+  int i = 0;
+  while (i < n) { // 依次将每个关键字插入到二叉排序树中
+    BST_Insert(T, str[i]);
+    i++;
+  }
 }
 ```
 ### 7.3.2 平衡二叉树
@@ -2120,6 +2157,43 @@ typedef struct AVLNode{
     struct AVLNode *lchild,*rchild;
 }AVLNode,*AVLTree
 ```
+基本操作：插入
+1. 调整LL（右旋操作）: 实现 f 向右下旋转，p 向右上旋转:
+
+> 其中 f 是爹，p 为左孩子，gf 为 f 他爹 
+> ① f -> lchild = p -> rchild;
+> ② p -> rchild = f;
+> ③ gf -> lchild/rchild = p;
+
+2. 调整RR（左旋操作）: 实现 f 向左下旋转，p 向左上旋转:
+
+> 其中 f 是爹，p 为右孩子，gf 为 f 他爹 
+> ① f -> rchild = p -> lchild;
+> ② p -> lchild = f;
+> ③ gf -> lchild/rchild = p;
+
+3. 调整LR 左旋再右旋
+
+4. 调整RL 右旋再左旋
+
+基本操作：删除
+1. 删除结点（方法同“二叉排序树”）
+   - 若删除的结点是叶子，直接删。
+   - 若删除的结点只有一个子树，用子树顶替删除位置
+   - 若删除的结点有两棵子树，用前驱（或后继）结点顶替，并转换为对前驱（或后继）结点的删除。
+2. 一路向北找到最小不平衡子树，我不到就完结撒花
+3. 找最小不平衡子树下，“个头”最高的儿子、孙子
+4. 根据孙子的位置，调整平衡（LL/RR/LR/RL） 
+   - 孙子在LL: 儿子右单旋
+   - 孙子在RR: 儿子左单旋
+   - 孙子在LR: 孙子先左旋，再右旋
+   - 孙子在RL: 孙子先右旋，再左
+5. 如果不平衡向上传导，继续②
+
+![](pictures/平衡二叉树删除.png)
+
+### 7.3.3 红黑树
+
 
 ## 7.4 B树和B+树
 
