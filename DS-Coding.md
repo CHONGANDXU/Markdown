@@ -2310,18 +2310,23 @@ n个关键字的B树必有n+1个叶子结点，则$n+1>=2(\lceil m/2 \rceil)^{h-
 4）所有叶结点包含全部关键字及指向相应记录的指针，叶结点中将关键字按大小顺序排列，并且相邻叶结点按大小顺序相互链接起来。
 
 ## 7.5 散列表（哈希表）
+
+装填因子 $\alpha$ =表中记录数/散列表长度
+
 构造方法：
-1. 除留余数法 $\quad H(key)=key\mod{p}$
+1. 除留余数法 $\quad H(key)=key\mod{p} \quad$ 散列表表长为m，取一个不大于m但最接近或等于m的质数p
 2. 直接定址法 $\quad H(key)=key \quad 或者 \quad H(key)=a*key+b \quad$ 计算简单，不会产生冲突，适用于关键字分布基本连续的情况
 3. 数字分析法  &emsp; 选取数码分布较为均匀的若干位作为散列地址【比如手机号】
 4. 平方取中法  &emsp; 取关键字的平方值的中间几位作为散列地址
 
 解决冲突的方法：
-1. 开放定址法
-   1. 线性探测法
-   2. 平方探测法
+1. 开放定址法 $H_i = (H(key)+d_i)\mod{m}, d_i为增量数列$ 
+   1. 线性探测法，即发生冲突时，每次往后探测相邻的下一个单元是否为空,$d_i=0,1,2,3,\cdots,m-1$
+   2. 平方探测法,$d_i=0^2,1^2,-1^2,2^2,-2^2,\cdots,k^2,-k^2\quad 其中k<=\frac{m}{2}$
    3. 伪随机序列法
    4. 再散列法
+  <font style="background-color:red;color:white">注意：采用“开放定址法”时，删除结点不能简单地将被删结点的空间置为空，否则将截断在它之后填入散列表的同义词结点的查找路径，可以做一个“删除标记”，进行逻辑删除</font>
+
 2. 拉链法
 
 
@@ -2331,67 +2336,67 @@ n个关键字的B树必有n+1个叶子结点，则$n+1>=2(\lceil m/2 \rceil)^{h-
 2. 折半插入排序
 3. 希尔排序
 ```c++
-//直接插入排序
-void InsertSort(int A[],int n){
-    int i,j,temp;
-    for(i=0;i<n;i++){       //将各元素插入已排好序的序列中
-        temp=A[i];          //若A[i]关键字小于前驱
-        for(j=i-1;j>=0 && A[j]>temp;--j){   //检查所有前面已排好序的元素
-            A[j+1]=A[j];    //所有大于temp也就是A[i]的元素都往后挪位
-        }
-        A[j+1]=temp;        //复制到插入位置
+// 直接插入排序
+void InsertSort(int A[], int n) {
+  int i, j, temp;
+  for (i = 0; i < n; i++) { // 将各元素插入已排好序的序列中
+    temp = A[i];            // 若A[i]关键字小于前驱
+    for (j = i - 1; j >= 0 && A[j] > temp; --j) { // 检查所有前面已排好序的元素
+      A[j + 1] = A[j]; // 所有大于temp也就是A[i]的元素都往后挪位
     }
+    A[j + 1] = temp; // 复制到插入位置
+  }
 }
 
-//直接插入排序（带哨兵）数组存储从下标1开始
-void InsertSort(int A[],int n){
-    int i,j;
-    for(i=2;i<n;i++){
-        if(A[i]<A[i-1]){
-            A[0]=A[i];
-            for(j=i-1;A[0]<A[j];--j){
-                A[j+1]=A[j];
-            }
-            A[j+1]=A[0];
-        }
+// 直接插入排序（带哨兵）数组存储从下标1开始
+void _InsertSort(int A[], int n) {
+  int i, j;
+  for (i = 2; i < n; i++) {
+    if (A[i] < A[i - 1]) {
+      A[0] = A[i];
+      for (j = i - 1; A[0] < A[j]; --j) {
+        A[j + 1] = A[j];
+      }
+      A[j + 1] = A[0];
     }
+  }
 }
 
-//折半插入排序
-void InsertSort(int A[],int n){
-    int i,j,low,high,mid;
-    for(i=2;i<=n;i++){          //依次将A[2]~A[n]插入前面的已排序序列
-        A[0]=A[i];              //将A[i]暂存到A[0]
-        low=1;
-        high=i-1;               //设置折半查找的范围
-        while(low<=high){       //折半查找（递增有序序列）
-            mid=(low+high)/2;
-            if(A[mid]>A[0])
-                high = mid-1;
-            else
-                low = mid+1;
-        }
-        for(j=i-1;j>=high+1;--j){
-            A[j+1]=A[j];        //统一后移元素，空出插入位置
-        }
-        A[high+1]=A[0];         //插入操作
+// 折半插入排序
+void HalfInsertSort(int A[], int n) {
+  int i, j, low, high, mid;
+  for (i = 2; i <= n; i++) { // 依次将A[2]~A[n]插入前面的已排序序列
+    A[0] = A[i];             // 将A[i]暂存到A[0]
+    low = 1;
+    high = i - 1;         // 设置折半查找的范围
+    while (low <= high) { // 折半查找（递增有序序列）
+      mid = (low + high) / 2;
+      if (A[mid] > A[0])
+        high = mid - 1;
+      else
+        low = mid + 1;
     }
+    for (j = i - 1; j >= high + 1; --j) {
+      A[j + 1] = A[j]; // 统一后移元素，空出插入位置
+    }
+    A[high + 1] = A[0]; // 插入操作
+  }
 }
 
-//希尔排序
-void ShellSort(int A[],int n){
-    int d,i,j;              //A[0]只是暂存单元，不是哨兵，当j<=0时，插入位置已到
-    for(d=n/2;d>=1;d=d/2){  //步长变化
-        for(i=d+1;i<=n;i++){
-            if(A[i]<A[i-d]){//需将A[i]插入有序增量子表
-                A[0]=A[i];  //暂存A[0]
-                for(j=i-d;j>0&&A[0]<A[j];j-=d){
-                    A[j+d]=A[j];    //记录后移，寻找插入位置
-                }
-                A[j+d]=A[0];//插入
-            }
+// 希尔排序
+void ShellSort(int A[], int n) {
+  int d, i, j; // A[0]只是暂存单元，不是哨兵，当j<=0时，插入位置已到
+  for (d = n / 2; d >= 1; d = d / 2) { // 步长变化
+    for (i = d + 1; i <= n; i++) {
+      if (A[i] < A[i - d]) { // 需将A[i]插入有序增量子表
+        A[0] = A[i];         // 暂存A[0]
+        for (j = i - d; j > 0 && A[0] < A[j]; j -= d) {
+          A[j + d] = A[j]; // 记录后移，寻找插入位置
         }
+        A[j + d] = A[0]; // 插入
+      }
     }
+  }
 }
 ```
 
@@ -2400,46 +2405,48 @@ void ShellSort(int A[],int n){
 2. 快速排序
 
 ```c++
-//冒泡排序
-void swap(int& a,int &b){
-    int temp = a;
-    a = b;
-    b = temp;
+// 冒泡排序
+void swap(int &a, int &b) {
+  int temp = a;
+  a = b;
+  b = temp;
 }
 
-void BubbleSort(int A[],int n){
-    for(int i=0;i<n-1;i++){
-        bool flag=false;            //表示本趟冒泡是否发生交换的标志
-        for(int j=n-1;j>i;j--){     //一趟冒泡过程
-            if(A[j-1]>A[j]){        //若为逆序
-                swap(A[j-1],A[j])
-                flag=true;
-            }
-            if(flag==false)         //本趟遍历后没有发生交换，说明表已经有序
-                return;
-        }
+void BubbleSort(int A[], int n) {
+  for (int i = 0; i < n - 1; i++) {
+    bool flag = false; // 表示本趟冒泡是否发生交换的标志
+    for (int j = n - 1; j > i; j--) { // 一趟冒泡过程
+      if (A[j - 1] > A[j]) {          // 若为逆序
+        swap(A[j - 1], A[j]);
+        flag = true;
+      }
+      if (flag == false) // 本趟遍历后没有发生交换，说明表已经有序
+        return;
     }
+  }
 }
 
-//快速排序
-void QuickSort(int A[],int low,int high){
-    if(low<high){                           //递归跳出的条件
-        int pivotpos=Partition(A,low,high); //划分
-        QuickSort(A,low,pivotpos-1);        //划分左子表
-        QuickSort(A,pivotpos+1,high);       //划分右子表
-    }
+// 快速排序
+int Partition(int A[], int low, int high) {
+  int pivot = A[low];  // 第一个元素作为枢轴
+  while (low < high) { // 用low、high搜索枢轴的最终位置
+    while (low < high && A[high] >= pivot)
+      --high;
+    A[low] = A[high]; // 比枢轴小的元素移动到左端
+    while (low < high && A[low] <= pivot)
+      ++low;
+    A[high] = A[low]; // 比枢轴大的元素移动到右侧
+  }
+  A[low] = pivot; // 枢轴元素存放到最终位置
+  return low;     // 返回存放枢轴的最终位置
 }
 
-int Partition(int A[],int low,int high){
-    int pivot=A[low];                           //第一个元素作为枢轴
-    while(low<high){                            //用low、high搜索枢轴的最终位置
-        while(low<high&&A[high]>=pivot) --high;
-        A[low]=A[high];                         //比枢轴小的元素移动到左端
-        while(low<high&&A[low]<=pivot) ++low;
-        A[high]=A[low];                         //比枢轴大的元素移动到右侧
-    }
-    A[low]=pivot;                               //枢轴元素存放到最终位置
-    return low;                                 //返回存放枢轴的最终位置
+void QuickSort(int A[], int low, int high) {
+  if (low < high) {                         // 递归跳出的条件
+    int pivotpos = Partition(A, low, high); // 划分
+    QuickSort(A, low, pivotpos - 1);        // 划分左子表
+    QuickSort(A, pivotpos + 1, high);       // 划分右子表
+  }
 }
 ```
 
