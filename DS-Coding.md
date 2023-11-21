@@ -2200,8 +2200,44 @@ typedef struct AVLNode{
 ![](pictures/平衡二叉树删除.png)
 
 ### 7.3.3 红黑树
+红黑树是二叉排序树:左子树结点值≤根结点值≤右子树结点值
 
+①每个结点或是红色，或是黑色的
+②根节点是黑色的
+③叶结点（外部结点、NULL结点、失败结点）均是黑色的 
+④不存在两个相邻的红结点（即红结点的父节点和孩子结点均是黑色） 
+⑤对每个结点，从该节点到任一叶结点的简单路径上，所含黑结点的数目相同
 
+**口诀：左根右，根叶黑，不红红，黑路同**
+
+```c++
+struct RBnode {   // 红黑树的结点定义
+  int key;        // 关键字的值
+  RBnode *parent; // 父结点指针
+  RBnode *lChild; // 左孩子指针
+  RBnode *rChild; // 右孩子指针
+  int color; // 结点颜色,可用 0/1 代表 黑/红,也可用enum枚举表示颜色
+};
+```
+
+性质：
+1. 从根节点到叶结点的最长路径不大于最短路径的2倍
+2. 有n个内部节点的红黑树高度$h≤2\log_{2}{(n+1)}$
+3. 红黑树的查找操作时间复杂度为$O(\log_{2}{n})$
+
+插入操作：
+- 先查找，确定插入位置（原理同二叉排序树），插入新结点 
+- <font style="background-color:#00ff90">新结点</font>是<font style="background-color:black;color:white">根</font>--染为<font style="background-color:black;color:white">黑色</font>
+- <font style="background-color:#00ff90">新结点</font><font style="background-color:red;color:white">非根</font>--染为<font style="background-color:red;color:white">红色</font>
+  - 若插入新结点后依然满足红黑树定义，则插入结束
+  - 若插入新结点后不满足红黑树定义，需要<font style="background-color:yellow">调整</font>，使其重新满足红黑树定义
+    - <font style="background-color:black;color:white">黑叔</font>：旋转+染色
+      - LL型：右单旋，父换爷+染色
+      - RR型：左单旋，父换爷+染色
+      - LR型：左、右双旋，儿换爷+染色
+      - RL型：右、左双旋，儿换爷＋染色
+    - <font style="background-color:red;color:white">红叔</font>：染色+变新
+      - 叔父爷染色，爷变为新结点
 ## 7.4 B树和B+树
 
 ```c++
