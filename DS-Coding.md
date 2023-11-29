@@ -1,8 +1,8 @@
 - [第一章——绪论](#第一章绪论)
 - [第二章——线性表](#第二章线性表)
   - [2.1 线性表的定义和基本操作](#21-线性表的定义和基本操作)
-  - [2.2 线性表的顺序表示【重要】](#22-线性表的顺序表示重要)
-  - [2.3 线性表的链式表示【重要】](#23-线性表的链式表示重要)
+  - [2.2 线性表的顺序表示](#22-线性表的顺序表示)
+  - [2.3 线性表的链式表示](#23-线性表的链式表示)
     - [2.3.1 单链表](#231-单链表)
     - [2.3.2 双链表](#232-双链表)
     - [2.3.3 循环链表\&\&静态链表](#233-循环链表静态链表)
@@ -84,11 +84,10 @@
 # 第一章——绪论
 
 # 第二章——线性表
+
 ## 2.1 线性表的定义和基本操作
 
-
-
-## 2.2 线性表的顺序表示【重要】
+## 2.2 线性表的顺序表示
 - 静态分配
   - ```data[MaxSize]```
   - 基本操作：插入、删除、查找
@@ -191,7 +190,7 @@ void IncreaseSize(SeqList &L, int len) {
 }
 ```
 
-## 2.3 线性表的链式表示【重要】
+## 2.3 线性表的链式表示
 
 ### 2.3.1 单链表
 ```c++
@@ -698,8 +697,9 @@ bool bracketCheck(char str[], int length) {
 ```
 
 2. 三种算术表达式（转换及求值）
-后缀表达式 = 逆波兰表达式【**重要**】
-前缀表达式 = 波兰表达式
+  - 中缀表达式
+  - 后缀表达式 = 逆波兰表达式【**重要**】
+  - 前缀表达式 = 波兰表达式
 
 > 后缀表达式（手算）
 > 【中缀转后缀】
@@ -729,22 +729,36 @@ bool bracketCheck(char str[], int length) {
 3. 递归
 
 ```c++
-#include<iostream>
+#include <iostream>
+#include <unordered_map>
 using namespace std;
 
-int Fib(int n){
-    if(n==0)
-        return 0;
-    else if(n==1)
-        return 1;
-    else
-        return Fib(n-1)+Fib(n-2);
+int Fib(int n) {
+  static std::unordered_map<int, int> memo;
+
+  if (n == 0)
+    return 0;
+  else if (n == 1)
+    return 1;
+
+  auto it = memo.find(n);
+  if (it != memo.end())
+    return it->second;
+
+  int result = Fib(n - 1) + Fib(n - 2);
+  memo.insert({n, result});
+
+  for (const auto &pair : memo) {
+    std::cout << "Key: " << pair.first << ", Value: " << pair.second
+              << std::endl;
+  }
+  return result;
 }
 
-int main(){
-    int x=Fib(4);
-    cout<<x<<"  奥里给！！！"<<endl;
-    return 0;
+int main() {
+  int x = Fib(10);
+  cout << x << "  奥里给！！！" << endl;
+  return 0;
 }
 ```
 
@@ -808,7 +822,13 @@ int GetHead(SqQueue Q, int &x) {
 }
 ```
 
+
+
 ### 3.2.3 队列的链式存储
+
+队列的链式存储结构，其实就是线性表的单链表+限制，在表尾插入元素，表头删除元素
+
+基本操作：队头出队，队尾入队
 
 ```c++
 #include <iostream>
@@ -1104,11 +1124,12 @@ next [ j ] = S 的最长相等前后缀长度 + 1
 
 常考性质:
 1. 结点数=总度数+1
-2. 度为 $m$ 的树( $m$ 叉树)第 $i$ 层至多有 $m^{i-1}$ 个结点（ $i>=1$ ）
-3. 高度为 $h$ 的 $m$ 叉树至多有 $\frac{m^h-1}{m-1}$ 个结点
-4. - 高度 $h$ 的 $m$ 叉树至少有 $h$ 个结点。
+2. ![度为m的树、m叉树的区别](./pictures/m叉树与度树的区别.png)
+3. 度为 $m$ 的树( $m$ 叉树)第 $i$ 层至多有 $m^{i-1}$ 个结点（ $i>=1$ ）
+4. 高度为 $h$ 的 $m$ 叉树至多有 $\frac{m^h-1}{m-1}$ 个结点
+5. - 高度 $h$ 的 $m$ 叉树至少有 $h$ 个结点。
    - 高度为 $h$ 、度为 $m$ 的树至少有 $h+m-1$ 个结点。
-5. 具有 $n$ 个结点的 $m$ 叉树的最小高度为 $\lceil\log_m(n(m-1)+1)\rceil$
+6. 具有 $n$ 个结点的 $m$ 叉树的最小高度为 $\lceil\log_m(n(m-1)+1)\rceil$
 
 ## 5.2 二叉树的基本概念
 
