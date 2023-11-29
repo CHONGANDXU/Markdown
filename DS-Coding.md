@@ -5,24 +5,25 @@
   - [2.3 线性表的链式表示【重要】](#23-线性表的链式表示重要)
     - [2.3.1 单链表](#231-单链表)
     - [2.3.2 双链表](#232-双链表)
+    - [2.3.3 循环链表\&\&静态链表](#233-循环链表静态链表)
 - [第三章——栈、队列和数组](#第三章栈队列和数组)
   - [3.1 栈](#31-栈)
     - [3.1.1 栈的基本概念](#311-栈的基本概念)
-    - [3.1.2 栈的顺序存储（顺序栈）【重要】](#312-栈的顺序存储顺序栈重要)
+    - [3.1.2 栈的顺序存储（顺序栈）](#312-栈的顺序存储顺序栈)
       - [共享栈](#共享栈)
-    - [3.1.3 栈的链式存储（链式栈）【重要】](#313-栈的链式存储链式栈重要)
+    - [3.1.3 栈的链式存储（链式栈）](#313-栈的链式存储链式栈)
     - [3.1.4 栈的应用](#314-栈的应用)
   - [3.2 队列](#32-队列)
     - [3.2.1 队列的基本结构](#321-队列的基本结构)
-    - [3.2.2 队列的顺序存储【重要】](#322-队列的顺序存储重要)
-    - [3.2.3 队列的链式存储【重要】](#323-队列的链式存储重要)
+    - [3.2.2 队列的顺序存储](#322-队列的顺序存储)
+    - [3.2.3 队列的链式存储](#323-队列的链式存储)
     - [3.2.4 双端队列（不受限和受限）](#324-双端队列不受限和受限)
     - [3.2.5 队列的应用](#325-队列的应用)
   - [3.3 数组和特殊矩阵](#33-数组和特殊矩阵)
 - [第四章——串(不考，可略过)](#第四章串不考可略过)
   - [4.1 串的定义和实现](#41-串的定义和实现)
-    - [串的顺序存储【重要】](#串的顺序存储重要)
-    - [串的链式存储【重要】](#串的链式存储重要)
+    - [串的顺序存储](#串的顺序存储)
+    - [串的链式存储](#串的链式存储)
   - [4.2 串的模式匹配](#42-串的模式匹配)
     - [4.2.1 朴素模式匹配（定位操作）](#421-朴素模式匹配定位操作)
     - [4.2.2 KMP](#422-kmp)
@@ -31,7 +32,7 @@
   - [5.1 树的基本概念](#51-树的基本概念)
   - [5.2 二叉树的基本概念](#52-二叉树的基本概念)
     - [5.2.1 二叉树的定义及其主要特征](#521-二叉树的定义及其主要特征)
-    - [5.2.2 二叉树的存储结构、遍历【重要】](#522-二叉树的存储结构遍历重要)
+    - [5.2.2 二叉树的存储结构、遍历](#522-二叉树的存储结构遍历)
   - [5.3 线索二叉树](#53-线索二叉树)
     - [5.3.1 线索化二叉树](#531-线索化二叉树)
     - [5.3.2 线索二叉树找前驱(后继)——没整理完整](#532-线索二叉树找前驱后继没整理完整)
@@ -89,7 +90,7 @@
 
 ## 2.2 线性表的顺序表示【重要】
 - 静态分配
-  - data[MaxSize]
+  - ```data[MaxSize]```
   - 基本操作：插入、删除、查找
 
 ```c++
@@ -135,11 +136,12 @@ int LocateElem(SqList L, int e) {
 
 > 假设新元素插入到任何一个位置的概率相同，即 $i=1,2,3,\cdots,length,length+1$ 的概率都是 $p=\frac{1}{n+1}$
 >
-> - i=1，移动n个数，循环n次；【最坏情况时间复杂度 $O(n)$ 】
-> - i=2，移动n-1个数，循环n-1次；
-> - i=3，移动n-1个数，循环n-2次
+> - i=1, 移动n个数, 循环n次【最坏情况时间复杂度 $O(n)$ 】
+> - i=2, 移动n-1个数, 循环n-1次
+> - i=3, 移动n-2个数, 循环n-2次
 > - ……
-> - i=n+1时，无需移动数组，循环0次【最好情况时间复杂度 $O(1)$ 】
+> - i=n, 移动1个数, 循环1次
+> - i=n+1, 无需移动数组, 循环0次【最好情况时间复杂度 $O(1)$ 】
 >
 > 平均循环次数 = $[n+(n-1)+(n-2)+\cdots+1+0]*\frac{1}{n+1}=\frac{(1+n)n}{2}\frac{1}{n+1}=\frac{n}{2}$
 >
@@ -149,13 +151,14 @@ int LocateElem(SqList L, int e) {
 
 > 假设删除任何一个位置元素的概率相同，即 $i=1,2,3,\cdots,length$ 的概率都是 $p=\frac{1}{n}$
 >
-> - i=1，移动n-1个数，循环n-1次；【最坏情况时间复杂度 $O(n)$ 】
-> - i=2，移动n-2个数，循环n-2次；
-> - i=3，移动n-3个数，循环n-3次
+> - i=1, 移动n-1个数, 循环n-1次【最坏情况时间复杂度 $O(n)$ 】
+> - i=2, 移动n-2个数, 循环n-2次
+> - i=3, 移动n-3个数, 循环n-3次
 > - ……
-> - i=n，移动0个数，循环0次【最好情况时间复杂度 $O(1)$ 】
+> - i=n-1, 移动1个数, 循环1次
+> - i=n, 移动0个数, 循环0次【最好情况时间复杂度 $O(1)$ 】
 >
-> 平均循环次数 = $[(n-1)+(n-2)+\cdots+1+0]*\frac{1}{n+1}=\frac{(n-1)n}{2}\frac{1}{n}=\frac{n-1}{2}$
+> 平均循环次数 = $[(n-1)+(n-2)+\cdots+1+0]*\frac{1}{n}=\frac{(n-1)n}{2}\frac{1}{n}=\frac{n-1}{2}$
 >
 > 平均时间复杂度为 $O(n)$
 
@@ -195,8 +198,10 @@ void IncreaseSize(SeqList &L, int len) {
 #include <iostream>
 using namespace std;
 
+typedef int Elemtype;
+
 typedef struct LNode { // 定义单链表结点类型
-  int data;            // 数据域，ElemType为可修改的data属性值
+  Elemtype data;       // 数据域，ElemType为可修改的data属性值
   struct LNode *next;  // 指针域
 } LNode, *LinkList;
 
@@ -237,9 +242,9 @@ LinkList createList_Tail(LinkList &L) {
     s = (LNode *)malloc(sizeof(LNode));
     s->data = x;
     r->next = s;
-    r = s;  // r 指向新的表尾结点
+    r = s; // r 指向新的表尾结点
   }
-  r->next = NULL;  // 尾指针指向空
+  r->next = NULL; // 尾指针指向空
   // 输入的值不是数值型数据，跳出程序
   if (cin.fail()) {
     cout << "非法输入，创建单链表结束" << std::endl;
@@ -269,22 +274,30 @@ LNode *LocateElem(LinkList L, int e) {
   return p;
 }
 
-// 按位置顺序插入(带头结点),已知要插入的位置与新插入的结点
-LinkList InsertElem(LinkList &L, LNode *s, int n) {
+// 按位置顺序插入(带头结点),已知要插入的位置n与新插入的结点数据e
+bool InsertElem(LinkList &L, Elemtype e, int n) {
   LNode *p = GetElem(L, n - 1);
+  if (p == NULL)
+    return false;
+  LNode *s = (LNode *)malloc(sizeof(LNode));
+  if (s == NULL)
+    return false; // 新结点 s 内存分配失败
+  s->data = e;  
   s->next = p->next;
   p->next = s;
-  return L;
+  return true;
 }
 
-// 按位序删除结点(带头结点),已知要删除的位置
-bool DeleteElem(LinkList &L, int &e, int n) {
+// 按位序删除结点(带头结点),删除表L中第n个位置的元素，并用e返回删除元素的值
+bool DeleteElem(LinkList &L, Elemtype &e, int n) {
   LNode *p = GetElem(L, n - 1);
+  if (p == NULL || p->next == NULL)
+    return false;
   LNode *q = p->next;
   e = q->data;
   p->next = q->next;
   free(q);
-  return L;
+  return true;
 }
 
 // 后插操作，在 p 结点之后插入元素 e
@@ -314,11 +327,11 @@ bool InsertPriorNode(LNode *p, int e) {
   return true;
 }
 
-// 删除结点
+// 删除指定 p 结点
 bool DeleteNode(LNode *p) {
   if (p == NULL)
     return false;
-  LNode *q = p->next;
+  LNode *q = p->next; // q 指向 p 的后继结点
   p->data = q->data;
   p->next = q->next;
   free(q);
@@ -356,6 +369,7 @@ typedef struct DNode {        // 定义双链表结点类型
   struct DNode *prior, *next; // 前驱和后驱指针
 } DNode, *DLinkList;
 
+// 初始化双链表
 bool initDLinkList(DLinkList &L) {
   L = (DNode *)malloc(sizeof(DNode)); // 分配一个头结点
   if (L == NULL)
@@ -365,7 +379,8 @@ bool initDLinkList(DLinkList &L) {
   return true;
 }
 
-bool insertNextDNode(DNode *p, DNode *s) { // 在P节点后插入S结点
+// 在 p 结点后插入 s 结点
+bool insertNextDNode(DNode *p, DNode *s) {
   if (p == NULL || s == NULL)
     return false;
   s->next = p->next;
@@ -376,7 +391,8 @@ bool insertNextDNode(DNode *p, DNode *s) { // 在P节点后插入S结点
   return true;
 }
 
-bool deleteNextDNode(DNode *p) { // 删除p结点的后继结点
+// 删除 p 结点的后继结点
+bool deleteNextDNode(DNode *p) {
   if (p == NULL)
     return false;
   DNode *q = p->next; // 找到p结点的后继结点q
@@ -389,11 +405,12 @@ bool deleteNextDNode(DNode *p) { // 删除p结点的后继结点
   return true;
 }
 
-void DestroyDLinkList(DLinkList &L) { // 循环释放各个数据结点
+// Destroy a doubly linked list by freeing each node in a loop.
+void DestroyDLinkList(DLinkList &L) {
   while (L->next != NULL)
     deleteNextDNode(L);
-  free(L);
-  L = NULL;
+  free(L);  // 释放头结点
+  L = NULL; // 指针置空
 }
 
 void checkAllDNode(DLinkList &L) {
@@ -424,13 +441,28 @@ void testDLinkList() {
 }
 ```
 
+### 2.3.3 循环链表&&静态链表
+
+- 循环单链表:循环单链表和单链表的区别在于，表中最后一个结点的指针不是NULL，而改为指向头结点，从而整个链表形成一个环
+- 循环双链表:首尾结点构成环
+- 静态链表:数组第一个元素不存储数据，它的指针域存储第一个元素所在的数组下标。链表最后一个元素的指针域值为-1
+
+```c++
+#define MaxSize 100;
+typedef int Elemtype;
+typedef struct { // 静态链表元素结构
+  Elemtype data; // 数据域
+  int next;      // 指针域
+} *SLinkList;
+```
+
 # 第三章——栈、队列和数组
 
 ## 3.1 栈
 
 ### 3.1.1 栈的基本概念
 
-### 3.1.2 栈的顺序存储（顺序栈）【重要】
+### 3.1.2 栈的顺序存储（顺序栈）
 
 > n个不同元素进栈，出栈元素不同排列的个数为 $\frac{1}{n+1}C^n_{2n}$，上述公式成为卡特兰数
 
@@ -558,7 +590,7 @@ bool GetTop(SqDouStack S, int &x, int StackNum) {
 }
 ```
 
-### 3.1.3 栈的链式存储（链式栈）【重要】
+### 3.1.3 栈的链式存储（链式栈）
 
 ```c++
 #include <iostream>
@@ -720,13 +752,13 @@ int main(){
 
 ### 3.2.1 队列的基本结构
 
-### 3.2.2 队列的顺序存储【重要】
+### 3.2.2 队列的顺序存储
 
-以下Code采用队列的顺序存储，且使用循环队列存储
-为了区分队空和队满，采取入队时**少用一个队列单元**
-队列空的条件为 Q.front == Q.rear
-队列满的条件为 (Q.rear+1) % MaxSize == Q.front
-队列中元素的个数 （rear + MaxSize - front）% MaxSize
+以下Code采用队列的顺序存储，且使用循环队列存储  
+为了区分队空和队满，采取入队时**少用一个队列单元**  
+队列空的条件为 Q.front == Q.rear  
+队列满的条件为 (Q.rear+1) % MaxSize == Q.front  
+队列中元素的个数 （rear + MaxSize - front）% MaxSize  
 
 ```c++
 #include <iostream>
@@ -776,7 +808,7 @@ int GetHead(SqQueue Q, int &x) {
 }
 ```
 
-### 3.2.3 队列的链式存储【重要】
+### 3.2.3 队列的链式存储
 
 ```c++
 #include <iostream>
@@ -897,7 +929,7 @@ bool DeQueue_NoHead(LinkQueue &Q, int &x) {
 
 ## 4.1 串的定义和实现
 
-### 串的顺序存储【重要】
+### 串的顺序存储
 ```c++
 #include<iostream>
 using namespace std;
@@ -988,7 +1020,7 @@ bool Concat(){
 }
 ```
 
-### 串的链式存储【重要】
+### 串的链式存储
 ```c++
 #include<iostream>
 using namespace std;
@@ -1102,14 +1134,14 @@ $$
    
 6. 
 
-$$ 
+$$
 高度为 h 的 m 叉树 至少有h个结点 \\ 高度为h 、度为m 的树至少有h+m-1个结点 
 $$
 
 7. $具有N个（N>0）结点的完全二叉树的高度为 \lceil log_{2}(N+1) \rceil 或 \lfloor log_{2}N \rfloor+1。\\[5px]$
 
 
-### 5.2.2 二叉树的存储结构、遍历【重要】
+### 5.2.2 二叉树的存储结构、遍历
 
 1. 顺序存储(适用于完全二叉树)
 
@@ -1853,8 +1885,8 @@ path[] ：path[i]表示从源点到顶点i之间的最短路径的前驱结点�
 Floyd算法 
 
 初始化矩阵
-![](/pictures/Floyd-V0.png)
-![](/pictures/Floyd-V1.png)
+![](./pictures/Floyd-V0.png)
+![](./pictures/Floyd-V1.png)
 
 $$
 \begin{aligned}
@@ -1968,9 +2000,10 @@ bool TopologicalSort(Graph G) {
 3. 重复步骤直到输出图中全部顶点，或者找不到出度为0的顶点为止【后者表示该图不是DAG（有向无环图）】
 
 - 实现逆拓扑排序算法：（两个）
-1. 逆邻接表
-2. DFS算法
 
+  1. 逆邻接表
+
+  2. DFS算法
 ```c++
 #define MaxVertexNum 100    // 结点的最大个数
 bool visited[MaxVertexNum]; // 访问标记数组
@@ -2018,7 +2051,7 @@ AOE网：在带权有向图中，以顶点代表事件，以有向边表示活�
 > 3. 事件 $V_k$ 的最迟发生时间 $vl(k)$ - 它是指在不推迟整个工程完成的前提下，该事件最迟必须发生的时间。
 > 4. 活动 $a_i$ 的最迟开始时间 $l(i)$ - 它是指该活动 $a_i$ 弧的终点所表示事件的最迟发生时间与该活动所需时间之差。
 > 5. 活动的时间余量 $d(i)=l(i)-e(i)$ - 表示在不增加完成整个工程所需总时间的情况下，活动a可以拖延的时间
->> $d(i)=0$ 的活动是关键活动，由关键活动组成的路径就是关键路径
+>> ps: $d(i)=0$ 的活动是关键活动，由关键活动组成的路径就是关键路径
 
 # 第七章——查找
 
@@ -2539,7 +2572,10 @@ void QuickSort(int A[], int low, int high) {
 ```
 
 ## 8.3 选择排序
-1. 简单选择排序[不稳定]:每一趟在待排序元素中选取关键字最小（或最大）的元素加入有序子序列
+
+选择排序:每一趟在待排序元素中选取关键字最小（或最大）的元素加入有序子序列
+
+1. 简单选择排序[不稳定]:
    - 总共需要对比关键字次数 $ =(n-1)+(n-2)+\cdots+1=\frac{n(n-1)}{2} $
    - 元素交换次数 $＜ n-1$ 次
    - 适用于顺序表、链表
@@ -2619,7 +2655,7 @@ void HeapSort(int A[], int len) {
 
 <font style="color:red">m路归并，每选出一个元素需要对比关键字 m-1 次</font>
 
-![](pictures/归并排序.png)
+![](./pictures/归并排序.png)
 
 ```c++
 #include <iostream>
