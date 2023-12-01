@@ -79,7 +79,8 @@
   - [8.4 归并排序和基数排序](#84-归并排序和基数排序)
     - [8.4.1 归并排序——稳定](#841-归并排序稳定)
     - [8.4.2 基数排序——稳定](#842-基数排序稳定)
-  - [8.5 内部排序算法的比较](#85-内部排序算法的比较)
+- [第九章——算法](#第九章算法)
+  - [9.1 分治法](#91-分治法)
 
 # 第一章——绪论
 
@@ -2131,6 +2132,7 @@ struct ElemType {
   int operator!=(ElemType e) { return key != e.key; }
   int operator==(ElemType e) { return key == e.key; }
   int operator>(ElemType e) { return key > e.key; }
+  int operator<(ElemType e) { return key < e.key; }
 };
 
 typedef struct {  // 查找表的数据结构（顺序表）
@@ -2717,4 +2719,130 @@ void MergeSort(int A[], int low, int high) {
 2. 每组关键字的取值范围不大，即 r 较小
 3. 数据元素个数 n 较大
 
-## 8.5 内部排序算法的比较
+
+# 第九章——算法
+
+## 9.1 分治法
+
+时间复杂度的计算:表示把规模为 $n$ 的问题分成 $k$ 个规模为 $\frac{n}{m}$ 的问题
+
+$$
+T_n= \left\{ 
+\begin{array}{rl}
+O(1) & ,n=1 \\
+kT(\frac{n}{m})+f(n) &,n>1
+\end{array} \right.
+$$
+
+计算步骤:
+① $令 \frac{n}{m^x}=1, 解出 x=\log_{m}{n }$
+② $令 T(n)=O(k^x+x*f(n)), 取最高次幂$
+
+举例:
+$$
+T_n= \left\{ 
+\begin{array}{rl}
+O(1) & ,n=1 \\
+4T(\frac{n}{2})+O(n) &,n>1
+\end{array} \right.
+$$
+
+① $令 \frac{n}{2^x}=1, 解出 x=\log_{2}{n}$
+② $令 T(n)=O(k^x+x*f(n))=O(4\log_{2}{n}+n\log_{2}{n})=O(n^2+n\log_{2}{n})=O(n^2)$
+
+1. 折半查找
+2. 大整数的乘法
+3. 矩阵相乘
+4. 棋盘覆盖算法
+   1. 将棋盘四等分
+   2. 把当前棋盘靠近分割线最中间的位置，并且该棋盘中没有特殊点，用一个L形骨牌覆盖
+   3. 重复上述步骤
+5. 合并排序
+6. 快速排序
+
+
+```c++
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+/**
+ * 棋盘覆盖算法
+ * Recursively covers a chessboard with L-shaped tiles.
+ *
+ * @param board: 棋盘
+ * @param tr: 棋盘左上角方格的行索引
+ * @param tc: 棋盘左上角方格的列索引
+ * @param dr: 特殊方格的行索引
+ * @param dc: 特殊方格的列索引
+ * @param size: 棋盘的大小
+ * @param tile: 当前要使用的L型骨牌编号
+ *
+ * @throws None.
+ */
+void chessboard_cover(vector<vector<int>> &board, int tr, int tc, int dr,
+                      int dc, int size, int &tile) {
+  if (size == 1) {
+    return;
+  }
+
+  int t = tile++;
+  int s = size / 2; // 分割棋盘
+
+  // 覆盖左上角子棋盘
+  if (dr < tr + s && dc < tc + s) {
+    chessboard_cover(board, tr, tc, dr, dc, s, tile);
+  } else {
+    board[tr + s - 1][tc + s - 1] = t; // 用t号L型骨牌覆盖右下角
+    chessboard_cover(board, tr, tc, tr + s - 1, tc + s - 1, s, tile);
+  }
+
+  // 覆盖右上角子棋盘
+  if (dr < tr + s && dc >= tc + s) {
+    chessboard_cover(board, tr, tc + s, dr, dc, s, tile);
+  } else {
+    board[tr + s - 1][tc + s] = t; // 用t号L型骨牌覆盖左下角
+    chessboard_cover(board, tr, tc + s, tr + s - 1, tc + s, s, tile);
+  }
+
+  // 覆盖左下角子棋盘
+  if (dr >= tr + s && dc < tc + s) {
+    chessboard_cover(board, tr + s, tc, dr, dc, s, tile);
+  } else {
+    board[tr + s][tc + s - 1] = t; // 用t号L型骨牌覆盖右上角
+    chessboard_cover(board, tr + s, tc, tr + s, tc + s - 1, s, tile);
+  }
+
+  // 覆盖右下角子棋盘
+  if (dr >= tr + s && dc >= tc + s) {
+    chessboard_cover(board, tr + s, tc + s, dr, dc, s, tile);
+  } else {
+    board[tr + s][tc + s] = t; // 用t号L型骨牌覆盖左上角
+    chessboard_cover(board, tr + s, tc + s, tr + s, tc + s, s, tile);
+  }
+}
+
+int main() {
+  const int SIZE = 4;                                    // 棋盘大小为4x4
+  vector<vector<int>> board(SIZE, vector<int>(SIZE, 0)); // 创建4x4棋盘
+  int tile = 1; // L型骨牌的起始编号
+
+  // 假设特殊方格在(1, 1)位置，标记为-1
+  int special_row = 1, special_col = 1;
+  board[special_row][special_col] = -1;
+
+  // 调用函数覆盖棋盘
+  chessboard_cover(board, 0, 0, special_row, special_col, SIZE, tile);
+
+  // 打印棋盘
+  for (const auto &row : board) {
+    for (int val : row) {
+      cout << val << " ";
+    }
+    cout << endl;
+  }
+
+  return 0;
+}
+```
