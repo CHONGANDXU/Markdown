@@ -155,13 +155,13 @@ brew install redis
 
   ```sh
   # 启动
-  brew service start redis
+  brew services start redis
   # 停止
-  brew service stop redis
+  brew services stop redis
   # 重启
-  brew service restart redis
+  brew services restart redis
   # 查看状态
-  brew service info redis
+  brew services info redis
   ```
 
 # 二、Redis常见命令
