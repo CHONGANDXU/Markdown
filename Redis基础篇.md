@@ -16,14 +16,14 @@
 
 ---
 
-|          |                            SQL                             |                            NoSQL                             |
-| :------: | :--------------------------------------------------------: | :----------------------------------------------------------: |
-| 数据结构 |                           结构化                           |                           非结构化                           |
-| 数据关联 |                           关联的                           |                           无关联的                           |
-| 查询方式 |                          SQL查询                           |                            非SQL                             |
-| 事务特性 |                            ACID                            |                             BASE                             |
-| 存储方式 |                            磁盘                            |                             内存                             |
-|  扩展性  |                            垂直                            |                             水平                             |
+|          |                            SQL                             |                               NoSQL                               |
+| :------: | :--------------------------------------------------------: | :---------------------------------------------------------------: |
+| 数据结构 |                           结构化                           |                             非结构化                              |
+| 数据关联 |                           关联的                           |                             无关联的                              |
+| 查询方式 |                          SQL查询                           |                               非SQL                               |
+| 事务特性 |                            ACID                            |                               BASE                                |
+| 存储方式 |                            磁盘                            |                               内存                                |
+|  扩展性  |                            垂直                            |                               水平                                |
 | 使用场景 | 1）数据结构固定<br>2）相关业务对数据安全性、一致性要求较高 | 1）数据结构不固定<br>2）对一致性、安全性要求不高<br>3）对性能要求 |
 
 ## 2. 认识Redis
@@ -218,17 +218,17 @@ brew install redis
 
 > **String的常见命令有如下表格所示**
 
-|    命令     |                             描述                             |
-| :---------: | :----------------------------------------------------------: |
-|     SET     |         添加或者修改已经存在的一个String类型的键值对         |
-|     GET     |                 根据key获取String类型的value                 |
-|    MSET     |                批量添加多个String类型的键值对                |
-|    MGET     |             根据多个key获取多个String类型的value             |
-|    INCR     |                     让一个整型的key自增1                     |
+|    命令     |                              描述                              |
+| :---------: | :------------------------------------------------------------: |
+|     SET     |          添加或者修改已经存在的一个String类型的键值对          |
+|     GET     |                  根据key获取String类型的value                  |
+|    MSET     |                 批量添加多个String类型的键值对                 |
+|    MGET     |              根据多个key获取多个String类型的value              |
+|    INCR     |                      让一个整型的key自增1                      |
 |   INCRBY    | 让一个整型的key自增并指定步长，例如：incrby num 2 让num值自增2 |
-| INCRBYFLOAT |              让一个浮点类型的数字自增并指定步长              |
-|    SETNX    | 添加一个String类型的键值对，前提是这个key不存在，否则不执行  |
-|  **SETEX**  |          添加一个String类型的键值对，并且指定有效期          |
+| INCRBYFLOAT |               让一个浮点类型的数字自增并指定步长               |
+|    SETNX    |  添加一个String类型的键值对，前提是这个key不存在，否则不执行   |
+|  **SETEX**  |           添加一个String类型的键值对，并且指定有效期           |
 
 
 
@@ -264,16 +264,16 @@ brew install redis
 
 - **Hash的常见命令有：**
 
-  |         命令         |                             描述                             |
-  | :------------------: | :----------------------------------------------------------: |
-  | HSET key field value |              添加或者修改hash类型key的field的值              |
-  |    HGET key field    |                获取一个hash类型key的field的值                |
-  |   HMSET(已经弃用)    |       hmset 和 hset 效果相同 ，4.0之后hmset可以弃用了        |
-  |        HMGET         |              批量获取多个hash类型key的field的值              |
-  |       HGETALL        |         获取一个hash类型的key中的所有的field和value          |
-  |        HKEYS         |             获取一个hash类型的key中的所有的field             |
-  |        HVALS         |             获取一个hash类型的key中的所有的value             |
-  |       HINCRBY        |           让一个hash类型key的字段值自增并指定步长            |
+  |         命令         |                               描述                                |
+  | :------------------: | :---------------------------------------------------------------: |
+  | HSET key field value |                添加或者修改hash类型key的field的值                 |
+  |    HGET key field    |                  获取一个hash类型key的field的值                   |
+  |   HMSET(已经弃用)    |          hmset 和 hset 效果相同 ，4.0之后hmset可以弃用了          |
+  |        HMGET         |                批量获取多个hash类型key的field的值                 |
+  |       HGETALL        |            获取一个hash类型的key中的所有的field和value            |
+  |        HKEYS         |               获取一个hash类型的key中的所有的field                |
+  |        HVALS         |               获取一个hash类型的key中的所有的value                |
+  |       HINCRBY        |              让一个hash类型key的字段值自增并指定步长              |
   |        HSETNX        | 添加一个hash类型的key的field值，前提是这个field不存在，否则不执行 |
 
   
@@ -293,13 +293,13 @@ brew install redis
 
 > **List的常见命令有**
 
-|            命令            |                             描述                             |
-| :------------------------: | :----------------------------------------------------------: |
-|   LPUSH key  element ...   |                 向列表左侧插入一个或多个元素                 |
-|          LPOP key          |        移除并返回列表左侧的第一个元素，没有则返回nil         |
-| **RPUSH key  element ...** |                 向列表右侧插入一个或多个元素                 |
-|          RPOP key          |                移除并返回列表右侧的第一个元素                |
-|    LRANGE key star end     |                 返回一段角标范围内的所有元素                 |
+|            命令            |                                描述                                 |
+| :------------------------: | :-----------------------------------------------------------------: |
+|   LPUSH key  element ...   |                    向列表左侧插入一个或多个元素                     |
+|          LPOP key          |            移除并返回列表左侧的第一个元素，没有则返回nil            |
+| **RPUSH key  element ...** |                    向列表右侧插入一个或多个元素                     |
+|          RPOP key          |                   移除并返回列表右侧的第一个元素                    |
+|    LRANGE key star end     |                    返回一段角标范围内的所有元素                     |
 |        BLPOP和BRPOP        | 与LPOP和RPOP类似，只不过在没有元素时等待指定时间，而不是直接返回nil |
 
 ![new](https://image-bed-vz.oss-cn-hangzhou.aliyuncs.com/Redis/new.gif)
@@ -423,7 +423,9 @@ Navicat 16.2 版本以上已支持 Redis 图形化界面及操作
 
 ## 3.Java客户端
 
-### 3.1	Jedis快速入门
+
+
+### 3.1 Jedis快速入门
 
 ---
 
@@ -482,18 +484,18 @@ Navicat 16.2 版本以上已支持 Redis 图形化界面及操作
 - **最后不要忘记编写一个释放资源的方法**
 
   ```java
-      @AfterEach //被该注解修饰的方法会在每次执行其他方法后执行
-      void tearDown(){
-          // 1.释放资源
-          if (jedis != null){
-              jedis.close();
-          }
+  @AfterEach //被该注解修饰的方法会在每次执行其他方法后执行
+  void tearDown(){
+      // 1.释放资源
+      if (jedis != null){
+          jedis.close();
       }
+  }
   ```
 
 - **执行`testString()`方法后测试结果如图所示**
 
-  ![image-20220525131017888](https://image-bed-vz.oss-cn-hangzhou.aliyuncs.com/Redis/image-20220525131017888.png)
+  ![testString](https://image-bed-vz.oss-cn-hangzhou.aliyuncs.com/Redis/image-20220525131017888.png)
 
 
 
@@ -682,7 +684,7 @@ public class JedisConnectionFactory {
 
 
 
-### 3.6	StringRedisTemplate
+### 3.6 StringRedisTemplate
 
 ---
 
