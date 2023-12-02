@@ -81,6 +81,7 @@
     - [8.4.2 基数排序——稳定](#842-基数排序稳定)
 - [第九章——算法](#第九章算法)
   - [9.1 分治法](#91-分治法)
+  - [9.2 动态规划](#92-动态规划)
 
 # 第一章——绪论
 
@@ -2570,7 +2571,7 @@ void BubbleSort(int A[], int n) {
   }
 }
 
-// 快速排序
+// 快速排序, 对于顺序表
 int Partition(int A[], int low, int high) {
   int pivot = A[low];  // 第一个元素作为枢轴
   while (low < high) { // 用low、high搜索枢轴的最终位置
@@ -2590,6 +2591,56 @@ void QuickSort(int A[], int low, int high) {
     int pivotpos = Partition(A, low, high); // 划分
     QuickSort(A, low, pivotpos - 1);        // 划分左子表
     QuickSort(A, pivotpos + 1, high);       // 划分右子表
+  }
+}
+
+// 快速排序, 对于单链表
+typedef struct LNode {
+  int data;
+  struct LNode *next;
+} LNode;
+
+/**
+ * Swaps the data between two LNode objects.
+ *
+ * @param pA Reference to the first LNode object.
+ * @param pB Reference to the second LNode object.
+ */
+void swap(LNode &pA, LNode &pB) {
+  int tmp = pA.data;
+  pA.data = pB.data;
+  pB.data = tmp;
+}
+
+/**
+ * Partitions the linked list around a pivot element.
+ *
+ * @param pHead Pointer to the head of the linked list.
+ * @param pTail Pointer to the tail of the linked list.
+ *
+ * @return Pointer to the pivot element after partition.
+ */
+LNode *GetMid(LNode *pHead, LNode *pTail) {
+  LNode *p = pHead;
+  LNode *q = pHead->next;
+  while (q != pTail) {
+    if (q->data < key) {
+      p = p->next;
+      swap(p,q);
+    }
+    q=q->next;
+  }
+  swap(pHead, p);
+  return p;
+}
+
+void QuickSort(LNode *pHead, LNode *pTail) {
+  if (pHead == pTail) {
+    return;
+  } else {
+    LNode *pMid = GetMid(pHead, pTail);
+    QuickSort(pHead, pMid);
+    QuickSort(pMid->next, pTail);
   }
 }
 ```
@@ -2759,6 +2810,7 @@ $$
    3. 重复上述步骤
 5. 合并排序
 6. 快速排序
+7. 线性时间选择: 给定一数组A和一个整数k，找出这n个元素中第k小的元素
 
 
 ```c++
@@ -2842,6 +2894,149 @@ int main() {
     }
     cout << endl;
   }
+
+  return 0;
+}
+```
+
+```c++
+#include <iostream>
+#define M 100
+using namespace std;
+
+int a[M] = {6, 7, 5, 2, 5, 8, 3, 5, 1};
+int n = 9;
+
+/**
+ * 线性时间选择
+ * Partitions an array segment by selecting a random
+ * pivot element and reorders so that elements less
+ * than pivot are on the left and others on the right.
+ *
+ * @param left The starting index of the segment.
+ * @param right The ending index of the segment.
+ *
+ * @return The index of the pivot element after
+ *         partitioning.
+ */
+int RandomizedPatition(int left, int right) {
+  srand((unsigned)time(NULL));
+  int t = rand() % (right - left) + left;
+
+  swap(a[t], a[left]); // 随机元素作为标准
+
+  int flag = a[left];
+
+  while (left < right) {
+    while (left < right && a[right] >= flag)
+      right--;
+    if (left < right) {
+      swap(a[right], a[left]);
+    }
+    while (left < right && a[left] <= flag)
+      left++;
+    if (left < right) {
+      swap(a[right], a[left]);
+    }
+  }
+
+  a[left] = flag;
+  return left;
+}
+
+/**
+ * Selects the k-th smallest element from an array using a randomized 
+ * selection algorithm, which is an expected O(n) on average.
+ *
+ * @param left The starting index of the array to consider.
+ * @param right The ending index of the array to consider.
+ * @param k The rank of the element to find.
+ *
+ * @return The k-th smallest element in the array.
+ */
+int RandomizedSelect(int left, int right, int k) {
+  if (left == right)
+    return a[right];
+  int p = RandomizedPatition(left, right); // 将数组分成两部分
+  int s = p - left + 1;
+  if (k <= s)
+    return RandomizedSelect(left, p, k);
+  else {
+    return RandomizedSelect(p + 1, right, k - s);
+  }
+}
+
+int main() {
+  cout << RandomizedSelect(0, n - 1, 8);
+  getchar();
+  return 0;
+}
+```
+
+## 9.2 动态规划
+
+矩阵连乘
+
+```c++
+#include <iostream>
+#include <limits>
+#include <vector>
+
+// Helper function to print the optimal parenthesization.
+void printOptimalParens(const std::vector<std::vector<int>> &s, int i, int j) {
+  if (i == j) {
+    std::cout << "A" << i;
+  } else {
+    std::cout << "(";
+    printOptimalParens(s, i, s[i][j]);
+    printOptimalParens(s, s[i][j] + 1, j);
+    std::cout << ")";
+  }
+}
+
+// Function to find the minimum number of multiplications needed to multiply a
+// chain of matrices.
+void matrixChainOrder(const std::vector<int> &p) {
+  int n = p.size() - 1;
+  std::vector<std::vector<int>> m(n + 1, std::vector<int>(n + 1, 0));
+  std::vector<std::vector<int>> s(n + 1, std::vector<int>(n + 1, 0));
+
+  // Cost is zero when multiplying one matrix.
+  for (int i = 1; i <= n; i++) {
+    m[i][i] = 0;
+  }
+
+  // L is chain length.
+  for (int L = 2; L <= n; L++) {
+    for (int i = 1; i <= n - L + 1; i++) {
+      int j = i + L - 1;
+      m[i][j] = std::numeric_limits<int>::max();
+      for (int k = i; k <= j - 1; k++) {
+        // q = cost/scalar multiplications
+        int q = m[i][k] + m[k + 1][j] + p[i - 1] * p[k] * p[j];
+        if (q < m[i][j]) {
+          m[i][j] = q;
+          s[i][j] = k; // Save the index where we split the product.
+        }
+      }
+    }
+  }
+
+  std::cout << "Minimum number of multiplications is " << m[1][n] << std::endl;
+  std::cout << "Optimal Parenthesization is: ";
+  printOptimalParens(s, 1, n);
+  std::cout << std::endl;
+}
+
+int main() {
+  // The dimensions of the matrices are: A1 is 30x35, A2 is 35x15, A3 is 15x5,
+  // A4 is 5x10, A5 is 10x20, A6 is 20x25 p contains the dimensions where p[i-1]
+  // and p[i] represent the dimensions of matrix i.
+  std::vector<int> p = {30, 35, 15, 5, 10, 20, 25};
+
+  // Call the matrixChainOrder function to find the minimum multiplication
+  // operations and print the optimal parenthesization.
+  matrixChainOrder(p);
 
   return 0;
 }
