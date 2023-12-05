@@ -3041,3 +3041,117 @@ int main() {
   return 0;
 }
 ```
+
+最长公共子序列
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+std::vector<std::vector<int>> lcs_length(const std::string &X, const std::string &Y) {
+    int m = X.size();
+    int n = Y.size();
+    std::vector<std::vector<int>> dp(m + 1, std::vector<int>(n + 1));
+
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (X[i - 1] == Y[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = std::max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+
+    return dp;
+}
+
+std::string lcs_construct(const std::vector<std::vector<int>> &dp, const std::string &X, const std::string &Y) {
+    std::string lcs;
+    int i = X.size();
+    int j = Y.size();
+
+    while (i > 0 && j > 0) {
+        if (X[i - 1] == Y[j - 1]) {
+            lcs.push_back(X[i - 1]);
+            i--;
+            j--;
+        } else if (dp[i - 1][j] > dp[i][j - 1]) {
+            i--;
+        } else {
+            j--;
+        }
+    }
+
+    std::reverse(lcs.begin(), lcs.end());
+    return lcs;
+}
+
+int main() {
+    std::string X = "ABCBDAB";
+    std::string Y = "BDCABC";
+
+    std::vector<std::vector<int>> dp = lcs_length(X, Y);
+    std::string lcs = lcs_construct(dp, X, Y);
+
+    std::cout << "The Longest Common Subsequence of " << X << " and " << Y << " is: " << lcs << std::endl;
+
+    return 0;
+}
+```
+
+最长上升子序列
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+int longest_increasing_subsequence(const std::vector<int>& sequence) {
+    if (sequence.empty()) return 0;
+
+    std::vector<int> dp(sequence.size(), 1); // 初始化 dp 数组，所有元素值为 1
+    int max_length = 1; // 最长上升子序列的长度至少为 1
+
+    for (size_t i = 1; i < sequence.size(); ++i) {
+        for (size_t j = 0; j < i; ++j) {
+            // 如果当前元素大于之前的某个元素，并且之前元素的 LIS 加 1 大于当前元素的 LIS
+            if (sequence[i] > sequence[j]) {
+                dp[i] = std::max(dp[i], dp[j] + 1);
+            }
+        }
+        max_length = std::max(max_length, dp[i]); // 更新最长上升子序列的长度
+    }
+
+    return max_length;
+}
+
+int main() {
+    std::vector<int> sequence = {10, 22, 9, 33, 21, 50, 41, 60, 80};
+    int lis_length = longest_increasing_subsequence(sequence);
+
+    std::cout << "The length of the Longest Increasing Subsequence is: " << lis_length << std::endl;
+
+    return 0;
+}
+```
+
+最长公共连续子序列: 最长公共子序列改版
+
+最大子段和
+```c++
+int max_subarray_sum(const std::vector<int>& nums) {
+    if (nums.empty()) return 0;
+
+    int max_sum = nums[0]; // 初始化最大和为数组的第一个元素
+    int current_sum = nums[0]; // 初始化当前和为数组的第一个元素
+
+    for (size_t i = 1; i < nums.size(); ++i) {
+        // 更新当前和为当前元素与之前当前和的较大者
+        current_sum = std::max(nums[i], current_sum + nums[i]);
+        // 更新最大和
+        max_sum = std::max(max_sum, current_sum);
+    }
+
+    return max_sum;
+}
+```
