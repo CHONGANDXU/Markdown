@@ -82,6 +82,7 @@
 - [第九章——算法](#第九章算法)
   - [9.1 分治法](#91-分治法)
   - [9.2 动态规划](#92-动态规划)
+  - [9.3 贪心](#93-贪心)
 
 # 第一章——绪论
 
@@ -2803,15 +2804,60 @@ $$
 ② $令 T(n)=O(k^x+x*f(n))=O(4\log_{2}{n}+n\log_{2}{n})=O(n^2+n\log_{2}{n})=O(n^2)$
 
 1. 折半查找
-2. 大整数的乘法
-3. 矩阵相乘
-4. 棋盘覆盖算法
-   1. 将棋盘四等分
-   2. 把当前棋盘靠近分割线最中间的位置，并且该棋盘中没有特殊点，用一个L形骨牌覆盖
-   3. 重复上述步骤
-5. 合并排序
-6. 快速排序
-7. 线性时间选择: 给定一数组A和一个整数k，找出这n个元素中第k小的元素
+
+---
+
+> 大整数的乘法: 有X、Y是n位二进制数，现计算X、Y的乘积
+> 算法思路: 把X、Y各拆成一半，进行一半一半的相乘得 $XY=(A*2^{\frac{n}{2}}+B)(C*2^{\frac{n}{2}}+D)=AC*2^n+(AD+BC)*2^{\frac{n}{2}}+BD$
+> 4次n/2位乘法，3次不超过2n位的加法。
+
+$$
+T_n= \left\{ 
+\begin{array}{rl}
+O(1) & ,n=1 \\
+4T(\frac{n}{2})+O(n) &,n>1
+\end{array} \right.
+$$
+
+> 时间复杂度 $O(n^2)$ 空间复杂度 $O(n)$
+
+---
+
+> 矩阵相乘——有A、B是n阶方阵，现计算矩阵A、B的乘积
+> 算法思路: 把A、B各拆成四瓣子矩阵，进行子矩阵的相乘, 8次n/2位乘法, 4次加法
+
+$$
+T_n= \left\{ 
+\begin{array}{rl}
+O(1) & ,n=1 \\
+8T(\frac{n}{2})+O(n^2) &,n>1
+\end{array} \right.
+$$
+
+> 时间复杂度 $O(n^3)$ 空间复杂度 $O(n^2)$
+
+---
+
+> 棋盘覆盖算法
+> 1. 将棋盘四等分
+> 2. 把当前棋盘靠近分割线最中间的位置，并且该棋盘中没有特殊点，用一个L形骨牌覆盖
+> 3. 重复上述步骤
+
+$$
+T_n= \left\{ 
+\begin{array}{rl}
+O(1) & ,n=1 \\
+4T(n-1)+O(1) &,n>1
+\end{array} \right.
+$$
+
+> 4. 时间复杂度 $O(4^n)$ 空间复杂度 $O(n^2)$
+
+---
+
+1. 合并排序
+2. 快速排序
+3. 线性时间选择: 给定一数组A和一个整数k，找出这n个元素中第k小的元素
 
 
 ```c++
@@ -2978,6 +3024,14 @@ int main() {
 
 矩阵连乘
 
+$$
+m[i][j]= \left\{ 
+\begin{array}{rl}
+0 & ,i=j \\
+\min\limits_{i \leqslant k \leqslant j}\{m[i][k]+m[i+1][j]+p_{i-1}p_{k}p_{j}\} &,i<j
+\end{array} \right.
+$$
+
 ```c++
 #include <iostream>
 #include <limits>
@@ -3029,21 +3083,20 @@ void matrixChainOrder(const std::vector<int> &p) {
   std::cout << std::endl;
 }
 
-int main() {
-  // The dimensions of the matrices are: A1 is 30x35, A2 is 35x15, A3 is 15x5,
-  // A4 is 5x10, A5 is 10x20, A6 is 20x25 p contains the dimensions where p[i-1]
-  // and p[i] represent the dimensions of matrix i.
-  std::vector<int> p = {30, 35, 15, 5, 10, 20, 25};
-
-  // Call the matrixChainOrder function to find the minimum multiplication
-  // operations and print the optimal parenthesization.
-  matrixChainOrder(p);
-
-  return 0;
-}
 ```
 
 最长公共子序列
+
+$$
+c[i][j]记录序列 X_i 和 Y_j 的最长公共子序列长度 \\
+c[i][j]= \left\{ 
+\begin{array}{rl}
+0 & i=0或j=0 \\
+c[i-1][j-1]+1 & i>0, j>0; X_i=Y_i \\
+\max\{c[i-1][j],c[i][j-1]\} & i>0, j>0; X_i!=Y_i
+\end{array} \right.
+$$
+
 ```c++
 #include <iostream>
 #include <vector>
@@ -3101,7 +3154,17 @@ int main() {
 }
 ```
 
-最长上升子序列
+最长上升子序列: 给定一个序列 $A=\{x_0,x_1,\cdots,x_n\}$
+
+求A的最长上升子序列的长度，子序列不要求连续
+$$
+A[\quad] = [1, 7, 3, 5, 9, 4, 8] \\
+设: dp[i]代表以a[i]结尾的最长上升子序列的长度\\
+递归公式: dp[i]=\max(dp[i],dp[j]+1)(0 \leqslant j < i, a[j]<a[i]) \\
+边界处理: dp[i]=1 (0 \leqslant j < n) \\
+解释: 在 0-j 范围内, 找到a[i]前面比a[i]小的元素, 取其对应元素中最大的dp值+1, 就是dp[i]的值, 逐行更新，直到最后
+$$
+
 ```c++
 #include <iostream>
 #include <vector>
@@ -3156,3 +3219,49 @@ int max_subarray_sum(const std::vector<int>& nums) {
     return max_sum;
 }
 ```
+
+0-1 背包问题
+
+设 $m[i][j]$ 表示背包容量为 $j$ 时，考虑装前 $i$ 个物品时的最大价值
+
+$$
+m[i][j]= \left\{ 
+\begin{array}{rl}
+0 & i=0或j=0 \\
+m[i-1][j] & w[i]>j \\
+\max\{m[i-1][j],m[i][j-w[i]]+v[i]\} & w[i] \leqslant j
+\end{array} \right.
+$$
+
+解释:  
+- i=0 可选的物品为0
+- j=0 背包容量为0
+- 由于第i个物品太重了装不下, $m[i-1][j]$ 容量不变, 只考虑装前 $i-1$ 个物品
+- 倘若第i个物品不重, $m[i][j-w[i]]+v[i]$ 表示把第 $i$ 个物品装下来的价值
+
+```c++
+// Returns the maximum value that can be put in a knapsack of capacity W
+int knapSack(int W, vector<int>& wt, vector<int>& val, int n) {
+    // Create a vector to store the maximum value that can be obtained for each weight
+    vector<vector<int>> dp(n + 1, vector<int>(W + 1));
+
+    // Build table dp[][] in bottom up manner
+    for (int i = 0; i <= n; i++) {
+        for (int w = 0; w <= W; w++) {
+            if (i == 0 || w == 0) {
+                dp[i][w] = 0; // Base case: no items or no capacity
+            } else if (wt[i - 1] <= w) {
+                // Item i can be included if it does not exceed the current weight w
+                dp[i][w] = max(val[i - 1] + dp[i - 1][w - wt[i - 1]], dp[i - 1][w]);
+            } else {
+                // Item i cannot be included if it exceeds the current weight w
+                dp[i][w] = dp[i - 1][w];
+            }
+        }
+    }
+
+    return dp[n][W]; // Return the maximum value that can be obtained for the given knapsack capacity
+}
+```
+
+## 9.3 贪心
