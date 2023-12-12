@@ -97,7 +97,7 @@
 
 ```c++
 // 静态数组插入
-bool ListInsert(SqList &L, int i, int e) {
+bool ListInsert(SqList &L, int i, int ele) {
   if (i < 1 || i > L.length + 1)
     return false;
   if (L.length >= MaxSize)
@@ -105,7 +105,7 @@ bool ListInsert(SqList &L, int i, int e) {
   for (int j = L.length; j >= i; j--) {
     L.data[j] = L.data[j - 1];
   }                  // 将第i个元素及之后的元素后移
-  L.data[i - 1] = e; // 在位置i处放入e
+  L.data[i - 1] = ele; // 在位置i处放入ele
   L.length++;
   return true;
 }
@@ -125,9 +125,9 @@ bool ListDelete(SqList &L, int i, int &deletedData) {
 int GetElem(SqList L, int i) { return L.data[i - 1]; }
 
 // 按值查找
-int LocateElem(SqList L, int e) {
+int LocateElem(SqList L, int ele) {
   for (int i = 0; i < L.length; i++) {
-    if (L.data[i] == e)
+    if (L.data[i] == ele)
       return i + 1;
   }
   return 0;
@@ -183,13 +183,8 @@ void InitList(SeqList &L) {
 
 // 增加动态数组的长度
 void IncreaseSize(SeqList &L, int len) {
-  int *p = L.data;
-  L.data = (int *)malloc((L.MaxSize + len) * sizeof(int));
-  for (int i = 0; i < L.length; i++) {
-    L.data[i] = p[i]; // 将数据复制到新区域
-  }
-  L.MaxSize = L.MaxSize + len; // 顺序表最大长度增加 len
-  free(p);                     // 释放原来的内存空间
+  L.data = (int *)realloc(L.data, (L.MaxSize + len) * sizeof(int));
+  L.MaxSize = L.MaxSize + len;
 }
 ```
 
@@ -707,26 +702,32 @@ bool bracketCheck(char str[], int length) {
 > 后缀表达式（手算）
 > 【中缀转后缀】
 > “左优先”原则：只要左边的运算符能先计算，就优先算左边的
-> 
+
+
 > 后缀表达式（机算）
->> ①从左往右扫描下一个元素，直到处理完所有元素
->> ②若扫描到操作数则压入栈，并回到①：否则执行③
->> ③若扫描到运算符，则弹出两个栈顶元素(<font color='red'>注意：先出栈的是“右操作数”</font>)，执行相应运算，运算结果压回栈顶，回到①
+> > ①从左往右扫描下一个元素，直到处理完所有元素
+> > ②若扫描到操作数则压入栈，并回到①：否则执行③
+> > ③若扫描到运算符，则弹出两个栈顶元素(<font color='red'>注意：先出栈的是“右操作数”</font>)，执行相应运算，运算结果压回栈顶，回到①
+
 ---
 > 前缀表达式（手算）
 > 【中缀转前缀】
 > “右优先”原则：只要右边的运算符能先计算，就优先算右边的
-> 
+
+
 > 前缀表达式（机算）
->> ①从右往左扫描下一个元素，直到处理完所有元素
->> ②若扫描到操作数则压入栈，并回到①：否则执行③
->> ③若扫描到运算符，则弹出两个栈顶元素(<font color='red'>注意：先出栈的是“左操作数”</font>)，执行相应运算，运算结果压回栈顶，回到①
+> > ①从右往左扫描下一个元素，直到处理完所有元素
+> > ②若扫描到操作数则压入栈，并回到①：否则执行③
+> > ③若扫描到运算符，则弹出两个栈顶元素(<font color='red'>注意：先出栈的是“左操作数”</font>)，执行相应运算，运算结果压回栈顶，回到①
+
 ---
-> 中缀表达式转后缴表达式（机算）
+> **中缀表达式转后缴表达式**（机算）
 > 从左到右处理各个元素，直到末尾。可能遇到三种情况：
+>
 > ① 遇到操作数。直接加入后缀表达式。
-> ② 遇到界限符。遇到“（”直接入栈；遇到“）”则依次弹出栈内运算符并加入后缀表达式，直到弹出“（”为止。注意：“（”不加入后缀表达式。
-> ③ 遇到运算符。依次弹出栈中优先级高于或等于当前运算符的所有运算符，并加入后缀表达式， 若碰到“（”或栈空则停止。之后再把当前运算符入栈。
+> ② 遇到界限符。遇到 `(` 直接入栈；遇到 `)` 则依次弹出栈内运算符并加入后缀表达式，直到弹出  `(`  为止。注意:  `(`  不加入后缀表达式。
+> ③ 遇到运算符。依次弹出栈中优先级高于或等于当前运算符的所有运算符，并加入后缀表达式， 若碰到  `(`  或栈空则停止。之后再将当前运算符入栈。
+>
 > 按上述方法处理完所有字符后，将栈中剩余运算符依次弹出，并加入后缀表达式。
 
 3. 递归
@@ -773,9 +774,10 @@ int main() {
 
 以下Code采用队列的顺序存储，且使用循环队列存储  
 为了区分队空和队满，采取入队时**少用一个队列单元**  
-队列空的条件为 Q.front == Q.rear  
-队列满的条件为 (Q.rear+1) % MaxSize == Q.front  
-队列中元素的个数 （rear + MaxSize - front）% MaxSize  
+
+1. 队列空的条件为 `Q.front == Q.rear`
+2. 队列满的条件为 `(Q.rear+1) % MaxSize == Q.front`
+3. 队列中元素的个数 `(rear + MaxSize - front)%MaxSize`
 
 ```c++
 #include <iostream>
@@ -829,7 +831,7 @@ int GetHead(SqQueue Q, int &x) {
 
 ### 3.2.3 队列的链式存储
 
-队列的链式存储结构，其实就是线性表的单链表+限制，在表尾插入元素，表头删除元素
+队列的链式存储结构，其实就是线性表的单链表+限制，表头删除元素，表尾插入元素
 
 基本操作：队头出队，队尾入队
 
@@ -931,7 +933,7 @@ bool DeQueue_NoHead(LinkQueue &Q, int &x) {
 ### 3.2.4 双端队列（不受限和受限）
 
 > 1. 双端队列（不受限制）
->> 双端队列是指允许两端都可以进行入队和出队操作的队列   
+>> 双端队列是指允许两端都可以进行入队和出队操作的队列 
 >> 队列的两端分别称为前端和后端，两端都可以入队和出队
 >
 > 2. 输出受限的双端队列
@@ -946,7 +948,16 @@ bool DeQueue_NoHead(LinkQueue &Q, int &x) {
 3. 操作系统 FCFS(先来先服务) 缓冲区
 
 ## 3.3 数组和特殊矩阵
-详情见 XMind
+
+1. 对称矩阵: 策略：只存储主对角线+下三角区
+2. 三角矩阵:
+   1. 下三角矩阵：除了主对角线和下三角区，其余的元素都相同
+   2. 上三角矩阵：除了主对角线和上三角区，其余的元素都相同
+   3. 存储策略：最后一个位置存储常量 `C`
+3. 三对角矩阵【带状矩阵】： $当 |i-j|>1 时, a_{i,j}=0 (1 \leqslant i,j \leqslant n)$
+4. 稀疏矩阵
+   1. 顺序存储使用三元组 <行, 列, 值>
+   2. 链式存储使用十字链表法
 
 # 第四章——串(不考，可略过)
 
@@ -1126,13 +1137,13 @@ next [ j ] = S 的最长相等前后缀长度 + 1
 ## 5.1 树的基本概念
 
 常考性质:
-1. 结点数=总度数+1
+1. 结点数 = 总度数 + 1
 2. 
 ![度为m的树、m叉树的区别](pictures/m叉树与度树的区别.png)
 3. 度为 $m$ 的树( $m$ 叉树)第 $i$ 层至多有 $m^{i-1}$ 个结点（ $i>=1$ ）
 4. 高度为 $h$ 的 $m$ 叉树至多有 $\frac{m^h-1}{m-1}$ 个结点
-5. - 高度 $h$ 的 $m$ 叉树至少有 $h$ 个结点。
-   - 高度为 $h$ 、度为 $m$ 的树至少有 $h+m-1$ 个结点。
+5. - 高度 $h$ 的 $m$ 叉树至少有 $h$ 个结点
+   - 高度为 $h$ 、度为 $m$ 的树至少有 $h+m-1$ 个结点
 6. 具有 $n$ 个结点的 $m$ 叉树的最小高度为 $\lceil\log_m(n(m-1)+1)\rceil$
 
 ## 5.2 二叉树的基本概念
@@ -3265,3 +3276,81 @@ int knapSack(int W, vector<int>& wt, vector<int>& val, int n) {
 ```
 
 ## 9.3 贪心
+
+1. 哈夫曼编码
+2. 最小生成树: Prim 算法 Kruskal 算法
+3. 单源最短路径: Dijkstra 算法
+
+```c++
+#include <iostream>
+using namespace std;
+
+#define MaxVertexNum 10 // 顶点数目的最大值
+#define INF 1000        // 宏定义 常量 “无穷”
+
+typedef char VertexType; // 顶点的数据类型
+typedef int EdgeType;    // 带权图中边上权值的数据类型
+
+typedef struct {
+  VertexType Vex[MaxVertexNum];              // 顶点表
+  EdgeType Edge[MaxVertexNum][MaxVertexNum]; // 邻接矩阵，边的权值表
+  int vexnum, arcnum; // 图的当前顶点数和边数/弧数
+} MGraph;
+
+// Prim 算法
+void Prim(MGraph G, int currentVex, int &sum) {
+  int set[MaxVertexNum];     // 记录染色的顶点
+  int lowcost[MaxVertexNum]; // 记录染色顶点的最小权值
+
+  for (int i = 0; i < G.vexnum; i++) {
+    set[i] = 0;
+    lowcost[i] = G.Edge[currentVex][i];
+  }
+
+  set[currentVex] = 1;
+
+  for (int i = 0; i < G.vexnum - 1; i++) {
+    int min = INF; // 记录最小权值
+    // 找到当前最小权值的顶点
+    for (int j = 0; j < G.vexnum; j++) {
+      if (set[j] == 0 && lowcost[j] < min) {
+        min = lowcost[j];
+        currentVex = j;
+      }
+    }
+    set[currentVex] = 1;
+    sum += min;
+
+    // 更新lowcost
+    for (int j = 0; j < G.vexnum; j++) {
+      if (set[j] == 0 && G.Edge[currentVex][j] < lowcost[j]) {
+        lowcost[j] = G.Edge[currentVex][j];
+      }
+    }
+  }
+}
+
+int main() {
+  MGraph G;
+  const int size = 5;
+  G.vexnum = size;
+  EdgeType A[size][size] = {{INF, 5, 1, 2, INF},
+                            {5, INF, 3, INF, 4},
+                            {1, 3, INF, 6, 2},
+                            {2, INF, 6, INF, 3},
+                            {INF, 4, 2, 3, INF}};
+
+  for (int i = 0; i < size; ++i) {
+    for (int j = 0; j < size; ++j) {
+      G.Edge[i][j] = A[i][j];
+    }
+  }
+
+  int sum;
+  Prim(G, 0, sum);
+  cout << sum << endl;
+
+  return 0;
+}
+```
+
