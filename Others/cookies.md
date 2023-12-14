@@ -30,11 +30,7 @@ cookie称之为会话跟踪技术，是一个很小的文本文件，是浏览�
 
 客户端发送一个请求到服务器 --》 服务器发送一个HttpResponse响应到客户端，其中包含Set-Cookie的头部 --》 客户端保存cookie，之后向服务器发送请求时，HttpRequest请求中会包含一个Cookie的头部 --》服务器返回响应数据
 
-
-
 ![img](https://pic4.zhimg.com/80/v2-c86832228608f55c5c849e57051aee8f_1440w.webp)
-
-
 
 时效限制：每个cookie都有时效，默认的有效期是，会话级别：就是当浏览器关闭，那么cookie立即销毁，但是我们也可以在存储的时候手动设置cookie的过期时间
 
@@ -64,21 +60,13 @@ cookie称之为会话跟踪技术，是一个很小的文本文件，是浏览�
 
 步骤3：自动化任务执行前会调用微服务接口，通过账号获取到永久cookie，携带此cookie执行后续自动化任务。
 
-
-
 ![img](https://pic1.zhimg.com/v2-999d625e20a67ac50a815d25f625f688_r.jpg)
-
-
 
 ## 6、落地案例
 
 目前通过下方方案，已实现了cookie一次配置，长久使用的目的。
 
-
-
 ![img](https://pic2.zhimg.com/v2-127c76703e407d816bb1cd0d84d18ee5_r.jpg)
-
-
 
 **实践效果对比**
 
@@ -86,12 +74,8 @@ cookie称之为会话跟踪技术，是一个很小的文本文件，是浏览�
 
 现在：使用上面方案后，只需手工在cookie微服务平台上配置一次cookie，以后不再需要更新cookie
 
-
-
 ![img](https://pic2.zhimg.com/v2-82ad3288e41f3018e4930f103ce4866d_r.jpg)
 
-
-
-## **7、专利描述**
+## 7、专利描述
 
 [https://zhuanli.tianyancha.com/](https://zhuanli.tianyancha.com/811840799431036187d34680d5b10ae3)
