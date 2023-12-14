@@ -2794,7 +2794,7 @@ $$
 T_n= \left\{ 
 \begin{array}{rl}
 O(1) & ,n=1 \\
-kT(\frac{n}{m})+f(n) &,n>1
+kT(\frac{n}{m})+O(f(n)) &,n>1
 \end{array} \right.
 $$
 
@@ -2812,7 +2812,7 @@ O(1) & ,n=1 \\
 $$
 
 ① $令 \frac{n}{2^x}=1, 解出 x=\log_{2}{n}$
-② $令 T(n)=O(k^x+x*f(n))=O(4\log_{2}{n}+n\log_{2}{n})=O(n^2+n\log_{2}{n})=O(n^2)$
+② $令 T(n)=O(k^x+x*f(n))=O(4^{\log_{2}{n}}+n\log_{2}{n})=O(n^2+n\log_{2}{n})=O(n^2)$
 
 1. 折半查找
 
