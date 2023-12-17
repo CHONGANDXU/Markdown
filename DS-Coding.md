@@ -53,7 +53,6 @@
     - [6.3.2 DFS 深度优先遍历算法](#632-dfs-深度优先遍历算法)
   - [6.4 应用](#64-应用)
     - [6.4.1 最小生成树](#641-最小生成树)
-  - [适合用于边稠密图](#适合用于边稠密图)
     - [6.4.2 最短路径](#642-最短路径)
     - [6.4.3 有向无环图（DAG）描述表达式](#643-有向无环图dag描述表达式)
     - [6.4.4 拓扑排序(逆拓扑排序)](#644-拓扑排序逆拓扑排序)
@@ -1212,10 +1211,8 @@ $n$ 个结点的二叉链表共有 $n+1$ 个空链域
 
 ```c++
 #include <iostream>
-
-struct ElemType {
-  int value;
-};
+#define ElemType int
+using namespace std;
 
 typedef struct BiTNode {
   ElemType data;                   // 数据域
@@ -1223,7 +1220,7 @@ typedef struct BiTNode {
   struct BiTNode *parent; // 父结点指针(方便查找当前结点的父结点)
 } BiTNode, *BiTree;
 
-void visit(BiTree T) { std::cout << T->data.value << std::endl; }
+void visit(BiTree T) { std::cout << T->data << " "; }
 
 // 先序遍历
 void PreOrder(BiTree T) {
@@ -1250,26 +1247,6 @@ void PostOrder(BiTree T) {
     PostOrder(T->rchild); // 递归遍历右子树
     visit(T);             // 访问根结点
   }
-}
-
-int main() {
-  // 定义一棵空树
-  BiTree root = NULL;
-
-  // 插入根结点 root
-  root = (BiTree)malloc(sizeof(BiTNode));
-  root->data = {1};
-  root->lchild = NULL;
-  root->rchild = NULL;
-
-  // 插入新结点 p
-  BiTNode *p = (BiTNode *)malloc(sizeof(BiTNode));
-  p->data = {2};
-  p->lchild = NULL;
-  p->rchild = NULL;
-
-  // 作为根节点的左孩子插入结点 p
-  root->lchild = p;
 }
 ```
 
@@ -1315,11 +1292,11 @@ void LevelOrder(BiTree T) {
 
 思路：
 
-从根节点出发，重新进行一次中序遍历，指针 q 记录当前访问的结点，指针 pre 记录上一个被访问的结点  
+从根节点出发，重新进行一次中序遍历，指针 `current` 记录当前访问的结点，指针 `pre` 记录上一个被访问的结点  
 
-① 当 $q==p$ 时，pre 为前驱  
+① 当 $current==target$ 时，`pre`为前驱  
 
-② 当 $pre=p$ 时，q 为后继  
+② 当 $pre==target$时，`current` 为后继  
 
 ```c++
 #include <iostream>
@@ -1330,16 +1307,16 @@ typedef struct BiTNode {
   struct BiTNode *lchild, *rchild; // 左右孩子指针
 } BiTNode, *BiTree;
 
-// 辅助的全局变量，用于查找结点p的前驱
-BiTNode *p;            // p指向目标结点
+// 辅助的全局变量，用于查找结点target的前驱
+BiTNode *target;       // target指向目标结点
 BiTNode *pre = NULL;   // 指向当前访问结点的前驱
 BiTNode *final = NULL; // 用于记录最终结果
 
-void visit(BiTNode *q) {
-  if (q == p)    // 当前访问结点刚好是结点p
-    final = pre; // 找到p的前驱
+void visit(BiTNode *current) {
+  if (current == target) // 当前访问结点刚好是结点p
+    final = pre;         // 找到p的前驱
   else
-    pre = q; // pre指向当前访问的结点
+    pre = current; // pre指向当前访问的结点
 }
 
 // 中序遍历
@@ -1363,10 +1340,7 @@ tag == 1 , 表示指针指向的是线索
 - 中序线索化
 ```c++
 #include <iostream>
-
-typedef struct ElemType {
-  int data;
-} ElemType;
+#define ElemType int
 
 // 线索二叉树结点
 typedef struct ThreadNode {
@@ -1412,7 +1386,7 @@ void CreateInThread(ThreadTree T) {
 ```
 
 - 先序线索化
-> 先序线索化 **有个坑**，在处理根结点之后，处理左孩子之前，需要判断改当前遍历结点的 **ltag** 标志是否为0，如果为0，则lchild不是前驱线索
+> 先序线索化 **有个坑**，在处理根结点之后，处理左孩子之前，需要判断当前遍历结点的 `ltag` 标志是否为0，如果为0，则lchild不是前驱线索
 >> 【综上是为了避免陷入遍历的 **死循环**】
 
 ```c++
@@ -1577,7 +1551,7 @@ void RevInOrder(ThreadNode *T) {
 
 ### 5.4.1 树的存储结构
 
-- 双亲表示法（顺序存储）:每个结点中保存指向双亲的“指针”
+- 双亲表示法(顺序存储): 顺序存储结点数据，节点中保存父节点在数组中的下标【缺点：找孩子不方便】
 ```c++
 #define MAX_TREE_SIZE 100           //树中最多结点树
 
@@ -1592,7 +1566,7 @@ typedef struct{                     //树的结构类型
 }PTree;
 ```
 
-- 孩子表示法（顺序+链式存储）
+- 孩子表示法(顺序+链式存储): 顺序存储结点数据，结点中保存孩子链表头指针【孩子所在下标组成指针】
 ```c++
 struct CTNode{
     int child;                  //孩子结点在数组中的位置
@@ -1642,6 +1616,8 @@ typedef struct CSNode{
 
 并查集（Disjoint Set）是逻辑结构——集合的一种具体实现，只进行 “并”和“查”两种基本操作  
 
+用互不相交的树表示不同的集合【使用双亲表示法，容易找到父结点】
+
 以下操作 :
 
 “查”的最坏时间复杂度为 $O(n)$ 
@@ -1684,7 +1660,8 @@ Union操作优化后,Find操作最坏时间复杂度: $\log_{2}{n}$
 
 ```c++
 // 进行并操作，将小树合并到大树
-void Union(int S[], int Root1, int Root2) {
+// 根结点的绝对值表示该树的结点总数，根结点为负数
+void Union_good(int S[], int Root1, int Root2) {
   if (Root1 == Root2)
     return;
   // 小树接到大树下
@@ -1703,14 +1680,14 @@ void Union(int S[], int Root1, int Root2) {
 // 优化“查”操作,先找到根结点,再递归压缩路径
 int Find_good(int S[], int x) {
   int root = x;
-  while (S[root] > 0)
+  while (S[root] >= 0)
     root = S[root];   // 循环找到根结点
   while (x != root) { // 压缩路径
-    int tmp = S[x];   // tmp指向x的父结点
+    int temp = S[x];  // temp指向x的父结点
     S[x] = root;      // 将x的父结点设为根结点
-    x = tmp;          // 继续循环
+    x = temp;         // 继续循环
   }
-  return root;
+  return root; // 返回根结点编号
 }
 ```
 
@@ -1736,47 +1713,51 @@ typedef struct{
 ```
 - 性质
 
-$设图G的邻接矩阵为A（矩阵元素为 0/1），则  A^n 的元素 A^n[i][j] \\ 等于 由顶点 i 到顶点 j 的长度为 n 的路径的数目$
+$设图G的邻接矩阵为A（矩阵元素为 0/1），则  A^n 的元素 A^n[i][j] = 由顶点 i 到顶点 j 的长度为 n 的路径的数目$
 
-> 对于带权图（网）
+> 对于**带权**图（网）
 ```c++
-#define MaxVertexNum 100                        //顶点数目的最大值
-#define INFINITY 最大的int值                     //宏定义 常量 “无穷”
-typedef char VertexType;                        //顶点的数据类型
-typedef int EdgeType;                           //带权图中边上权值的数据类型
-typedef struct{
-    VertexType Vex[MaxVertexNum];               //顶点表
-    EdgeType Edge[MaxVertexNum][MaxVertexNum];  //邻接矩阵，边的权值表
-    int vexnum,arcnum;                          //图的当前顶点数和边数/弧数
-}MGraph;
+#include <limits>
+#define MaxVertexNum 100                    // 顶点数目的最大值
+#define INFINITY numeric_limits<int>::max() // 宏定义,int类型的最大值
+typedef char VertexType;                    // 顶点的数据类型
+typedef int EdgeType; // 带权图中边上权值的数据类型
+typedef struct {
+  VertexType Vex[MaxVertexNum];              // 顶点表
+  EdgeType Edge[MaxVertexNum][MaxVertexNum]; // 邻接矩阵，边的权值表
+  int vexnum, arcnum; // 图的当前顶点数和边数/弧数
+} MGraph;
 ```
 
 ### 6.2.2 邻接表法（顺序+链式存储）
 ```c++
 #define MaxVertexNum 100
+typedef char VertexType;
 
-//用邻接表存储的图
-typedef struct{
-    AdjList vertices;
-    int vexnum,arcnum;
-}ALGraph;
+// “边/弧”
+typedef struct ArcNode {
+  int adjvex;           // 边/弧指向哪个结点
+  struct ArcNode *next; // 指向下一条弧的指针
+  // InfoType info;        //边权值
+} ArcNode;
 
-//顶点
-typedef struct VNode{
-    VertexType data;        //顶点信息
-    ArcNode *first;         //第一条边/弧
-}VNode,AdjList[MaxVertexNum];
+// 顶点
+typedef struct VNode {
+  VertexType data; // 顶点信息
+  ArcNode *first;  // 第一条边/弧
+} VNode, AdjList[MaxVertexNum];
 
-//“边/弧”
-typedef struct ArcNode{
-    int adjvex;             //边/弧指向哪个结点
-    struct ArcNode *next;   //指向下一条弧的指针
-    //InfoType info;        //边权值
-}ArcNode;
+// 用邻接表存储的图
+typedef struct {
+  AdjList vertices;
+  int vexnum, arcnum;
+} ALGraph;
 ```
 
 ## 6.3 图的遍历
+
 ### 6.3.1 BFS 广度优先遍历算法
+
 ```c++
 #include <iostream>
 
@@ -1815,16 +1796,6 @@ void BFSTraverse(Graph G) { // 对图G进行广度优先遍历
 
 ```
 
-时间复杂度：
-1. 邻接矩阵存储的图：
-   访问 $|V|$ 个顶点需要 $O(|V|)$ 的时间
-   查找每个顶点的邻接点都需要 $O(|V|)$ 的时间，总共有 $|V|$ 个顶点
-   总的时间复杂度为 $O(|V|^2)$
-2. 邻接表存储的图：
-   访问 $|V|$ 个顶点需要 $O(|V|)$ 的时间
-   查找所有顶点的邻接点总共需要 $O(|E|)$ 的时间
-   总的时间复杂度为 $O(|V|+|E|)$
-
 ### 6.3.2 DFS 深度优先遍历算法
 ```c++
 #define MaxVertexNum 100    // 结点的最大个数
@@ -1854,40 +1825,108 @@ void DFSTraverse(Graph G) { // 对图G进行深度优先遍历
 }
 ```
 
-时间复杂度：
-1. 邻接矩阵存储的图：
-   访问 $|V|$ 个顶点需要 $O(|V|)$ 的时间
-   查找每个顶点的邻接点都需要 $O(|V|)$ 的时间，总共有 $|V|$ 个顶点
-   总的时间复杂度为 $O(|V|^2)$
-2. 邻接表存储的图：
-   访问 $|V|$ 个顶点需要 $O(|V|)$ 的时间
-   查找所有顶点的邻接点总共需要 $O(|E|)$ 的时间
-   总的时间复杂度为 $O(|V|+|E|)$
+| 时间复杂度   | BFS——广度优先                                                                                                                                                                                                            | DFS——深度优先                                                                                                                                                                                                             |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 对于邻接矩阵 | 访问 $\vert V \vert $ 个顶点需要 $O(\vert V \vert)$ 的时间<br />查找每个顶点的邻接点都需要 $O(   \vert V \vert )$ 的时间，总共有 $                 \vert V \vert $ 个顶点<br />总的时间复杂度为 $O( \vert V \vert ^2)$   | 访问 $ \vert V \vert $ 个顶点需要 $O( \vert V \vert )$ 的时间<br />查找每个顶点的邻接点都需要 $O(   \vert V \vert )$ 的时间，总共有 $                 \vert V \vert $ 个顶点<br />总的时间复杂度为 $O( \vert V \vert ^2)$ |
+| 对于邻接表   | 访问 $  \vert V \vert $ 个顶点需要 $O( \vert V \vert )$ 的时间<br />查找所有顶点的邻接点总共需要 $O( \vert E \vert )$ 的时间<br />总的时间复杂度为 $O( \vert V \vert +                                  \vert E \vert )$ | 访问 $ \vert V \vert $ 个顶点需要 $O( \vert V \vert )$ 的时间<br />查找所有顶点的邻接点总共需要 $O( \vert E \vert )$ 的时间<br />总的时间复杂度为 $O( \vert V \vert +                                  \vert E \vert )$   |
+| 区别         | 使用了Queue队列辅助                                                                                                                                                                                                      | 使用递归算法                                                                                                                                                                                                              |
 
 ## 6.4 应用
 ### 6.4.1 最小生成树
-1. Prim算法
-   从某一个顶点开始构建生成树
-   每次将代价最小的新顶点纳入生成树，直到所有顶点都纳入为止
-   时间复杂度 $O(|V|^2)$
-   适合用于边稠密图
----
-2. Kruskal算法
-   每次选择一条权值最小的边，使这条边的两头连通（原本已经连通的就不选）
-   直到所有结点都连通
-   时间复杂度 $O(|E|\log_{2}{|E|})$
-   适合用于边稀疏图
+
+| Prim算法                                                                                                                                                                               | Kruskal算法                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 从某一个顶点开始构建生成树<br/>每次将代价最小的新顶点纳入生成树，直到所有顶点都纳入为止                                                                                                | 每次选择一条权值最小的边，使这条边的两头连通（原本已经连通的就不选）<br/>直到所有结点都连通                                                            |
+| 时间复杂度 $O(                                                            \vert V \vert ^2)$                                                                                           | 时间复杂度 $O( \vert E \vert \log_{2}{ \vert E \vert })$                                                                                               |
+| 适合用于边稠密图                                                                                                                                                                       | 适合用于边稀疏图                                                                                                                                       |
+| 算法思想：<br />从第1个顶点开始，总共需要 n-1 轮处理<br />每一轮处理：循环遍历所有个结点，找到lowCost最低的，且还没加入树的顶点。<br />再次循环遍历，更新还没加入的各个顶点的lowCost值 | 算法思想：<br />初始：将各条边按权值排序<br />第n轮：检查第n条边的两个顶点是否连通（是否属于同一个集合）<br />【不属于同一个集合就将这两个顶点连起来】 |
+
+
+```c++
+#include <iostream>
+using namespace std;
+
+#define MaxVertexNum 10 // 顶点数目的最大值
+#define INF 1000        // 宏定义 常量 “无穷”
+
+typedef char VertexType; // 顶点的数据类型
+typedef int EdgeType;    // 带权图中边上权值的数据类型
+
+typedef struct {
+  VertexType Vex[MaxVertexNum];              // 顶点表
+  EdgeType Edge[MaxVertexNum][MaxVertexNum]; // 邻接矩阵，边的权值表
+  int vexnum, arcnum; // 图的当前顶点数和边数/弧数
+} MGraph;
+
+// Prim 算法
+void Prim(MGraph G, int currentVex, int &sum) {
+  int set[MaxVertexNum];     // 记录染色的顶点
+  int lowcost[MaxVertexNum]; // 记录染色顶点的最小权值
+
+  for (int i = 0; i < G.vexnum; i++) {
+    set[i] = 0;
+    lowcost[i] = G.Edge[currentVex][i];
+  }
+
+  set[currentVex] = 1;
+
+  for (int i = 0; i < G.vexnum - 1; i++) {
+    int min = INF; // 记录最小权值
+    // 找到当前最小权值的顶点
+    for (int j = 0; j < G.vexnum; j++) {
+      if (set[j] == 0 && lowcost[j] < min) {
+        min = lowcost[j];
+        currentVex = j;
+      }
+    }
+    set[currentVex] = 1;
+    sum += min;
+
+    // 更新还未加入集合的其余顶点的lowcost值
+    for (int j = 0; j < G.vexnum; j++) {
+      if (set[j] == 0 && G.Edge[currentVex][j] < lowcost[j]) {
+        lowcost[j] = G.Edge[currentVex][j];
+      }
+    }
+  }
+}
+
+int main() {
+  MGraph G;
+  const int size = 5;
+  G.vexnum = size;
+  EdgeType A[size][size] = {{INF, 5, 1, 2, INF},
+                            {5, INF, 3, INF, 4},
+                            {1, 3, INF, 6, 2},
+                            {2, INF, 6, INF, 3},
+                            {INF, 4, 2, 3, INF}};
+
+  for (int i = 0; i < size; ++i) {
+    for (int j = 0; j < size; ++j) {
+      G.Edge[i][j] = A[i][j];
+    }
+  }
+
+  int sum;
+  Prim(G, 0, sum);
+  cout << sum << endl;
+
+  return 0;
+}
+```
 
 ### 6.4.2 最短路径
 
-> 单源最短路径
+> 单源最短路径——求一个顶点到其他顶点的最短路径【BFS，Dijkstra】
 1. BFS 求单源最短路径（无权图）
 ```c++
+#define INFINITY numeric_limits<int>::max() // 宏定义,int类型的最大值
+
 // 求顶点 U 到其他顶点的最短路径
 void BFS_MIN_Distance(Graph G, int u) {
   // d[i] 表示从 u 到 i 结点的最短路径
   for (int i = 0; i < G.vexnum; i++) {
-    d[i] = ∞;     // 初始化路径长度
+    d[i] = INFINITY;     // 初始化路径长度
     path[i] = -1; // 最短路径从哪个顶点过来
   }
   d[u] = 0;
@@ -1907,23 +1946,21 @@ void BFS_MIN_Distance(Graph G, int u) {
 }
 ```
 
-2. Dijkstra算法 （迪杰斯特拉——带权图、无权图）
+2. Dijkstra算法 （迪杰斯特拉——带权图、无权图）**不适合带负权值的图**
 
-**不适合带负权值的图**
-
-final[] ：初始化为false，循环遍历所有结点，找到还没确定最短路径，且 dist 最小的顶点 $V_i$ ,使得 final[i]=true
-dist[] ：记录了从源点 $V_0$ 到其他各顶点当前的最短路径长度
-path[] ：path[i]表示从源点到顶点i之间的最短路径的前驱结点，初始化为 -1
+`final[] ` 初始化为false，循环遍历所有结点，找到还没确定最短路径，且 dist 最小的顶点 $V_i$ ,使得 `final[i]=true`
+`dist[]` 记录了从源点 $V_0$ 到其他各顶点当前的最短路径长度
+`path[]` 表示从源点到顶点i之间的最短路径的前驱结点，初始化为 -1
 
 
-> 各个顶点之间的最短距离
+---
 
-Floyd算法 
+
+> 各个顶点之间的最短距离【Floyd算法 】
 
 初始化矩阵
 ![](pictures/Floyd-V0.png)
 ![](pictures/Floyd-V1.png)
-
 $$
 \begin{aligned}
 & 若 A^{(k-1)}[i][j] > A^{(k-1)}[i][k] + A^{(k-1)}[k][j] \\
@@ -3280,77 +3317,3 @@ int knapSack(int W, vector<int>& wt, vector<int>& val, int n) {
 1. 哈夫曼编码
 2. 最小生成树: Prim 算法 Kruskal 算法
 3. 单源最短路径: Dijkstra 算法
-
-```c++
-#include <iostream>
-using namespace std;
-
-#define MaxVertexNum 10 // 顶点数目的最大值
-#define INF 1000        // 宏定义 常量 “无穷”
-
-typedef char VertexType; // 顶点的数据类型
-typedef int EdgeType;    // 带权图中边上权值的数据类型
-
-typedef struct {
-  VertexType Vex[MaxVertexNum];              // 顶点表
-  EdgeType Edge[MaxVertexNum][MaxVertexNum]; // 邻接矩阵，边的权值表
-  int vexnum, arcnum; // 图的当前顶点数和边数/弧数
-} MGraph;
-
-// Prim 算法
-void Prim(MGraph G, int currentVex, int &sum) {
-  int set[MaxVertexNum];     // 记录染色的顶点
-  int lowcost[MaxVertexNum]; // 记录染色顶点的最小权值
-
-  for (int i = 0; i < G.vexnum; i++) {
-    set[i] = 0;
-    lowcost[i] = G.Edge[currentVex][i];
-  }
-
-  set[currentVex] = 1;
-
-  for (int i = 0; i < G.vexnum - 1; i++) {
-    int min = INF; // 记录最小权值
-    // 找到当前最小权值的顶点
-    for (int j = 0; j < G.vexnum; j++) {
-      if (set[j] == 0 && lowcost[j] < min) {
-        min = lowcost[j];
-        currentVex = j;
-      }
-    }
-    set[currentVex] = 1;
-    sum += min;
-
-    // 更新lowcost
-    for (int j = 0; j < G.vexnum; j++) {
-      if (set[j] == 0 && G.Edge[currentVex][j] < lowcost[j]) {
-        lowcost[j] = G.Edge[currentVex][j];
-      }
-    }
-  }
-}
-
-int main() {
-  MGraph G;
-  const int size = 5;
-  G.vexnum = size;
-  EdgeType A[size][size] = {{INF, 5, 1, 2, INF},
-                            {5, INF, 3, INF, 4},
-                            {1, 3, INF, 6, 2},
-                            {2, INF, 6, INF, 3},
-                            {INF, 4, 2, 3, INF}};
-
-  for (int i = 0; i < size; ++i) {
-    for (int j = 0; j < size; ++j) {
-      G.Edge[i][j] = A[i][j];
-    }
-  }
-
-  int sum;
-  Prim(G, 0, sum);
-  cout << sum << endl;
-
-  return 0;
-}
-```
-
