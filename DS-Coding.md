@@ -55,7 +55,7 @@
     - [6.4.1 最小生成树](#641-最小生成树)
     - [6.4.2 最短路径](#642-最短路径)
     - [6.4.3 有向无环图（DAG）描述表达式](#643-有向无环图dag描述表达式)
-    - [6.4.4 拓扑排序(逆拓扑排序)](#644-拓扑排序逆拓扑排序)
+    - [6.4.4 拓扑排序与逆拓扑排序](#644-拓扑排序与逆拓扑排序)
     - [6.4.5 关键路径](#645-关键路径)
 - [第七章——查找](#第七章查找)
   - [7.1 查找的基本概念](#71-查找的基本概念)
@@ -1920,6 +1920,7 @@ int main() {
 > 单源最短路径——求一个顶点到其他顶点的最短路径【BFS，Dijkstra】
 1. BFS 求单源最短路径（无权图）
 ```c++
+#include <limits>
 #define INFINITY numeric_limits<int>::max() // 宏定义,int类型的最大值
 
 // 求顶点 U 到其他顶点的最短路径
@@ -1950,7 +1951,7 @@ void BFS_MIN_Distance(Graph G, int u) {
 
 `final[] ` 初始化为false，循环遍历所有结点，找到还没确定最短路径，且 dist 最小的顶点 $V_i$ ,使得 `final[i]=true`
 `dist[]` 记录了从源点 $V_0$ 到其他各顶点当前的最短路径长度
-`path[]` 表示从源点到顶点i之间的最短路径的前驱结点，初始化为 -1
+`path[]` 表示从源点到顶点i之间的最短路径的前驱结点，初始化为 `-1`
 
 
 ---
@@ -1997,7 +1998,7 @@ Step 2：标出各个运算符的生效顺序（先后顺序有点出入无所�
 Step 3：按顺序加入运算符，注意“分层”  
 Step 4：从底向上逐层检章同层的运算符是否可以合体  
 
-### 6.4.4 拓扑排序(逆拓扑排序)
+### 6.4.4 拓扑排序与逆拓扑排序
 
 AOV网：用DAG图表示一个工程，其顶点表示活动，用有向边 $ < V_i,V_j > $ 表示活动 $V_i$ 必须先于活动 $V_j$ 的这样一种关系，则将这种有向图称为顶点表示活动的网络，记为AOV网。
 
@@ -2013,9 +2014,7 @@ AOV网：用DAG图表示一个工程，其顶点表示活动，用有向边 $ < 
 #include <stack>
 #define MaxVertexNum 100 // 图中顶点的最大数目
 
-struct VertexType {
-  int data;
-};
+typedef int VertexType;
 
 typedef struct ArcNode {   // 边表结点
   int adjvex;              // 该弧所指向的顶点的位置
@@ -2035,13 +2034,13 @@ typedef struct {
 
 std::stack<int> S; // 用栈来实现拓扑排序
 
-int indegree[MaxVertexNum]; // 记录每个顶点的入度
+int inDegree[MaxVertexNum]; // 记录每个顶点的入度
 
 int print[MaxVertexNum]; // 记录拓扑序列
 
 bool TopologicalSort(Graph G) {
   for (int i = 0; i < G.vexnum; i++) {
-    if (indegree[i] == 0) // degree数组记录当前顶点的入度
+    if (inDegree[i] == 0) // degree数组记录当前顶点的入度
       S.push(i);          // 将所有入度为0的顶点入栈
   }
   int count = 0; // 计数，记录当前已经输出的顶点数
@@ -2053,7 +2052,7 @@ bool TopologicalSort(Graph G) {
         ArcNode *p = G.vertices[i].firstArc; p;
         p = p->nextArc) { // 将所有i指向的顶点的入度减1，并且将入度为0的顶点压入栈S
       int v = p->adjvex;
-      if (!(--indegree[v]))
+      if (!(--inDegree[v]))
         S.push(v); // 入度为0，则入栈
     }
   }
@@ -2076,36 +2075,7 @@ bool TopologicalSort(Graph G) {
 
   1. 逆邻接表
 
-  2. DFS算法
-```c++
-#define MaxVertexNum 100    // 结点的最大个数
-bool visited[MaxVertexNum]; // 访问标记数组
-
-void DFSTraverse(Graph G) { // 对图G进行深度优先遍历
-  for (int i = 0; i < G.vexnum; i++) {
-    visited[i] = false; // 访问标记数组初始化
-  }
-  for (int i = 0; i < G.vexnum; i++) { // 从0号顶点开始遍历
-    if (!visited[i]) { // 对每个连通分量调用一次DFS算法
-      DFS(G, i);       // 若第i个顶点未被访问过，则执行DFS
-    }
-  }
-}
-
-// 深度优先遍历算法
-void DFS(Graph G, int v) { // 从顶点v出发，深度优先遍历图G
-  visit(v);                // 访问初始顶点v
-  visited[v] = true;       // 对顶点 v 做已访问标记
-  for (int w = FirstNeighbor(G, v); w >= 0;
-       w = NextNeighbor(G, v, w)) { // 检测v的所有邻接点
-    if (!visited[w]) {              // w为v的未访问的邻接顶点
-      DFS(G, w);
-    }
-  }
-  print(v); // 输出顶点
-}
-```
-
+  2. DFS算法——在DFS递归算法的最后一行输出该顶点，则可以实现逆拓扑排序
 ### 6.4.5 关键路径
 AOE网：在带权有向图中，以顶点代表事件，以有向边表示活动，以边上的权值表示完成该活动的开销（时间），称之为用边表示活动的网络。
 
@@ -2264,8 +2234,6 @@ $$
 建立、查找、插入等相关操作
 
 ```c++
-#include <iostream>
-
 // 二叉排序树结点
 typedef struct BSTNode {
   int key;
@@ -2324,8 +2292,6 @@ void Create_BST(BSTree &T, int str[], int n) {
 ### 7.3.2 平衡二叉树
 
 ```c++
-#include<iostream>
-using namespace std;
 typedef struct AVLNode{
     int key;        //结点关键词
     int balance;    //平衡因子
@@ -2336,21 +2302,22 @@ typedef struct AVLNode{
 基本操作：插入
 1. 调整LL（右旋操作）: 实现 f 向右下旋转，p 向右上旋转:
 
-> 其中 f 是爹，p 为左孩子，gf 为 f 他爹  
+> 其中 f 是爹，p 为左孩子，gf 为 f 的父结点，插入的位置是p的左子树  
 > ① f -> lchild = p -> rchild;  
 > ② p -> rchild = f;  
 > ③ gf -> lchild/rchild = p;  
 
 2. 调整RR（左旋操作）: 实现 f 向左下旋转，p 向左上旋转:
 
-> 其中 f 是爹，p 为右孩子，gf 为 f 他爹  
+> 其中 f 是爹，p 为右孩子，gf 为 f 的父结点，插入的位置是p的右子树  
 > ① f -> rchild = p -> lchild;  
 > ② p -> lchild = f;  
 > ③ gf -> lchild/rchild = p;  
 
 3. 调整LR 左旋再右旋
-
 4. 调整RL 右旋再左旋
+
+---
 
 基本操作：删除
 1. 删除结点（方法同“二叉排序树”）
@@ -2366,7 +2333,7 @@ typedef struct AVLNode{
    - 孙子在RL: 孙子先右旋，再左
 5. 如果不平衡向上传导，继续②
 
-![](pictures/平衡二叉树删除.png)
+<img src="pictures/平衡二叉树删除.png" style="zoom:50%;" />
 
 ### 7.3.3 红黑树
 红黑树是二叉排序树:左子树结点值≤根结点值≤右子树结点值
@@ -2435,8 +2402,8 @@ struct Node{
 <font size=5px>如何保证查找效率</font>
 
 策略1：m叉查找树中，规定 <font color='red'>除了根结点外</font>，任何结点至少有 $\color{red}{\lceil m/2 \rceil}$ 个分叉，即至少含有 $\color{red}{\lceil m/2 \rceil-1}$ 个关键字
-&emsp;example:
-&emsp;对于5叉排序树，除了根结点外，任何结点都至少有3个分支，2个关键字
+
+example:对于5叉排序树，除了根结点外，任何结点都至少有3个分支，2个关键字
 
 ---
 
@@ -2458,23 +2425,24 @@ $$
 
 最大高度——让各层的分叉尽可能的少，即根节点只有2个分叉，其他结点只有 $\lceil m/2 \rceil$ 个分叉
 各层结点至少有:
-第一层 $1$ 
-第二层 $2$ 
-第三层 $2\lceil m/2 \rceil$
-第h层 $2(\lceil m/2 \rceil)^{h-2}$
-第h+1层【叶子结点】 $2(\lceil m/2 \rceil)^{h-1}$
+第 `1` 层 $1$ 
+第 `2` 层 $2$ 
+第 `3` 层 $2\lceil m/2 \rceil$
+第 `h` 层 $2(\lceil m/2 \rceil)^{h-2}$
+第 `h+1` 层【叶子结点】 $2(\lceil m/2 \rceil)^{h-1}$
 
-n个关键字的B树必有n+1个叶子结点，则 $n+1>=2(\lceil m/2 \rceil)^{h-1}$ ,即 $ h<=\log_{\lceil m/2 \rceil}\frac{n+1}{2}+1$
+`n` 个关键字的B树必有 `n+1` 个叶子结点，则 $n+1>=2(\lceil m/2 \rceil)^{h-1}$ ,即 $ h<=\log_{\lceil m/2 \rceil}\frac{n+1}{2}+1$
 
 基本操作：插入【注意溢出分裂】、删除【如果为终端结点，则直接删除；若不是终端结点，使用直接前驱或者直接后继取代被删除的元素,若元素数量不够可向兄弟结点借元素，倘若兄弟结点数量也不够，可考虑合并结点】
 
 ### 7.4.2 B+树
+
 一棵m阶的B+树需满足下列条件：
 
-1. 每个分支结点最多有m棵子树（孩子结点）。
-2. 非叶根结点至少有两棵子树，其他每个分支结点至少有 $\lceil m/2 \rceil$ 棵子树。
-3. 结点的子树个数与关键字个数相等。
-4. 所有叶结点包含全部关键字及指向相应记录的指针，叶结点中将关键字按大小顺序排列，并且相邻叶结点按大小顺序相互链接起来。
+1. 每个分支结点最多有m棵子树（孩子结点）
+2. 非叶根结点至少有两棵子树，其他每个分支结点至少有 $\lceil m/2 \rceil$ 棵子树
+3. 结点的子树个数与关键字个数相等
+4. 所有叶结点包含全部关键字及指向相应记录的指针，叶结点中将关键字按大小顺序排列，并且相邻叶结点按大小顺序相互链接起来
 
 ## 7.5 散列表（哈希表）
 
