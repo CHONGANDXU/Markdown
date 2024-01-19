@@ -65,12 +65,12 @@ In computing, a **shell** is a computer program which exposes an [operating syst
 
 ### Zsh的配置文件
 
-- .zshenv：包含设置命令搜索路径的命令，以及配置其他重要的环境变量，通常把$PATH等变量写在这里，无论是在交互shell，或者运行程序都会读取此文件。
-- .zprofile：和.zlogin类似，在.zshrc之前加载。
-- .zshrc：源自交互式shell，读取并执行该文件，包含设置别名、函数、选项、键绑定等命令。
-- .zlogin：源自登录shell，包含仅在登录shell中执行的命令，用于设置终端类型并运行一系列外部命令（`fortune`、`msgs`等）。
-- .zlogout：退出终端的时候读取，用于做一些清理工作。对标bash_logout。
-- .zsh_history：保存了历史命令。在Shell为Zsh时，每次敲击命令时，都会保存在这个文件里。
+- `.zshenv`：包含设置命令搜索路径的命令，以及配置其他重要的环境变量，通常把$PATH等变量写在这里，无论是在交互shell，或者运行程序都会读取此文件。
+- `.zprofile`：和.zlogin类似，在.zshrc之前加载。
+- `.zshrc`：源自交互式shell，读取并执行该文件，包含设置别名、函数、选项、键绑定等命令。
+- `.zlogin`：源自登录shell，包含仅在登录shell中执行的命令，用于设置终端类型并运行一系列外部命令（`fortune`、`msgs`等）。
+- `.zlogout`：退出终端的时候读取，用于做一些清理工作。对标bash_logout。
+- `.zsh_history`：保存了历史命令。在Shell为Zsh时，每次敲击命令时，都会保存在这个文件里。
 
 加载顺序：$.zshenv \rightarrow .zprofile \rightarrow .zshrc \rightarrow .zlogin \rightarrow .zlogout$
 
@@ -201,10 +201,10 @@ chgrp [-R] 属组名 文件名
 - w:2
 - x:1
 
-每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： **-rwxrwx---** 分数则是：
+每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： **-rwxr-x---** 分数则是：
 
 - owner = rwx = 4+2+1 = 7
-- group = rwx = 4+2+1 = 7
+- group = r-x = 4+0+1 = 5
 - others= --- = 0+0+0 = 0
 
 #### 第一种语法
@@ -212,7 +212,7 @@ chgrp [-R] 属组名 文件名
 变更权限的指令 chmod 的语法：
 
 ```sh
- chmod [-R] xyz 文件或目录
+chmod [-R] xyz 文件或目录
 ```
 
 选项与参数：
