@@ -170,7 +170,7 @@ brew install redis
 >
 > 也可以通过菜鸟教程官网来学习：[Redis 命令 | 菜鸟教程 (runoob.com)](https://www.runoob.com/redis/redis-commands.html)
 
-## 1.Redis数据结构介绍
+## 2.1 Redis数据结构介绍
 
 > **Redis是一个key-value的数据库，key一般是String类型，不过value的类型多种多样**
 
@@ -178,7 +178,7 @@ brew install redis
 
 
 
-## 2.通用命令
+## 2.2 通用命令
 
 > **通用指令是部分数据类型的，都可以使用的指令，常见的有如下表格所示**
 
@@ -194,7 +194,7 @@ brew install redis
 
 
 
-## 3.String类型
+## 2.3 String类型
 
 > **String类型，也就是字符串类型，是Redis中最简单的存储类型。**
 
@@ -254,7 +254,7 @@ brew install redis
 
 
 
-## 4.Hash类型
+## 2.4 Hash类型
 
 > **Hash类型，也叫散列，其value是一个无序字典，类似于Java中的`HashMap`结构。**
 
@@ -278,7 +278,7 @@ brew install redis
 
   
 
-## 5.List类型
+## 2.5 List类型
 
 > **Redis中的List类型与Java中的LinkedList类似，可以看做是一个双向链表结构。既可以支持正向检索和也可以支持反向检索。**
 
@@ -321,7 +321,7 @@ brew install redis
 
   
 
-## 6.Set类型
+## 2.6 Set类型
 
 > **Redis的Set结构与Java中的HashSet类似，可以看做是一个value为null的HashMap。因为也是一个hash表，因此具备与HashSet类似的特征**
 
@@ -349,7 +349,7 @@ brew install redis
 
 
 
-## 7.SortedSet类型
+## 2.7 SortedSet类型
 
 > **Redis的SortedSet是一个可排序的set集合，与Java中的TreeSet有些类似，但底层数据结构却差别很大。SortedSet中的每一个元素都带有一个score属性，可以基于score属性对元素排序，底层的实现是一个跳表（SkipList）加 hash表。**
 
@@ -391,7 +391,7 @@ brew install redis
 
 
 
-## 1.命令行客户端
+## 3.1 命令行客户端
 
 - **Redis安装完成后就自带了命令行客户端：`redis-cli`，使用方式如下：**
 
@@ -413,7 +413,7 @@ brew install redis
 
 
 
-## 2.图形化客户端
+## 3.2 图形化客户端
 
 Navicat 16.2 版本以上已支持 Redis 图形化界面及操作
 
@@ -421,11 +421,11 @@ Navicat 16.2 版本以上已支持 Redis 图形化界面及操作
 
 
 
-## 3.Java客户端
+## 3.3 Java客户端
 
 
 
-### 3.1 Jedis快速入门
+### 3.3.1 Jedis快速入门
 
 ---
 
@@ -438,18 +438,10 @@ Navicat 16.2 版本以上已支持 Redis 图形化界面及操作
   <dependency>
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
-      <version>4.2.0</version>
-  </dependency>
-  
-  <!--引入单元测试依赖-->
-  <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>5.8.2</version>
-      <scope>test</scope>
+      <version></version>
   </dependency>
   ```
-
+  
 - **编写测试类并与Redis建立连接**
 
   ```java
@@ -458,7 +450,7 @@ Navicat 16.2 版本以上已支持 Redis 图形化界面及操作
   @BeforeEach //被该注解修饰的方法每次执行其他方法前自动执行
   void setUp(){
       // 1. 获取连接
-      jedis = new Jedis("192.168.230.88",6379);
+      jedis = new Jedis("192.168.0.1",6379);
       // 2. 设置密码
       jedis.auth("132537");
       // 3. 选择库（默认是下标为0的库）
@@ -472,7 +464,7 @@ Navicat 16.2 版本以上已支持 Redis 图形化界面及操作
   @Test
   public void testString(){
       // 1.往redis中存放一条String类型的数据并获取返回结果
-      String result = jedis.set("url", "https://www.oz6.cn");
+      String result = jedis.set("url", "https://www.github.com");
       System.out.println("result = " + result);
   
       // 2.从redis中获取一条数据
@@ -499,7 +491,7 @@ Navicat 16.2 版本以上已支持 Redis 图形化界面及操作
 
 
 
-### 3.2	Jedis连接池
+### 3.3.2 Jedis连接池
 
 ---
 
@@ -510,18 +502,23 @@ public class JedisConnectionFactory {
     private static final JedisPool jedisPool;
 
     static {
-        //配置连接池
+        // 配置连接池
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        // 最大连接数
         jedisPoolConfig.setMaxTotal(8);
+        // 最大空闲连接
         jedisPoolConfig.setMaxIdle(8);
+        // 最小空闲连接
         jedisPoolConfig.setMinIdle(0);
+        // 设置最长等待时间
         jedisPoolConfig.setMaxWaitMillis(200);
-        //创建连接池对象
-        jedisPool = new JedisPool(jedisPoolConfig,"192.168.230.88",6379,1000,"132537");
+        // 创建连接池对象 参数 config host port timeout password
+        jedisPool = new JedisPool(jedisPoolConfig, "192.168.0.1", 6379, 1000, "132537");
     }
 
-    public static Jedis getJedis(){
-       return jedisPool.getResource();
+    // 获取 Jedis 连接池中的资源
+    public static Jedis getJedis() {
+        return jedisPool.getResource();
     }
 }
 
@@ -529,7 +526,7 @@ public class JedisConnectionFactory {
 
 
 
-### 3.3	SpringDataRedis介绍
+### 3.3.3 SpringDataRedis介绍
 
 ---
 
@@ -543,7 +540,7 @@ public class JedisConnectionFactory {
 - 支持Redis哨兵和Redis集群
 - 支持基于Lettuce的响应式编程
 - 支持基于JDK、JSON、字符串、Spring对象的数据序列化及反序列化
-- 支持基于Redis的JDKCollection实现
+- 支持基于Redis的`JDKCollection`实现
 
 > **SpringDataRedis中提供了RedisTemplate工具类，其中封装了各种对Redis的操作。并且将不同数据类型的操作API封装到了不同的类型中：**
 
@@ -551,7 +548,7 @@ public class JedisConnectionFactory {
 
 
 
-### 3.4 SpringDataRedis快速入门
+### 3.3.4 SpringDataRedis快速入门
 
 ---
 
@@ -575,23 +572,24 @@ public class JedisConnectionFactory {
 
   ```yml
   spring:
-    redis:
-      host: 192.168.230.88 #指定redis所在的host
-      port: 6379  #指定redis的端口
-      password: 132537  #设置redis密码
-      lettuce:
-        pool:
-          max-active: 8 #最大连接数
-          max-idle: 8 #最大空闲数
-          min-idle: 0 #最小空闲数
-          max-wait: 100ms #连接等待时间
+    data:
+      redis:
+        host: 192.168.0.1 #指定redis所在的host
+        port: 6379  #指定redis的端口
+        password: 111111  #设置redis密码
+        lettuce:
+          pool:
+            max-active: 8 #最大连接数
+            max-idle: 8 #最大空闲数
+            min-idle: 0 #最小空闲数
+            max-wait: 100ms #连接等待时间
   ```
 
 - **编写测试类执行测试方法**
 
   ```java
-  @SpringBootTest
-  class RedisDemoApplicationTests {
+  @SpringBootTest(classes=***.class)
+  class RedisTest {
   
   	@Resource
   	private RedisTemplate redisTemplate;
@@ -612,7 +610,7 @@ public class JedisConnectionFactory {
 
   
 
-### 3.5	RedisSerializer配置
+### 3.3.5 RedisSerializer配置
 
 ---
 
@@ -634,31 +632,22 @@ public class JedisConnectionFactory {
   ```java
   @Configuration
   public class RedisConfig {
+      @Resource
+      private RedisConnectionFactory connectionFactory;
   
       @Bean
-      public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory factory){
-          // 1.创建RedisTemplate对象
-          RedisTemplate<String ,Object> redisTemplate = new RedisTemplate<>();
-          // 2.设置连接工厂
-          redisTemplate.setConnectionFactory(factory);
-  
-          // 3.创建序列化对象
-          StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-          GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
-  
-          // 4.设置key和hashKey采用String的序列化方式
-          redisTemplate.setKeySerializer(stringRedisSerializer);
-          redisTemplate.setHashKeySerializer(stringRedisSerializer);
-  
-          // 5.设置value和hashValue采用json的序列化方式
-          redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
-          redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
-  
-          return redisTemplate;
+      public RedisTemplate<String,Object> redisTemplate(){
+          RedisTemplate<String, Object> template = new RedisTemplate<>();
+          template.setConnectionFactory(connectionFactory);
+          template.setKeySerializer(new StringRedisSerializer());
+          template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+          template.setHashKeySerializer(new StringRedisSerializer());
+          template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+          return template;
       }
   }
   ```
-
+  
 - **此时我们已经将RedisTemplate的key设置为`String序列化`，value设置为`Json序列化`的方式，再来执行方法测试**
 
   ![image-20220525170925364](https://image-bed-vz.oss-cn-hangzhou.aliyuncs.com/Redis/image-20220525170925364.png)
@@ -684,7 +673,7 @@ public class JedisConnectionFactory {
 
 
 
-### 3.6 StringRedisTemplate
+### 3.3.6 StringRedisTemplate
 
 ---
 
@@ -730,7 +719,7 @@ public class JedisConnectionFactory {
 
 
 
-### 3.7	总结
+### 3.3.7	总结
 
 ---
 
@@ -746,3 +735,76 @@ public class JedisConnectionFactory {
 1. 使用StringRedisTemplate
 2. 写入Redis时，手动把对象序列化为JSON
 3. 读取Redis时，手动把读取到的JSON反序列化为对象
+
+
+
+# 四、缓存
+
+缓存就是数据交换的缓冲区，是存贮数据的临时场所，一般读写性能较高
+
+作用：
+
+1. 降低后端负载
+2. 提高读写效率，较低响应时间
+
+成本：
+
+1. 数据一致性成本
+2. 代码维护成本
+3. 运维成本
+
+
+
+## 4.1 缓存更新
+
+1. 低一致性需求——使用Redis自带的内存淘汰机制
+2. 高一致性需求——主动更新，并以超时剔除作为兜底方案
+   - 读操作
+     - 缓存命中则直接返回
+     - 缓存未命中则查询数据库，并写入缓存，设置超时时间
+   - 写操作
+     - 先写数据库，然后再删除缓存
+     - 要确保数据库与缓存操作的原子性
+
+
+
+## 4.2 缓存穿透
+
+缓存穿透是指客户端请求的数据在缓存中和数据库中都不存在，这样缓存永远不会生效，这些请求都会打到数据库
+
+常见解决方案：
+
+- 缓存空对象
+  - 优点：实现简单，维护方便
+  - 缺点：
+    - 额外的内存消耗
+    - 可能造成短期的不一致
+- 布隆过滤
+  - 优点：内存占用少，没有多余key
+  - 缺点：
+    - 实现复杂
+    - 存在误判可能
+
+
+
+## 4.3 缓存雪崩
+
+缓存雪崩是指同一时间大量的缓存Key同时失效或者Redis服务宕机，导致大量请求到达数据库，带来巨大压力
+
+常见解决方案：
+
+- 给不同的key添加随机TTL
+- 利用Redis集群提高服务的可用性
+- 给缓存业务添加降级限流策略
+- 给业务添加多级缓存
+
+
+
+## 4.4 缓存击穿
+
+缓存击穿是指一个热点的键在缓存中突然失效（例如过期），在这个键再次被更新到缓存之前，所有对这个键的请求都会直接查询数据库。如果这个键非常热门，突然的大量请求可能会对数据库造成巨大压力。
+
+**解决方案**:
+
+- **设置热点数据永远不过期**：对于热点数据，可以设置为永不过期，或者使用逻辑过期，即数据有一个逻辑过期时间，在过期之后可以异步更新缓存。
+- **使用互斥锁（Mutex Lock）**：在缓存失效后，不是每个请求都去数据库加载数据，而是使用锁或其他同步机制保证只有一个请求去数据库查询，并更新缓存，其他请求等待缓存更新后再从缓存中获取数据。
