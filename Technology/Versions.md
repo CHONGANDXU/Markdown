@@ -2,11 +2,11 @@
 >> 以下三者，在系统、架包、软件的开发过程中使用
 >> 1. Alpha: 内测版，BUG多，开发人员开发过程中使用，希腊字母 $\alpha$ ，第一，指最初版
 >> 2. Beta: 早期版本，有缺陷，无大BUG，可能加入新功能，进一步开发完善
->> 3. Gamma: 经 $\gamma$ 版，完善修改，成为正式发布的候选版本（Release Candidate）
+>> 3. Gamma: 经 $\gamma$​ 版，完善修改，成为正式发布的候选版本（Release Candidate）
 
 ---
 
-> RC, GA, R版本  
+> RC, GA, R版本
 1. RC: (Release Candidate) 候选版本，几乎就是正式版了  
 2. GA: (Ggeneral Availability) 发行稳定版，官方推荐使用此版本  
 3. R: (RELEASE) 正式版，等价于GA  
