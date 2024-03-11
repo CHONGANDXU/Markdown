@@ -1138,7 +1138,7 @@ next [ j ] = S 的最长相等前后缀长度 + 1
 常考性质:
 1. 结点数 = 总度数 + 1
 2. 
-![度为m的树、m叉树的区别](pictures/m叉树与度树的区别.png)
+![度为m的树、m叉树的区别](./pictures/m叉树与度树的区别.png)
 3. 度为 $m$ 的树( $m$ 叉树)第 $i$ 层至多有 $m^{i-1}$ 个结点（ $i>=1$ ）
 4. 高度为 $h$ 的 $m$ 叉树至多有 $\frac{m^h-1}{m-1}$ 个结点
 5. - 高度 $h$ 的 $m$ 叉树至少有 $h$ 个结点
@@ -1651,11 +1651,11 @@ void Union(int S[], int Root1, int Root2) {
 }
 ```
 
-优化操作  
-①用根节点的绝对值表示树的结点总数  
+优化操作
+①用根节点的绝对值表示树的结点总数 
 ②Union操作，让小树合并到大树，保持树的高度  
 
-该方法构造的树高不超过 $\lfloor \log_{2}{n} \rfloor+1$  
+该方法构造的树高不超过 $\lfloor \log_{2}{n} \rfloor+1$ 
 Union操作优化后,Find操作最坏时间复杂度: $\log_{2}{n}$  
 
 ```c++
@@ -1960,8 +1960,8 @@ void BFS_MIN_Distance(Graph G, int u) {
 > 各个顶点之间的最短距离【Floyd算法 】
 
 初始化矩阵
-![](pictures/Floyd-V0.png)
-![](pictures/Floyd-V1.png)
+![](./pictures/Floyd-V0.png)
+![](./pictures/Floyd-V1.png)
 $$
 \begin{aligned}
 & 若 A^{(k-1)}[i][j] > A^{(k-1)}[i][k] + A^{(k-1)}[k][j] \\
@@ -1991,7 +1991,7 @@ $ 空间复杂度 O(|V|^2) $
 ### 6.4.3 有向无环图（DAG）描述表达式
 **顶点中不可能出现重复的操作数**
 
-![](pictures/DAG表达式.png)
+![](./pictures/DAG表达式.png)
 
 Step 1：把各个操作数不重复地排成一排  
 Step 2：标出各个运算符的生效顺序（先后顺序有点出入无所谓）  
