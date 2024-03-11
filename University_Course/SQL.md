@@ -190,7 +190,7 @@ create table if not exists user
 
 
 ## 3.2 数据查询
-```SQL
+```sql
 	select		5
 		...
 	from		1
@@ -318,7 +318,7 @@ drop view myview;
 > 可以对视图进行CRUD操作
 
 ### 3.5.4 面向视图操作
-```SQL
+```sql
 mysql> select * from myview;
 +-------+--------+
 | empno | ename  |
@@ -363,7 +363,7 @@ delete from myview1 where empno = 7369; // 通过视图删除原表数据。
 > 1. **自主存取控制：**
 > 用户对于不同的数据库对象有不同的数据库权限，不同的用户对同一对象也有不同的权限，而且用户还可将其拥有的存取权限转授给其他用户。
 
-```SQL
+```sql
 *GRANT* 例如：
 Create user ‘testuser’@’localhost’ identified by ‘testpwd’;
 
@@ -415,7 +415,7 @@ show grants for 'rose'@'localhost';
 (2) 检查主码的各个属性是否为空，只要有一个空就拒绝插入或修改
 
 怎么给一张表添加主键约束呢？
-```SQL
+```sql
 drop table if exists t_user;
 create table t_user(
     id int primary key,  // 列级约束
@@ -468,7 +468,7 @@ ERROR 1364 (HY000): Field 'id' doesn't have a default value
 ***一张表的主键约束只能有1个。（必须记住）***
 
 使用表级约束方式定义主键：
-```SQL
+```sql
 drop table if exists t_user;
 create table t_user(
     id int,
@@ -496,7 +496,7 @@ insert .......
 ```
 
 MySQL提供主键值自增：（非常重要。）
-```SQL
+```sql
 drop table if exists t_user;
 create table t_user(
     id int primary key auto_increment, // id字段自动维护一个自增的数字，从1开始，以1递增。
@@ -519,7 +519,7 @@ select * from t_user;
 	
 	* 业务背景：
 		请设计数据库表，用来维护学生和班级的信息?
-		```SQL
+		```sql
 		第一种方案：一张表存储所有数据
 		no(pk)			name			classno			classname
 		-------------------------------------------------------------------------------------------
@@ -557,7 +557,7 @@ select * from t_user;
 			添加数据的时候，先添加父表，在添加子表。
 			创建表的时候，先创建父表，再创建子表。
 			删除表的时候，先删除子表，在删除父表。
-		```SQL
+		```sql
 		drop table if exists t_student;
 		drop table if exists t_class;
 		
@@ -612,7 +612,7 @@ CONSTRAINT <完整性约束条件名><完整性约束条件>
 - FOREIGN KEY
 - CHECK短语
 
-```SQL
+```sql
 CREATE TABLE Student(
 	Sno NUMERIC(6)
 		CONSTRAINT C1 CHECK(Sno BETWEEN 900 AND 999),
@@ -627,7 +627,7 @@ CREATE TABLE Student(
 ```
 
 2. 修改表中的完整性限制
-```SQL
+```sql
 ALTER TABLE Student
 	DROP CONSTRAINT C1;
 
@@ -651,14 +651,14 @@ ALTER TABLE Student
 
 定义：触发器时用户定义在关系表上的一类由事件驱动的特殊过程，又叫做事件-条件-动作规则
 
-```SQL
+```sql
 CREATE TRIGGER <触发器名> < BEFORE | AFTER >
 <INSERT | UPDATE | DELETE > ON <表名> 
 FOR EACH ROW <触发器主体>
 ```
 
 例如：
-```SQL
+```sql
 Create table account(acct_id int ,amount decimal(10,2));
 Create trigger ins_num after insert on account 
 for each row 
@@ -892,20 +892,20 @@ int main(){
 1. 查询结果为多条记录的SELECT语句
 >使用游标的步骤
 >1. 申明游标
->	```SQL
+>	```sql
 >	EXEC SQL DECLARE <游标名> CURSOR
 >		FOR <SELECT语句>;
 >	```
 >	说明性语句，DBMS并不执行SELECT语句，而是申请一个数据空间，用于存放未来执行SELECT的结构数据集
 >
 >2. 打开游标
->	```SQL
+>	```sql
 >	EXEC SQL OPEN <游标名>;
 >	```
 >	- 打开游标实际上是执行相应的SELECT语句，把查询结果取到缓冲区中
 >	- 这是游标处于活动状态，指针指向查询结果集中的第一条记录
 >3. 推进游标指针并取当前记录
->	```SQL
+>	```sql
 >	EXEC SQL FETCH <游标名>
 >		INTO <主变量>[<指示变量>]
 >			[,<主变量>[<指示变量>]]...;
@@ -913,7 +913,7 @@ int main(){
 >	指定方向推动游标指针，同时将缓冲区中的当前记录取出来送至主变量供主语言进一步处理
 >
 >4. 关闭游标
->	```SQL
+>	```sql
 >	EXEC SQL CLOSE <游标名>;
 >	```
 >	- 关闭游标，释放结果集占用的缓冲区及其他资源
@@ -945,7 +945,7 @@ int main(){
 
 流程控制
 - 条件控制
-```SQL
+```sql
 IF condition THEN
 	...;
 END IF;
@@ -957,7 +957,7 @@ ELSE
 END IF;
 ```
 - 循环控制
-```SQL
+```sql
 LOOP
 	...;
 END LOOP;
@@ -968,7 +968,7 @@ END LOOP;
 ```
 - 错误处理
 ## 8.3 存储过程和函数
-```SQL
+```sql
 delimiter //
 create procedure proc2(in cid char(18), out num int)
 begin
@@ -981,7 +981,7 @@ call procedure proc2('210210199901011111', @num);
 select @num;
 ```
 
-```SQL
+```sql
 delimiter //
 create function show_level(cid char(18))
 	returns varchar(10)
