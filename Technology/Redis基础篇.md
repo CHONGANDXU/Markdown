@@ -65,12 +65,12 @@ brew --version
 brew install redis
 ```
 
-## 4.启动Redis
+## 4. 启动Redis
 
 > Redis的启动方式有很多种，例如：**前台启动**、**后台启动**、**开机自启**
 >
 
-### 4.1	前台启动（不推荐）
+### 4.1 前台启动（不推荐）
 
 ---
 
@@ -82,7 +82,7 @@ brew install redis
   redis-server
   ```
 
-### 4.2	后台启动（不推荐）
+### 4.2 后台启动（不推荐）
 
 ---
 
@@ -145,7 +145,7 @@ brew install redis
 
   
 
-### 4.3	开机自启（推荐）
+### 4.3 开机自启（推荐）
 
 ---
 
@@ -556,8 +556,6 @@ public class JedisConnectionFactory {
 
 - **首先新建一个Spring Boot工程**
 
-  ![image-20220525141608974](https://image-bed-vz.oss-cn-hangzhou.aliyuncs.com/Redis/image-20220525141608974.png)
-
 - **然后引入连接池依赖**
 
   ```xml
@@ -719,7 +717,7 @@ public class JedisConnectionFactory {
 
 
 
-### 3.3.7	总结
+### 3.3.7 总结
 
 ---
 
@@ -728,7 +726,7 @@ public class JedisConnectionFactory {
 方案一：
 
 1. 自定义RedisTemplate
-2. 修改RedisTemplate的序列化器为GenericJackson2JsonRedisSerializer
+2. 修改RedisTemplate的序列化器配置为GenericJackson2JsonRedisSerializer
 
 方案二：
 
