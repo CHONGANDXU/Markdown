@@ -45,6 +45,74 @@ training/webapp     latest              6fae60ef3446        11 months ago       
 - **CREATED：**镜像创建时间
 - **SIZE：**镜像大小
 
+
+
+在 Docker 中，常用的 Docker 镜像（Image）指令包括：
+
+1. **docker pull**: 从 Docker Registry 中拉取镜像。例如：
+
+   ```sh
+   docker pull ubuntu
+   ```
+
+2. **docker build**: 根据 Dockerfile 构建镜像。例如：
+
+   ```sh
+   docker build -t my-image .
+   ```
+
+3. **docker push**: 将本地的镜像推送到 Docker Registry。例如：
+
+   ```sh
+   docker push my-image
+   ```
+
+4. **docker images**: 列出本地已下载的镜像。例如：
+
+   ```sh
+   docker images
+   ```
+
+5. **docker rmi**: 删除本地的镜像。例如：
+
+   ```sh
+   docker rmi my-image
+   ```
+
+6. **docker tag**: 给本地镜像打标签。例如：
+
+   ```sh
+   docker tag my-image my-registry/my-image:latest
+   ```
+
+7. **docker inspect**: 查看镜像的详细信息。例如：
+
+   ```sh
+   docker inspect my-image
+   ```
+
+8. **docker history**: 显示镜像的历史记录。例如：
+
+   ```sh
+   docker history my-image
+   ```
+
+9. **docker save**: 将镜像保存为 tar 归档文件。例如：
+
+   ```sh
+   docker save -o my-image.tar my-image
+   ```
+
+10. **docker load**: 从 tar 归档文件加载镜像。例如：
+
+```sh
+docker load -i my-image.tar
+```
+
+这些是 Docker 中常用的一些镜像相关指令。通过这些指令，您可以管理 Docker 中的镜像，包括拉取、构建、推送、删除等操作。
+
+
+
 Volumes
 
 
