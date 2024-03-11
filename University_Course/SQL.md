@@ -169,12 +169,24 @@
 > DCL（数据控制语言）: grant授权、revoke撤销权限等。  
 
 ## 3.1 数据定义
-		create table 表名(
-			字段名1 数据类型,
-			字段名2 数据类型,
-			字段名3 数据类型,
-			....
-		);
+```sql
+create table if not exists user
+(
+    id           bigint auto_increment comment 'id' primary key,
+    userAccount  varchar(256)                           not null comment '账号',
+    userPassword varchar(512)                           not null comment '密码',
+    unionId      varchar(256)                           null comment '微信开放平台id',
+    mpOpenId     varchar(256)                           null comment '公众号openId',
+    userName     varchar(256)                           null comment '用户昵称',
+    userAvatar   varchar(1024)                          null comment '用户头像',
+    userProfile  varchar(512)                           null comment '用户简介',
+    userRole     varchar(256) default 'user'            not null comment '用户角色',
+    createTime   datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime   datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete     tinyint      default 0                 not null comment '是否删除',
+    index idx_unionId (unionId)
+) comment '用户' collate = utf8mb4_unicode_ci;
+```
 
 
 ## 3.2 数据查询
@@ -289,13 +301,16 @@ delete from 表名 where 条件;
 
 ## 3.5 视图
 ### 3.5.1 什么是视图？
-	站在不同的角度去看到数据。（同一张表的数据，通过不同的角度去看待）。
+
+> 站在不同的角度去看到数据。（同一张表的数据，通过不同的角度去看待）。
 
 ### 3.5.2 怎么创建视图？怎么删除视图？
-	create view myview as select empno,ename from emp;
-	drop view myview;
-	
-	注意：只有DQL语句才能以视图对象的方式创建出来。
+```sql
+create view myview as select empno,ename from emp;
+drop view myview;
+
+注意：只有DQL语句才能以视图对象的方式创建出来。
+```
 
 ### 3.5.3 对视图进行增删改查，会影响到原表数据。
 > 通过视图影响原表数据的，不是直接操作的原表
@@ -304,30 +319,30 @@ delete from 表名 where 条件;
 
 ### 3.5.4 面向视图操作
 ```SQL
-	mysql> select * from myview;
-	+-------+--------+
-	| empno | ename  |
-	+-------+--------+
-	|  7369 | SMITH  |
-	|  7499 | ALLEN  |
-	|  7521 | WARD   |
-	|  7566 | JONES  |
-	|  7654 | MARTIN |
-	|  7698 | BLAKE  |
-	|  7782 | CLARK  |
-	|  7788 | SCOTT  |
-	|  7839 | KING   |
-	|  7844 | TURNER |
-	|  7876 | ADAMS  |
-	|  7900 | JAMES  |
-	|  7902 | FORD   |
-	|  7934 | MILLER |
-	+-------+--------+
+mysql> select * from myview;
++-------+--------+
+| empno | ename  |
++-------+--------+
+|  7369 | SMITH  |
+|  7499 | ALLEN  |
+|  7521 | WARD   |
+|  7566 | JONES  |
+|  7654 | MARTIN |
+|  7698 | BLAKE  |
+|  7782 | CLARK  |
+|  7788 | SCOTT  |
+|  7839 | KING   |
+|  7844 | TURNER |
+|  7876 | ADAMS  |
+|  7900 | JAMES  |
+|  7902 | FORD   |
+|  7934 | MILLER |
++-------+--------+
 
-	create table emp_bak as select * from emp;
-	create view myview1 as select empno,ename,sal from emp_bak;
-	update myview1 set ename='hehe',sal=1 where empno = 7369; // 通过视图修改原表数据。
-	delete from myview1 where empno = 7369; // 通过视图删除原表数据。
+create table emp_bak as select * from emp;
+create view myview1 as select empno,ename,sal from emp_bak;
+update myview1 set ename='hehe',sal=1 where empno = 7369; // 通过视图修改原表数据。
+delete from myview1 where empno = 7369; // 通过视图删除原表数据。
 ```
 ### 3.5.5 视图的作用？
 视图可以隐藏表的实现细节。保密级别较高的系统，数据库只对外提供相关的视图，java程序员只对视图对象进行CRUD。
@@ -349,7 +364,7 @@ delete from 表名 where 条件;
 > 用户对于不同的数据库对象有不同的数据库权限，不同的用户对同一对象也有不同的权限，而且用户还可将其拥有的存取权限转授给其他用户。
 
 ```SQL
- *GRANT* 例如：
+*GRANT* 例如：
 Create user ‘testuser’@’localhost’ identified by ‘testpwd’;
 
 Grant select,update on *.* to ‘testuser’@’localhost’;
@@ -401,29 +416,29 @@ show grants for 'rose'@'localhost';
 
 怎么给一张表添加主键约束呢？
 ```SQL
-	drop table if exists t_user;
-	create table t_user(
-		id int primary key,  // 列级约束
-		username varchar(255),
-		email varchar(255)
-	);
-	insert into t_user(id,username,email) values(1,'zs','zs@123.com');
-	insert into t_user(id,username,email) values(2,'ls','ls@123.com');
-	insert into t_user(id,username,email) values(3,'ww','ww@123.com');
-	select * from t_user;
-	+----+----------+------------+
-	| id | username | email      |
-	+----+----------+------------+
-	|  1 | zs       | zs@123.com |
-	|  2 | ls       | ls@123.com |
-	|  3 | ww       | ww@123.com |
-	+----+----------+------------+
+drop table if exists t_user;
+create table t_user(
+    id int primary key,  // 列级约束
+    username varchar(255),
+    email varchar(255)
+);
+insert into t_user(id,username,email) values(1,'zs','zs@123.com');
+insert into t_user(id,username,email) values(2,'ls','ls@123.com');
+insert into t_user(id,username,email) values(3,'ww','ww@123.com');
+select * from t_user;
++----+----------+------------+
+| id | username | email      |
++----+----------+------------+
+|  1 | zs       | zs@123.com |
+|  2 | ls       | ls@123.com |
+|  3 | ww       | ww@123.com |
++----+----------+------------+
 
-	insert into t_user(id,username,email) values(1,'jack','jack@123.com');
-	ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
+insert into t_user(id,username,email) values(1,'jack','jack@123.com');
+ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
 
-	insert into t_user(username,email) values('jack','jack@123.com');
-	ERROR 1364 (HY000): Field 'id' doesn't have a default value
+insert into t_user(username,email) values('jack','jack@123.com');
+ERROR 1364 (HY000): Field 'id' doesn't have a default value
 ```
 
 根据以上的测试得出：id是主键，因为添加了主键约束，主键字段中的数据不能为NULL，也不能重复。
@@ -454,46 +469,46 @@ show grants for 'rose'@'localhost';
 
 使用表级约束方式定义主键：
 ```SQL
-	drop table if exists t_user;
-	create table t_user(
-		id int,
-		username varchar(255),
-		primary key(id)
-	);
-	insert into t_user(id,username) values(1,'zs');
-	insert into t_user(id,username) values(2,'ls');
-	insert into t_user(id,username) values(3,'ws');
-	insert into t_user(id,username) values(4,'cs');
-	select * from t_user;
+drop table if exists t_user;
+create table t_user(
+    id int,
+    username varchar(255),
+    primary key(id)
+);
+insert into t_user(id,username) values(1,'zs');
+insert into t_user(id,username) values(2,'ls');
+insert into t_user(id,username) values(3,'ws');
+insert into t_user(id,username) values(4,'cs');
+select * from t_user;
 
-	insert into t_user(id,username) values(4,'cx');
-	ERROR 1062 (23000): Duplicate entry '4' for key 'PRIMARY'
+insert into t_user(id,username) values(4,'cx');
+ERROR 1062 (23000): Duplicate entry '4' for key 'PRIMARY'
 
-	以下内容是演示以下复合主键，不需要掌握：
-		drop table if exists t_user;
-		create table t_user(
-			id int,
-			username varchar(255),
-			password varchar(255),
-			primary key(id,username)
-		);
-		insert .......
+以下内容是演示以下复合主键，不需要掌握：
+drop table if exists t_user;
+create table t_user(
+    id int,
+    username varchar(255),
+    password varchar(255),
+    primary key(id,username)
+);
+insert .......
 ```
 
 MySQL提供主键值自增：（非常重要。）
 ```SQL
-	drop table if exists t_user;
-	create table t_user(
-		id int primary key auto_increment, // id字段自动维护一个自增的数字，从1开始，以1递增。
-		username varchar(255)
-	);
-	insert into t_user(username) values('a');
-	insert into t_user(username) values('b');
-	insert into t_user(username) values('c');
-	insert into t_user(username) values('d');
-	insert into t_user(username) values('e');
-	insert into t_user(username) values('f');
-	select * from t_user;
+drop table if exists t_user;
+create table t_user(
+    id int primary key auto_increment, // id字段自动维护一个自增的数字，从1开始，以1递增。
+    username varchar(255)
+);
+insert into t_user(username) values('a');
+insert into t_user(username) values('b');
+insert into t_user(username) values('c');
+insert into t_user(username) values('d');
+insert into t_user(username) values('e');
+insert into t_user(username) values('f');
+select * from t_user;
 ```
 
 ## 5.2 参照完整性
@@ -505,37 +520,38 @@ MySQL提供主键值自增：（非常重要。）
 	* 业务背景：
 		请设计数据库表，用来维护学生和班级的信息?
 		```SQL
-			第一种方案：一张表存储所有数据
-			no(pk)			name			classno			classname
-			-------------------------------------------------------------------------------------------
-			1					zs1				101				北京大兴区经济技术开发区亦庄二中高三1班
-			2					zs2				101				北京大兴区经济技术开发区亦庄二中高三1班
-			3					zs3				102				北京大兴区经济技术开发区亦庄二中高三2班
-			4					zs4				102				北京大兴区经济技术开发区亦庄二中高三2班
-			5					zs5				102				北京大兴区经济技术开发区亦庄二中高三2班
-			缺点：冗余。【不推荐】
+		第一种方案：一张表存储所有数据
+		no(pk)			name			classno			classname
+		-------------------------------------------------------------------------------------------
+		1					zs1				101				北京大兴区经济技术开发区亦庄二中高三1班
+		2					zs2				101				北京大兴区经济技术开发区亦庄二中高三1班
+		3					zs3				102				北京大兴区经济技术开发区亦庄二中高三2班
+		4					zs4				102				北京大兴区经济技术开发区亦庄二中高三2班
+		5					zs5				102				北京大兴区经济技术开发区亦庄二中高三2班
 		
-			第二种方案：两张表（班级表和学生表）
-			t_class 班级表
-			cno(pk)		cname
-			--------------------------------------------------------
-			101		北京大兴区经济技术开发区亦庄二中高三1班
-			102		北京大兴区经济技术开发区亦庄二中高三2班
+		缺点：冗余。【不推荐】
 		
-			t_student 学生表
-			sno(pk)		sname				classno(该字段添加外键约束fk)
-			------------------------------------------------------------
-			1				zs1				101
-			2				zs2				101
-			3				zs3				102
-			4				zs4				102
-			5				zs5				102
+		第二种方案：两张表（班级表和学生表）
+		t_class 班级表
+		cno(pk)		cname
+		--------------------------------------------------------
+		101		北京大兴区经济技术开发区亦庄二中高三1班
+		102		北京大兴区经济技术开发区亦庄二中高三2班
+		
+		t_student 学生表
+		sno(pk)		sname				classno(该字段添加外键约束fk)
+		------------------------------------------------------------
+		1				zs1				101
+		2				zs2				101
+		3				zs3				102
+		4				zs4				102
+		5				zs5				102
 		```
-
+		
 	* 将以上表的建表语句写出来：
-
+	
 		t_student中的classno字段引用t_class表中的cno字段，此时t_student表叫做子表。t_class表叫做父表。
-
+	
 		顺序要求：
 			删除数据的时候，先删除子表，再删除父表。
 			添加数据的时候，先添加父表，在添加子表。
@@ -574,7 +590,7 @@ MySQL提供主键值自增：（非常重要。）
 		insert into t_student values(7,'lisi',103);
 		ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`bjpowernode`.INT `t_student_ibfk_1` FOREIGN KEY (`classno`) REFERENCES `t_class` (`cno`))
 		```
-
+	
 	- 外键值可以为NULL？ 外键可以为NULL。	
 	- 外键字段引用其他表的某个字段的时候，被引用的字段必须是主键吗？
 	- 注意：被引用的字段不一定是主键，但至少具有unique约束。
@@ -724,7 +740,7 @@ select @sum;
 > 5. 数据库实施阶段
 > 6. 数据库运行和维护阶段
 
-![基本过程](./pictures/process.png)
+![基本过程](./pictures/sqlDesign.png)
 
 ## 7.2 需求分析
 
