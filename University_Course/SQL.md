@@ -1,6 +1,9 @@
 # 第一章 绪论
+
 ## 1.1 数据库系统概论
+
 ### 1.1.1 数据库的四个概念
+
 1. 数据（ *Data* ）
 
    描述事物的符号记录称为 ***数据***。
@@ -195,15 +198,15 @@ create table if not exists user
 		...
 	from		1
 		...		
-	where		2
+	where		2 /* 运算符 = <> > < >= <= Between Like In And Or Not */
 		...	
-	group by	3
+	group by	3 /* 分组汇总 */
 		...
-	having		4
+	having		4 /* 对汇总的结果进行过滤 */
 		...
-	order by	6
+	order by	6 /* 对一个列或者多个列排序 默认 ASC 升序, DESC 降序 */
 		...
-	limit		7
+	limit		7 
 		...;
 
 1. SELECT Sno,Sname FROM SC WHERE 课程号='002';
