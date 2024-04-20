@@ -1,18 +1,18 @@
 ## Java基本语法
 
-| 函数式编程                                                        | 面向对象编程                                                   | 面向过程编程 |
-| ---------------------------------------------------------------------- | -------------------------------------------------------------- | ------------ |
-| 此编程范例强调使用功能，其中每个功能执行特定任务。                     | 该编程范例基于面向对象的概念。在创建对象实例的地方使用类。     |使用过程：在面向过程编程中，程序由一系列的过程组成，每个过程都有一个特定的功能。每个过程都是独立的，可以单独调用和执行。|
-| 使用的基本元素是变量和函数。函数中的数据是不可变的（创建后无法更改）。 | 使用的基本元素是对象和方法，此处使用的数据是可变数据。         |没有类和对象：在面向过程编程中，没有类和对象的概念。程序由一系列的过程组成，每个过程都有一个特定的功能。过程之间可以通过函数调用互相调用，实现不同功能的组合。<br />  使用变量和函数：在面向过程编程中，程序使用变量和函数。变量用于存储和管理数据，函数用于执行特定的功能。 <br />使用基本元素：在面向过程编程中，程序使用基本元素，如变量和函数。变量用于存储和管理数据，函数用于执行特定的功能。|
-| 重要性不在于数据，而在于功能。                                         | 重视数据而不是程序。                                           |重视功能：在面向过程编程中，重要的不是数据，而是功能。程序的设计和实现应该围绕特定的功能，而不是数据。|
-| 遵循声明式编程模型。                                                 | 遵循命令式编程模型。                                         ||
-| 使用递归进行迭代。                                                   | 使用循环进行迭代。                                           ||
-| 支持并行编程。                                                         | 不支持并行编程。                                             ||
-| 该编程范例中的语句在执行时不需要遵循特定的顺序。                       | 该编程范例中的语句在执行时需要遵循一个顺序，即自下而上的方法。 ||
-| 没有任何访问说明符。                                                   | 具有三个访问说明符，即“公共”，“专用”和“受保护”。               ||
-| 添加新数据和功能并非易事。                                             | 提供添加新数据和功能的简便方法。                               ||
-| 隐藏数据是不可能的。因此，安全性是不可能的。                           | 提供数据隐藏。可能会生成安全的程序。                           ||
-| **Haskell**：Haskell是一种纯函数式编程语言，强调不可变性和纯函数。<br /> **Lisp**：Lisp是一种函数式编程语言，具有强大的元编程能力和函数式编程的特性。<br /> **Erlang**：Erlang是一种函数式编程语言，专注于并发和容错性。 <br />**Clojure**：Clojure是一种基于Lisp的函数式编程语言，运行在Java虚拟机上。<br /> **Scala**：Scala是一种结合了面向对象编程和函数式编程的语言，具有函数式编程的特性。 | Java，Python，C++，C#，Ruby |**C**：强调简洁和高效性，并支持面向过程的编程范式。 <br />**Fortran**：主要用于科学和工程领域，具有严格的语法和结构。 <br />**COBOL**：主要用于商业应用程序开发，具有固定的语法和结构。 <br />**BASIC**：适用于初学者，具有简单易学的语法和结构。|
+| 函数式编程                                                                                                                                                                                                                                                                                                                                                                                       | 面向对象编程                                                   | 面向过程编程                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 此编程范例强调使用功能，其中每个功能执行特定任务。                                                                                                                                                                                                                                                                                                                                               | 该编程范例基于面向对象的概念。在创建对象实例的地方使用类。     | 使用过程：在面向过程编程中，程序由一系列的过程组成，每个过程都有一个特定的功能。每个过程都是独立的，可以单独调用和执行。                                                                                                                                                                                                                                                                            |
+| 使用的基本元素是变量和函数。函数中的数据是不可变的（创建后无法更改）。                                                                                                                                                                                                                                                                                                                           | 使用的基本元素是对象和方法，此处使用的数据是可变数据。         | 没有类和对象：在面向过程编程中，没有类和对象的概念。程序由一系列的过程组成，每个过程都有一个特定的功能。过程之间可以通过函数调用互相调用，实现不同功能的组合。<br />  使用变量和函数：在面向过程编程中，程序使用变量和函数。变量用于存储和管理数据，函数用于执行特定的功能。 <br />使用基本元素：在面向过程编程中，程序使用基本元素，如变量和函数。变量用于存储和管理数据，函数用于执行特定的功能。 |
+| 重要性不在于数据，而在于功能。                                                                                                                                                                                                                                                                                                                                                                   | 重视数据而不是程序。                                           | 重视功能：在面向过程编程中，重要的不是数据，而是功能。程序的设计和实现应该围绕特定的功能，而不是数据。                                                                                                                                                                                                                                                                                              |
+| 遵循声明式编程模型。                                                                                                                                                                                                                                                                                                                                                                             | 遵循命令式编程模型。                                           |                                                                                                                                                                                                                                                                                                                                                                                                     |
+| 使用递归进行迭代。                                                                                                                                                                                                                                                                                                                                                                               | 使用循环进行迭代。                                             |                                                                                                                                                                                                                                                                                                                                                                                                     |
+| 支持并行编程。                                                                                                                                                                                                                                                                                                                                                                                   | 不支持并行编程。                                               |                                                                                                                                                                                                                                                                                                                                                                                                     |
+| 该编程范例中的语句在执行时不需要遵循特定的顺序。                                                                                                                                                                                                                                                                                                                                                 | 该编程范例中的语句在执行时需要遵循一个顺序，即自下而上的方法。 |                                                                                                                                                                                                                                                                                                                                                                                                     |
+| 没有任何访问说明符。                                                                                                                                                                                                                                                                                                                                                                             | 具有三个访问说明符，即“公共”，“专用”和“受保护”。               |                                                                                                                                                                                                                                                                                                                                                                                                     |
+| 添加新数据和功能并非易事。                                                                                                                                                                                                                                                                                                                                                                       | 提供添加新数据和功能的简便方法。                               |                                                                                                                                                                                                                                                                                                                                                                                                     |
+| 隐藏数据是不可能的。因此，安全性是不可能的。                                                                                                                                                                                                                                                                                                                                                     | 提供数据隐藏。可能会生成安全的程序。                           |                                                                                                                                                                                                                                                                                                                                                                                                     |
+| **Haskell**：Haskell是一种纯函数式编程语言，强调不可变性和纯函数。<br /> **Lisp**：Lisp是一种函数式编程语言，具有强大的元编程能力和函数式编程的特性。<br /> **Erlang**：Erlang是一种函数式编程语言，专注于并发和容错性。 <br />**Clojure**：Clojure是一种基于Lisp的函数式编程语言，运行在Java虚拟机上。<br /> **Scala**：Scala是一种结合了面向对象编程和函数式编程的语言，具有函数式编程的特性。 | Java，Python，C++，C#，Ruby                                    | **C**：强调简洁和高效性，并支持面向过程的编程范式。 <br />**Fortran**：主要用于科学和工程领域，具有严格的语法和结构。 <br />**COBOL**：主要用于商业应用程序开发，具有固定的语法和结构。 <br />**BASIC**：适用于初学者，具有简单易学的语法和结构。                                                                                                                                                   |
 
 
 
@@ -43,7 +43,7 @@
 
 
 
-## 基本数据类型
+## 数据类型
 
 | 类型    | 位数 | 字节 | 默认值   | 十进制范围                                                  | 二进制范围                                                                                                                           |
 | ------- | ---- | ---- | -------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -293,9 +293,392 @@ JDK1.4 中新加入的 **NIO** ( **Non-Blocking I/O** ），引入了一种基�
 
 ## 进程和线程
 
+### 创建多线程的方式
+
+#### 1.1、继承Thread类
+
+这是最普通的方式，继承`Thread`类，重写`run`方法，如下：
+
+```java
+public class ExtendsThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("1......");
+    }
+
+    public static void main(String[] args) {
+        new ExtendsThread().start();
+    }
+}
+```
+
+#### 1.2、实现Runnable接口
+
+这也是一种常见的方式，实现`Runnable`接口并重写`run`方法，如下：
+
+```java
+public class ImplementsRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("2......");
+    }
+
+    public static void main(String[] args) {
+        ImplementsRunnable runnable = new ImplementsRunnable();
+        new Thread(runnable).start();
+    }
+}
+```
+
+
+#### 1.3、实现Callable接口
+
+和上一种方式类似，只不过这种方式可以拿到线程执行完的返回值，如下：
+
+```java
+public class ImplementsCallable implements Callable<String> {
+    @Override
+    public String call() throws Exception {
+        System.out.println("3......");
+        return "zhuZi";
+    }
+
+    public static void main(String[] args) throws Exception {
+        ImplementsCallable callable = new ImplementsCallable();
+        FutureTask<String> futureTask = new FutureTask<>(callable);
+        new Thread(futureTask).start();
+        System.out.println(futureTask.get());
+    }
+}
+```
+
+#### 1.4、使用Executor线程池
+
+这种属于进阶方式，可以通过`Executors`创建线程池，也可以自定义线程池，如下：
+
+```java
+public class UseExecutorService {
+    public static void main(String[] args) {
+        ExecutorService poolA = Executors.newFixedThreadPool(2);
+        poolA.execute(()->{
+            System.out.println("4A......");
+        });
+        poolA.shutdown();
+
+        // 又或者自定义线程池
+        ThreadPoolExecutor poolB = new ThreadPoolExecutor(2, 3, 0,
+                TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(3),
+                Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
+        poolB.submit(()->{
+            System.out.println("4B......");
+        });
+        poolB.shutdown();
+    }
+}
+```
+
+
+#### 1.5、使用CompletableFuture类
+
+`CompletableFuture`是`JDK1.8`引入的新类，可以用来执行异步任务，如下：
+
+```java
+public class UseCompletableFuture {
+    public static void main(String[] args) throws InterruptedException {
+        CompletableFuture<String> cf = CompletableFuture.supplyAsync(() -> {
+            System.out.println("5......");
+            return "zhuZi";
+        });
+        // 需要阻塞，否则看不到结果
+        Thread.sleep(1000);
+    }
+}
+```
+
+
+## JDK 8 新特性
+
+### 函数式编程
+
+#### 消费型接口
+
+（顾客）在项目中一些不需要返回值，只负责消费的方法可以用过 Consumer 接口来实现
+
+`Consumer<T> void accept(T t)`
+
+```java
+// 定义一个顾客（Consumer），用于消费食物
+Consumer<String> customer = food -> System.out.println("吃掉了：" + food);
+
+// 厨师准备了一份美食
+String food = "美味牛排";
+
+// 顾客吃掉厨师准备的食物
+customer.accept(food);
+```
+
+#### 供给型接口
+
+（厨师）生产对应对象，不关心谁使用
+
+ `Supplier<T> T get()`
+
+```java
+@Test
+public void testSupplier() {
+    Employee tom = new Employee(1001, "Tom", 23, 5600);
+
+    Supplier<String> supplier = () -> tom.getName();
+    System.out.println(supplier.get());
+
+    System.out.println("***********");
+
+    Supplier<String> supplier1 = tom::getName;
+    System.out.println(supplier1.get());
+}
+```
+
+#### 函数型接口
+
+（服务员）负责将厨师提供的食物送到顾客手中，根据顾客的需求将食物进行加工或处理
+
+ `Function<T,R> R apply(T t)` 接受一个输入T ，返回一个输出 R
+
+```java
+@Test
+public void testFunction(){
+	Function<Integer, String[]> function = String[]::new;
+	String[] arr = function.apply(10);
+	System.out.println(Arrays.toString(arr));
+}
+```
+
+#### 断定型接口
+
+用于判断对象是否符合特定的条件
+
+`Predicate<T> boolean test(T t)`
+
+```java
+@Test
+public void testPredicate(){
+    // 定义一个菜单选择标准（Predicate）
+    Predicate<String> isSteak = food -> food.equals("美味牛排");
+
+    // 厨师提供食物
+    Supplier<String> chef = () -> "美味牛排";
+    String food = chef.get();
+
+    // 判断食物是否符合菜单选择标准
+    if (isSteak.test(food)) {
+        System.out.println("顾客点了牛排！");
+    } else {
+        System.out.println("顾客选择了其他食物！");
+    }
+}
+```
 
 
 
+
+
+
+## 设计模式
+
+### 单例模式（Singleton Pattern）
+单例模式确保一个类只有一个实例，并提供一个全局访问点。常见的实现方式是使用私有构造函数和静态方法来返回实例。
+
+```java
+public class Singleton {
+    private static Singleton instance;
+    
+    private Singleton() {} // 私有构造函数
+    
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+```
+
+### 工厂模式（Factory Pattern）
+工厂模式定义一个接口来创建对象，但是由子类决定实例化哪个类。这样可以将对象的创建与使用分离。
+
+```java
+public interface Shape {
+    void draw();
+}
+
+public class Circle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a circle");
+    }
+}
+
+public class Rectangle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a rectangle");
+    }
+}
+
+public class ShapeFactory {
+    public Shape getShape(String shapeType) {
+        if (shapeType.equalsIgnoreCase("Circle")) {
+            return new Circle();
+        } else if (shapeType.equalsIgnoreCase("Rectangle")) {
+            return new Rectangle();
+        }
+        return null;
+    }
+}
+```
+
+### 观察者模式（Observer Pattern）
+观察者模式定义了一种一对多的依赖关系，当一个对象状态改变时，所有依赖于它的对象都会得到通知并自动更新。
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public interface Observer {
+    void update(String message);
+}
+
+public class ConcreteObserver implements Observer {
+    @Override
+    public void update(String message) {
+        System.out.println("Received message: " + message);
+    }
+}
+
+public interface Subject {
+    void attach(Observer observer);
+    void detach(Observer observer);
+    void notifyObservers(String message);
+}
+
+public class ConcreteSubject implements Subject {
+    private List<Observer> observers = new ArrayList<>();
+    
+    @Override
+    public void attach(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void detach(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
+    }
+}
+```
+
+### 静态代理（Static Proxy）
+静态代理是指代理类在编译期间就已经确定，并且代理类和目标类的关系在代码中是固定的。代理类负责将请求转发给目标类，并可以在转发前后进行一些额外的处理。
+
+```java
+// 接口
+public interface Subject {
+    void request();
+}
+
+// 目标类
+public class RealSubject implements Subject {
+    @Override
+    public void request() {
+        System.out.println("RealSubject: Processing request.");
+    }
+}
+
+// 代理类
+public class ProxySubject implements Subject {
+    private RealSubject realSubject;
+
+    public ProxySubject() {
+        this.realSubject = new RealSubject();
+    }
+
+    @Override
+    public void request() {
+        System.out.println("ProxySubject: Pre-processing request.");
+        realSubject.request();
+        System.out.println("ProxySubject: Post-processing request.");
+    }
+}
+
+// 测试类
+public class Main {
+    public static void main(String[] args) {
+        Subject subject = new ProxySubject();
+        subject.request();
+    }
+}
+```
+
+### 动态代理（Dynamic Proxy）
+动态代理是在运行时期间动态生成代理类的一种代理方式，代理类不需要硬编码，可以根据需要动态生成。Java提供了java.lang.reflect.Proxy和java.lang.reflect.InvocationHandler来实现动态代理。
+
+```java
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
+// 接口
+public interface Subject {
+    void request();
+}
+
+// 目标类
+public class RealSubject implements Subject {
+    @Override
+    public void request() {
+        System.out.println("RealSubject: Processing request.");
+    }
+}
+
+// InvocationHandler实现类
+public class DynamicProxyHandler implements InvocationHandler {
+    private Object target;
+
+    public DynamicProxyHandler(Object target) {
+        this.target = target;
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println("DynamicProxyHandler: Pre-processing request.");
+        Object result = method.invoke(target, args);
+        System.out.println("DynamicProxyHandler: Post-processing request.");
+        return result;
+    }
+}
+
+// 测试类
+public class Main {
+    public static void main(String[] args) {
+        RealSubject realSubject = new RealSubject();
+        InvocationHandler handler = new DynamicProxyHandler(realSubject);
+
+        Subject proxySubject = (Subject) Proxy.newProxyInstance(
+            realSubject.getClass().getClassLoader(),
+            realSubject.getClass().getInterfaces(),
+            handler
+        );
+
+        proxySubject.request();
+    }
+}
+```
 
 ## JavaDoc
 
