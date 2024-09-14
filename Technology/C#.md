@@ -1,0 +1,13 @@
+带 `*` 号的是推荐使用。
+- Console
+- WPF(Windows Presentation Foundation)`*`
+- Windows Forms(Old)
+- ASP.NET Web Forms(Old)
+- ASP.NET MVC(Model-View-Controller)`*`
+  - 分离不同种类的代码
+  - 结构清晰，易于维护
+- WCF(Windows Communication Foundation)`*`
+- Windows Store Application`*`
+- Windows Phone Application`*`
+- Cloud(Windows Azure)`*`
+- WF(Workflow Foundation)
