@@ -86,3 +86,21 @@
 
 对一个程序来说，静态指编辑期、编译期，动态指运行期。 
 静态时装在硬盘里，动态时装在内存里。
+
+```c#
+static void Main(string[] args)
+{
+    Type myType = typeof(Form);
+    Console.WriteLine(myType.BaseType.FullName + Environment.NewLine + myType.FullName);
+    var pInfos = myType.GetProperties();
+    foreach (var p in pInfos)
+    {
+        Console.WriteLine(p.Name);
+    }
+    var mInfos = myType.GetMethods();
+    foreach (var m in mInfos)
+    {
+        Console.WriteLine(m.Name);
+    }
+}
+```
