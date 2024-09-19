@@ -104,3 +104,11 @@ static void Main(string[] args)
     }
 }
 ```
+
+C#的五大数据类型
+
+- 类 Classes 如 Windows, Form, Console, String
+- 结构体 Structures Int32, Int64, Single, Double
+- 枚举 Enumerations HorizontalAlignment, Visibility
+- 接口 Interfaces
+- 委托 Delegates
