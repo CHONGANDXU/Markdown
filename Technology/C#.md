@@ -112,3 +112,28 @@ C#的五大数据类型
 - 枚举 Enumerations HorizontalAlignment, Visibility
 - 接口 Interfaces
 - 委托 Delegates
+
+C# 类型的派生谱系
+
+$$
+\begin{array}{l}
+\text{Object} 
+\left\{
+  \begin{array}{ll}
+    \text{引用类型 (Reference Type)} & \left\{
+      \begin{array}{l}
+        \text{类 (Class)} \\
+        \text{接口 (Interface)} \\
+        \text{委托 (Delegate)} \\
+      \end{array}
+    \right. \\ \\
+    \text{值类型 (Value Type)} & \left\{
+      \begin{array}{l}
+        \text{结构体 (Struct)} \\
+        \text{枚举 (Enum)} \\
+      \end{array}
+    \right. \\
+  \end{array}
+\right. \\
+\end{array}
+$$
